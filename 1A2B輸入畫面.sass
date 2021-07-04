@@ -1,0 +1,140 @@
+$color_white: #fff
+$color_black: #2D2D3A
+$color_green: #8CC554
+*
+   // border: 1px solid pink
+
+/* 全域 border box */
+*,*::before,*::after
+    box-sizing: border-box
+@mixin size($w: 50px,$h: 50px)
+    width: $w
+    height: $h
+    
+
+.container
+    max-width: 1000px
+    margin: 0 auto
+    padding: 15px
+    background-color: $color_black
+    color: $color_white
+
+    .topinfo
+        width: 80%
+        min-width: 300px
+        margin: 0 auto
+        display: flex
+        justify-content: space-around
+        align-items: center
+        .toppic
+            +size(52px,52px)
+            border: 3px solid $color_white
+            border-radius: 50%
+            // position: relative
+            img
+                +size(45px,45px)
+    .username
+        width: 80%
+        min-width: 300px
+        margin: 0 auto
+        text-align: center
+        font-size: 10px
+        padding: 5px 15px 5px 0px
+
+        
+    .showarea
+        padding: 0px 50px 0px 50px
+        width: 80%
+        min-width: 300px
+        margin: 0 auto
+        display: flex
+        justify-content: space-around
+        .num,.showinfo
+            font-size: 18px
+            font-family: Comic Sans MS
+    hr
+        height: 0px
+
+        .num
+            border-bottom: 4px solid $color_white
+            //padding-bottom: 1px
+        
+    .bottombox
+        padding: 5px
+        // background-color: rgba(235, 235, 247,0.2)
+        // box-shadow: 0 0 5px 0 #c7c2c226
+        // border-radius: 20px
+        width: 70%
+        min-width: 310px
+        margin: 0 auto
+        display: flex
+        flex-direction: column
+
+        .inputbox
+            width: 70%
+            min-width: 200px
+            margin: 0 auto
+            display: inline-flex
+            justify-content: space-around
+            .inputnum1,.inputnum2,.inputnum3,.inputnum4
+                font-size: 25px
+                color: $color_green
+                border-bottom: 4px solid $color_white
+                margin-bottom: 7px
+
+        .keyboard
+            display: flex
+            flex-wrap: wrap
+            justify-content: center
+            width: 70%
+            min-width: 280px
+            margin: 0 auto
+            padding: 10px
+        .btn
+            margin: 5px
+            margin-top: 2px
+            padding: 10px
+            // border: solid 2px $color_blue
+            border-radius: 9px
+            width: 16%
+            text-align: center
+            font-size: 15px
+            cursor: pointer
+            box-shadow: 0px 0px 17px -1px rgba($color_white,0.2)
+
+            &:hover
+                background-color: rgba($color_white,0.5)
+                border: solid 2px black
+                color: $color_white
+        .functionbtn
+            display: flex
+            width: 70%
+            min-width: 280px
+            margin: 0 auto
+            justify-content: center
+            .delete ,.ok
+                margin: 0 auto
+                width: 40%
+                min-width: 60px
+                padding: 8px
+                margin: 0px 20px 5px 20px
+                
+
+
+
+
+@media screen and ( max-width: 375px)
+    .container
+        max-width: 360px
+        .topinfo
+            width: 70%
+        .showarea
+            width: 70%
+            max-width: 250px
+            padding: 0px 10px 0px 10px
+            margin: 0 auto
+        .bottombox
+            width: 60%
+            max-width: 250px
+            padding: 5px 10px 0px 10px
+
