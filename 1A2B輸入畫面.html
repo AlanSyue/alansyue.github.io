@@ -52,6 +52,26 @@
             </div>
         </div>
 
+        <div class="popcontainer">
+            <div class="result">太神啦！</div>
+            <div class="close">X</div>
+            <div class="answerarea">
+                <div class="anstxt">答案</div>
+                <div class="answernum"></div>
+            </div>
+            <div class="showarea">
+                <div class="toptime">
+                    <div class="icon">◔</div>
+                    <div class="time"></div>
+                </div>
+                <div class="topnum">
+                    <div class="icon"> ♟</div>
+                    <div class="timenum"> <span id="finish-times"></span> ∥ 10</div>
+                </div>
+            </div>
+            <div class="keepPlaying">繼續遊戲</div>
+        </div>
+
     </div>
 </body>
 <script src="./script/setting.js"></script>
@@ -63,18 +83,33 @@
     var WIN_HINT = '4A0B';
     var playTimes = 0;
     var setMinute = 0;
+    console.log(answer);
 
-    const checkTime = () => {
+    var timerId = window.setInterval("checkTime()", 1000);
+
+    $('.keepPlaying').click(function () {
+        window.location.href = "./1A2B輸入畫面.html";
+    });
+
+    $('.close').click(function () {
+        $('.popcontainer').hide();
+    });
+
+    const generateTimer = () => {
         setMinute += 1;
         const minute = Math.floor(Math.floor(setMinute % 3600) / 60);
         const second = setMinute % 60;
 
         const displayMinute = minute > 9 ? minute : `0${minute}`;
         const displaySecond = second > 9 ? second : `0${second}`;
-        $('#timer').html(`${displayMinute}:${displaySecond}`);
 
+        return `${displayMinute}:${displaySecond}`;
+    };
+
+    const checkTime = () => {
+        $('#timer').html(generateTimer());
     }
-        
+
     const reGuess = () => {
         inputPosition = 1;
         [1, 2, 3, 4].forEach((number) => {
@@ -84,10 +119,18 @@
         $('.input-num').text('');
     }
 
+    const finishSetting = () => {
+        clearInterval(timerId);
+        $('.answernum').text(answer);
+        $('.time').text(generateTimer());
+        $('#finish-times').text(playTimes > 9 ? playTimes : `0${playTimes}`);
+        $('.popcontainer').show();
+    };
+
     $(document).ready(function () {
+        $('.popcontainer').hide();
         const nickname = getNickName();
         $('.username').text(nickname);
-        window.setInterval("checkTime()", 1000);
     });
 
     $('.btn-number').click(function () {
@@ -145,6 +188,17 @@
             </div>
             <hr style="border:none;border-top:1px dashed grey;width:80%;min-width: 300px;">
         `);
+
+        if (hint === WIN_HINT) {
+            finishSetting();
+            return;
+        }
+
+        if (playTimes === 10) {
+            $('.result').text('挑戰失敗');
+            finishSetting();
+            return;
+        }
         reGuess();
     });
 </script>

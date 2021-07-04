@@ -1,6 +1,8 @@
 $color_white: #fff
 $color_black: #2D2D3A
 $color_green: #8CC554
+$color_blue: #58B8E1
+$color_red: #C54C4D
 *
    // border: 1px solid pink
 
@@ -120,7 +122,74 @@ $color_green: #8CC554
                 margin: 0px 20px 5px 20px
                 
 
+//pop up
+.popcontainer
+    max-width: 320px
+    height: 350px
+    position: fixed
+    top: 0
+    bottom: 0
+    left: 0
+    right: 0
+    margin: auto
+    padding: 10px
+    background-color: $color_black
+    color: $color_white
+    border-radius: 10px
+    box-shadow: 0px 0px 17px -1px rgba($color_white,0.2)
 
+
+.close
+    position: absolute
+    top: 15px
+    right: 30px
+    font-size: 30px
+    font-weight: lighter
+    color: grey
+    cursor: pointer
+    &:hover
+        color: $color_white
+        font-size: 32px
+        font-weight: bolder
+
+.result
+    text-align: center
+    margin-top: 30px
+.answerarea
+    text-align: center
+    .anstxt
+        margin-top: 25px
+    .answernum
+        color: $color_red
+
+.showarea
+    display: flex
+    justify-content: space-around
+    .icon
+        font-size: 60px
+        margin: 0 auto
+
+    .toptime, .topnum
+        display: flex
+        flex-direction: column
+        justify-content: center
+        align-items: center
+        
+.keepPlaying
+    margin: 0 auto
+    margin-top: 20px
+    margin-bottom: 10px
+    text-align: center
+    padding: 10px
+    border: solid 2px $color_blue
+    border-radius: 9px
+    width: 100px
+    font-size: 15px
+    cursor: pointer
+    &:hover
+        background-color: rgba($color_white,0.5)
+        border: solid 2px black
+        color: $color_white
 
 
 @media screen and ( max-width: 375px)
