@@ -83,6 +83,7 @@
     var WIN_HINT = '4A0B';
     var playTimes = 0;
     var setMinute = 0;
+    var isFinish = false;
     console.log(answer);
 
     var timerId = window.setInterval("checkTime()", 1000);
@@ -121,6 +122,7 @@
 
     const finishSetting = () => {
         clearInterval(timerId);
+        isFinish = true;
         $('.answernum').text(answer);
         $('.time').text(generateTimer());
         $('#finish-times').text(playTimes > 9 ? playTimes : `0${playTimes}`);
@@ -134,7 +136,7 @@
     });
 
     $('.btn-number').click(function () {
-        if (inputPosition === END_INPUT_POSITION) {
+        if (inputPosition === END_INPUT_POSITION || isFinish) {
             return;
         }
         const isDisabled = $(this).attr('disabled');
@@ -148,7 +150,7 @@
     });
 
     $('.delete').click(function () {
-        if (inputPosition === 1) {
+        if (inputPosition === 1 || isFinish) {
             return;
         }
         const current = inputPosition - 1;
@@ -159,7 +161,7 @@
     });
 
     $('.ok').click(function () {
-        if (inputPosition !== END_INPUT_POSITION) {
+        if (inputPosition !== END_INPUT_POSITION || isFinish) {
             return;
         }
         const numberOne = $('.inputnum1').text();
