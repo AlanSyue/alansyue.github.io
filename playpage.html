@@ -105,7 +105,7 @@
     };
 
     const checkTime = () => {
-        $('.timenum').html(generateTimer());
+        $('#timer').html(generateTimer());
     }
 
     const reGuess = () => {
@@ -121,7 +121,7 @@
         clearInterval(timerId);
         isFinish = true;
         $('.answernum').text(answer);
-        $('.time').text(generateTimer());
+        $('.timenum').text(generateTimer());
         $('#finish-times').text(playTimes > 9 ? playTimes : `0${playTimes}`);
         $('.popcontainer').show();
     };
