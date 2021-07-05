@@ -14,43 +14,12 @@
   position: relative;
 }
 
-.mode {
-  border: solid 2px #fff;
-  width: 75px;
-  padding: 0px;
-  border-radius: 30px;
-  position: absolute;
-  top: 10px;
-  right: 20px;
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: row;
-}
-
-.mode .modebtn {
-  border-radius: 50%;
-  width: 23px;
-  height: 23px;
-  padding: 0px;
-  margin: 0px;
-  background-color: #FBC439;
-  cursor: pointer;
-}
-
-.mode .status {
-  font-size: 13px;
-  color: #fff;
-  padding: 0px 10px 0px 10px;
-  margin: 0px;
-}
-
 .logo {
   width: 95%;
   min-width: 300px;
   display: flex;
   justify-content: center;
-  margin-top: 300px;
+  margin-top: 200px;
 }
 
 .text {

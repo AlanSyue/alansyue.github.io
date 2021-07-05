@@ -1,4 +1,9 @@
 @charset "UTF-8";
+* {
+  user-select: none;
+  margin: 0 auto;
+}
+
 /* 全域 border box */
 *, *::before, *::after {
   box-sizing: border-box;
@@ -42,8 +47,11 @@
   padding: 5px 15px 5px 0px;
 }
 
+.container .timenum {
+  color: #C54C4D;
+}
+
 .container .showarea {
-  padding: 0px 50px 0px 50px;
   width: 80%;
   min-width: 300px;
   margin: 0 auto;
@@ -58,6 +66,10 @@
 
 .container hr {
   height: 0px;
+  border: none;
+  border-top: 0.5px dashed grey;
+  width: 80%;
+  min-width: 300px;
 }
 
 .container hr .num {
@@ -66,7 +78,7 @@
 
 .container .bottombox {
   padding: 5px;
-  width: 70%;
+  width: 80%;
   min-width: 310px;
   margin: 0 auto;
   display: flex;
@@ -92,18 +104,18 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  width: 70%;
-  min-width: 280px;
+  width: 90%;
+  min-width: 305px;
   margin: 0 auto;
-  padding: 10px;
+  padding: 5px;
 }
 
 .container .bottombox .btn {
   margin: 5px;
-  margin-top: 2px;
-  padding: 10px;
   border-radius: 9px;
-  width: 16%;
+  width: 48px;
+  height: 48px;
+  line-height: 48px;
   text-align: center;
   font-size: 15px;
   cursor: pointer;
@@ -126,10 +138,13 @@
 
 .container .bottombox .functionbtn .delete, .container .bottombox .functionbtn .ok {
   margin: 0 auto;
-  width: 40%;
+  width: 100px;
+  height: 48px;
   min-width: 60px;
-  padding: 8px;
+  line-height: 48px;
+  text-align: center;
   margin: 0px 20px 5px 20px;
+  cursor: pointer;
 }
 
 .popcontainer {

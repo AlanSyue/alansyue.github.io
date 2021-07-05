@@ -10,6 +10,8 @@
     <script src="https://code.jquery.com/jquery-3.6.0.slim.js"
         integrity="sha256-HwWONEZrpuoh951cQD1ov2HUK5zA5DwJ1DNUXaM6FsY=" crossorigin="anonymous">
         </script>
+    <link href="/your-path-to-fontawesome/css/all.css" rel="stylesheet"> <!--load all styles -->
+
 </head>
 
 <body>
@@ -49,6 +51,7 @@
             <div class="functionbtn">
                 <div class="btn delete">刪除</div>
                 <div class="btn ok">確認</div>
+
             </div>
         </div>
 
@@ -64,13 +67,12 @@
                     <div class="time"></div>
                 </div>
                 <div class="topnum">
-                    <div class="icon"> ♟</div>
+                    <div class="icon">♟</div>
                     <div class="timenum"> <span id="finish-times"></span> ∥ 10</div>
                 </div>
             </div>
             <div class="keepPlaying">繼續遊戲</div>
         </div>
-
     </div>
 </body>
 <script src="./script/setting.js"></script>
@@ -183,7 +185,7 @@
                 <div class="num playnum4">${numberFour}</div>
                 <div class="showinfo">${hint}</div>
             </div>
-            <hr style="border:none;border-top:1px dashed grey;width:80%;min-width: 300px;">
+            <hr>
         `);
 
         if (hint === WIN_HINT) {

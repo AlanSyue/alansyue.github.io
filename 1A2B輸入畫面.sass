@@ -4,7 +4,9 @@ $color_green: #8CC554
 $color_blue: #58B8E1
 $color_red: #C54C4D
 *
-   // border: 1px solid pink
+    //border: 1px solid pink
+    user-select: none
+    margin: 0 auto
 
 /* 全域 border box */
 *,*::before,*::after
@@ -42,10 +44,11 @@ $color_red: #C54C4D
         text-align: center
         font-size: 10px
         padding: 5px 15px 5px 0px
-
+    .timenum
+        color: $color_red
         
     .showarea
-        padding: 0px 50px 0px 50px
+        //padding: 0px 50px 0px 50px
         width: 80%
         min-width: 300px
         margin: 0 auto
@@ -56,6 +59,10 @@ $color_red: #C54C4D
             font-family: Comic Sans MS
     hr
         height: 0px
+        border: none
+        border-top: 0.5px dashed grey
+        width: 80%
+        min-width: 300px
 
         .num
             border-bottom: 4px solid $color_white
@@ -66,7 +73,7 @@ $color_red: #C54C4D
         // background-color: rgba(235, 235, 247,0.2)
         // box-shadow: 0 0 5px 0 #c7c2c226
         // border-radius: 20px
-        width: 70%
+        width: 80%
         min-width: 310px
         margin: 0 auto
         display: flex
@@ -88,17 +95,18 @@ $color_red: #C54C4D
             display: flex
             flex-wrap: wrap
             justify-content: center
-            width: 70%
-            min-width: 280px
+            width: 90%
+            min-width: 305px
             margin: 0 auto
-            padding: 10px
+            padding: 5px
         .btn
             margin: 5px
-            margin-top: 2px
-            padding: 10px
+            //padding: 5px
             // border: solid 2px $color_blue
             border-radius: 9px
-            width: 16%
+            width: 48px
+            height: 48px
+            line-height: 48px
             text-align: center
             font-size: 15px
             cursor: pointer
@@ -116,10 +124,14 @@ $color_red: #C54C4D
             justify-content: center
             .delete ,.ok
                 margin: 0 auto
-                width: 40%
+                width: 100px
+                height: 48px
                 min-width: 60px
-                padding: 8px
+                line-height: 48px
+                text-align: center
                 margin: 0px 20px 5px 20px
+                cursor: pointer
+
                 
 
 //pop up
