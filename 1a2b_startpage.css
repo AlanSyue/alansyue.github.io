@@ -38,13 +38,20 @@
 }
 
 input {
-  width: 50%;
-  min-width: 170px;
+  width: 60%;
+  min-width: 200px;
   border: solid 1px #fff;
   background-color: #2D2D3A;
   height: 35px;
   border-radius: 5px;
   color: #8CC554;
+  box-shadow: 0px 0px 5px #969292;
+}
+
+#nickname {
+  font-size: 15px;
+  text-align: center;
+  padding: 5px;
 }
 
 .block {
