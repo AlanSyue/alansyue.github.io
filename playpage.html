@@ -21,7 +21,7 @@
             <div class="toppic">
                 <!-- <img src="https://i.ibb.co/4NQ4MHZ/testlogo-001-2.png" border="0"> -->
             </div>
-            <div class="topnum">▞ <span id="play-times">00</span>∥10</div>
+            <div class="topnum">▞ <span id="play-times">00</span> ∥ 10</div>
         </div>
         <div class="username"></div>
         <div id="result-area">
@@ -59,16 +59,16 @@
             <div class="result">太神啦！</div>
             <div class="answerarea">
                 <div class="anstxt">答案</div>
-                <div class="answernum"></div>
+                <div class="answernum">0000</div>
             </div>
             <div class="showarea">
                 <div class="toptime">
-                    <div class="icon">◔</div>
-                    <div class="time"></div>
+                    <div class="timeicon">◔</div>
+                    <div class="timenum">00:00</div>
                 </div>
                 <div class="topnum">
-                    <div class="icon">▞</div>
-                    <div class="timenum"> <span id="finish-times"></span> ∥ 10</div>
+                    <div class="stepicon">▞</div>
+                    <div class="stepnum"> <span id="finish-times"></span> ∥ 10</div>
                 </div>
             </div>
             <div class="keepPlaying">再玩一局</div>
@@ -90,7 +90,7 @@
     var timerId = window.setInterval("checkTime()", 1000);
 
     $('.keepPlaying').click(function () {
-        window.location.href = "./1A2B輸入畫面.html";
+        window.location.href = "./playpage.html";
     });
 
     const generateTimer = () => {

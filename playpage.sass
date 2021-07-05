@@ -3,6 +3,8 @@ $color_black: #2D2D3A
 $color_green: #8CC554
 $color_blue: #58B8E1
 $color_red: #C54C4D
+$color_yellow: #FBC439
+
 *
     //border: 1px solid pink
     user-select: none
@@ -14,14 +16,26 @@ $color_red: #C54C4D
 @mixin size($w: 50px,$h: 50px)
     width: $w
     height: $h
-    
+html, body
+    background-color: $color_black
+    width: 100%
+    height: 100%
+    padding: 0px
+    margin: 0px
+
 
 .container
-    max-width: 1000px
+    position: absolute
+    left: 50%
+    top: 50%
+    transform: translateX(-50%) translateY(-50%)
+    max-width: 500px
     margin: 0 auto
     padding: 15px
     background-color: $color_black
     color: $color_white
+    box-shadow: 0px 0px 17px -1px rgba($color_white,0.2)
+
 
     .topinfo
         width: 80%
@@ -30,32 +44,32 @@ $color_red: #C54C4D
         display: flex
         justify-content: space-around
         align-items: center
-        .toppic
-            +size(52px,52px)
-            border: 3px solid $color_white
-            border-radius: 50%
-            // position: relative
-            img
-                +size(45px,45px)
-    .username
-        width: 80%
-        min-width: 300px
-        margin: 0 auto
-        text-align: center
-        font-size: 10px
-        color: $color_white
-    .timenum //*沒改到*/
-        color: $color_white
+        
+    #play-times //*沒改到*/
+        color: $color_red
 
     .toptime
         font-size: 25px
         display: flex
         align-items: center
-
     #timer
         font-size: 16px
         margin-left: 5px
+    .toppic
+            +size(52px,52px)
+            border: 3px solid $color_white
+            border-radius: 50%
+    .topnum
+        font-size: 16px
 
+    .username
+            width: 80%
+            min-width: 300px
+            margin: 0 auto
+            text-align: center
+            font-size: 12px
+            padding-top: 5px
+            color: $color_white
     
     #result-area
         //background-color: #4d2222
@@ -181,28 +195,43 @@ $color_red: #C54C4D
 .result
     text-align: center
     margin-top: 30px
+    color: $color_yellow
+    
 .answerarea
     text-align: center
     .anstxt
-        margin-top: 25px
+        margin: 20px
     .answernum
         color: $color_red
+        font-size: 30px
+        padding: 3px
 
 .showarea
+    //border: 1px solid pink
     display: flex
     justify-content: space-around
-    .icon
-        font-size: 40px
-        margin: 0 auto
-    .time
-        font-size: 20px
-        color: #fff
+    align-items: center
 
     .toptime, .topnum
         display: flex
         flex-direction: column
         justify-content: center
         align-items: center
+    .timeicon
+        font-size: 40px
+        padding: 10px
+        line-height: 25px
+        
+    .stepicon
+        font-size: 25px
+        padding: 10px
+
+
+    .timenum, .stepnum
+        font-size: 20px
+        color: #fff
+
+    
         
 .keepPlaying
     margin: 0 auto
