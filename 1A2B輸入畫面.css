@@ -44,11 +44,26 @@
   margin: 0 auto;
   text-align: center;
   font-size: 10px;
-  padding: 5px 15px 5px 0px;
+  color: #fff;
 }
 
 .container .timenum {
   color: #C54C4D;
+}
+
+.container .toptime {
+  font-size: 25px;
+  display: flex;
+  align-items: center;
+}
+
+.container #timer {
+  font-size: 16px;
+  margin-left: 5px;
+}
+
+.container #result-area {
+  height: 260px;
 }
 
 .container .showarea {
@@ -77,23 +92,21 @@
 }
 
 .container .bottombox {
-  padding: 5px;
+  padding: 2px;
   width: 80%;
-  min-width: 310px;
+  min-width: 330px;
   margin: 0 auto;
-  display: flex;
-  flex-direction: column;
 }
 
 .container .bottombox .inputbox {
   width: 70%;
+  height: 40px;
   min-width: 200px;
   margin: 0 auto;
-  display: inline-flex;
-  justify-content: space-around;
+  display: flex;
 }
 
-.container .bottombox .inputbox .inputnum1, .container .bottombox .inputbox .inputnum2, .container .bottombox .inputbox .inputnum3, .container .bottombox .inputbox .inputnum4 {
+.container .bottombox .inputnum1, .container .bottombox .inputnum2, .container .bottombox .inputnum3, .container .bottombox .inputnum4 {
   font-size: 25px;
   color: #8CC554;
   border-bottom: 4px solid #fff;
@@ -104,6 +117,7 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+  align-items: center;
   width: 90%;
   min-width: 305px;
   margin: 0 auto;
@@ -202,8 +216,13 @@
 }
 
 .showarea .icon {
-  font-size: 60px;
+  font-size: 40px;
   margin: 0 auto;
+}
+
+.showarea .time {
+  font-size: 20px;
+  color: #fff;
 }
 
 .showarea .toptime, .showarea .topnum {

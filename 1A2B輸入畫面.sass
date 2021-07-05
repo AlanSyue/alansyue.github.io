@@ -43,10 +43,24 @@ $color_red: #C54C4D
         margin: 0 auto
         text-align: center
         font-size: 10px
-        padding: 5px 15px 5px 0px
-    .timenum
+        color: $color_white
+    .timenum //*沒改到*/
         color: $color_red
-        
+
+    .toptime
+        font-size: 25px
+        display: flex
+        align-items: center
+
+    #timer
+        font-size: 16px
+        margin-left: 5px
+
+    
+    #result-area
+        //background-color: #4d2222
+        height: 260px
+
     .showarea
         //padding: 0px 50px 0px 50px
         width: 80%
@@ -69,32 +83,32 @@ $color_red: #C54C4D
             //padding-bottom: 1px
         
     .bottombox
-        padding: 5px
-        // background-color: rgba(235, 235, 247,0.2)
-        // box-shadow: 0 0 5px 0 #c7c2c226
-        // border-radius: 20px
+        padding: 2px
         width: 80%
-        min-width: 310px
+        min-width: 330px
         margin: 0 auto
-        display: flex
-        flex-direction: column
+        // display: flex
+        // flex-direction: column
+        // align-items: center
 
         .inputbox
             width: 70%
+            height: 40px
+            //background-color: #fff
             min-width: 200px
             margin: 0 auto
-            display: inline-flex
-            justify-content: space-around
-            .inputnum1,.inputnum2,.inputnum3,.inputnum4
-                font-size: 25px
-                color: $color_green
-                border-bottom: 4px solid $color_white
-                margin-bottom: 7px
+            display: flex
+        .inputnum1,.inputnum2,.inputnum3,.inputnum4
+            font-size: 25px
+            color: $color_green
+            border-bottom: 4px solid $color_white
+            margin-bottom: 7px
 
         .keyboard
             display: flex
             flex-wrap: wrap
             justify-content: center
+            align-items: center
             width: 90%
             min-width: 305px
             margin: 0 auto
@@ -178,8 +192,11 @@ $color_red: #C54C4D
     display: flex
     justify-content: space-around
     .icon
-        font-size: 60px
+        font-size: 40px
         margin: 0 auto
+    .time
+        font-size: 20px
+        color: #fff
 
     .toptime, .topnum
         display: flex

@@ -17,11 +17,11 @@
 <body>
     <div class="container">
         <div class="topinfo">
-            <div class="toptime">◔ <span id="timer">00:00</span></div>
+            <div class="toptime">◔ <span id="timer">00 : 00</span></div>
             <div class="toppic">
-                <img src="https://i.ibb.co/4NQ4MHZ/testlogo-001-2.png" border="0">
+                <!-- <img src="https://i.ibb.co/4NQ4MHZ/testlogo-001-2.png" border="0"> -->
             </div>
-            <div class="topnum"> ♟ <span id="play-times">00</span> ∥ 10</div>
+            <div class="topnum">♟ <span id="play-times">00</span>∥10</div>
         </div>
         <div class="username"></div>
         <div id="result-area">
@@ -30,10 +30,10 @@
 
         <div class="bottombox">
             <div class="inputbox">
-                <div class="num input-num inputnum1"></div>
-                <div class="num input-num inputnum2"></div>
-                <div class="num input-num inputnum3"></div>
-                <div class="num input-num inputnum4"></div>
+                <div class="num input-num inputnum1">_</div>
+                <div class="num input-num inputnum2">_</div>
+                <div class="num input-num inputnum3">_</div>
+                <div class="num input-num inputnum4">_</div>
             </div>
 
             <div class="keyboard">
@@ -71,7 +71,7 @@
                     <div class="timenum"> <span id="finish-times"></span> ∥ 10</div>
                 </div>
             </div>
-            <div class="keepPlaying">繼續遊戲</div>
+            <div class="keepPlaying">再玩一局</div>
         </div>
     </div>
 </body>
@@ -101,7 +101,7 @@
         const displayMinute = minute > 9 ? minute : `0${minute}`;
         const displaySecond = second > 9 ? second : `0${second}`;
 
-        return `${displayMinute}:${displaySecond}`;
+        return `${displayMinute} : ${displaySecond}`;
     };
 
     const checkTime = () => {

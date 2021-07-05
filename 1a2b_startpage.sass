@@ -5,7 +5,7 @@ $color_red: #C54C4D
 $color_yellow: #FBC439
 *
     //border: solid 1px green
-    margin: 10px 0px 10px 0px
+    //margin: 10px 0px 10px 0px
 
 .container
     border: solid 1px $color_black
@@ -49,7 +49,7 @@ $color_yellow: #FBC439
     min-width: 300px
     display: flex
     justify-content: center
-    margin-top: 200px
+    margin-top: 100px
 .text
     font-size: 13px
     font-family: 微軟正黑體
@@ -83,15 +83,15 @@ input
     text-align: center
     padding: 5px
 
-.name
-  //border: solid 1px #fff
-  //width: 170px
-  //height: 35px
-    margin-top: 13px
-    font-size: 15px
-    font-family: 微軟正黑體
-    text-align: center
-    // line-height: 35px
+// .name
+//   //border: solid 1px #fff
+//   //width: 170px
+//   //height: 35px
+//     margin-top: 13px
+//     font-size: 15px
+//     font-family: 微軟正黑體
+//     text-align: center
+//     // line-height: 35px
 
 .block
     display: inline-block
@@ -112,8 +112,8 @@ input
     color: $color_black
 
 .startbtn
-    margin-top: 40px
-    margin-bottom: 40px
+    margin-top: 35px
+    margin-bottom: 100px
     border: solid 2px $color_yellow
     border-radius: 9px
     min-width: 120px
@@ -126,3 +126,18 @@ input
     &:hover
         border: solid 2px $color_red
         color: $color_red
+@media screen and ( max-width:320px  )
+    html,body
+        margin: 0px
+        padding: 0px
+    .container
+        max-width: 320px
+        max-height:560px
+
+@media screen and ( max-width:768px  )
+.container
+    max-width: 760px
+
+@media screen and ( max-width:1024px  )
+.container
+    max-width: 1000px 
