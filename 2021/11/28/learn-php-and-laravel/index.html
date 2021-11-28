@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <!-- Minima -->
+  <!-- Hexo theme created by @adisaktijrs -->
+
+  <!-- Basic Page Needs
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta charset="utf-8">
+
+  
+  <title>非本科生程式自學心得 - PHP、Laravel</title>
+  
+  <link rel="canonical" href="http://example.com/2021/11/28/learn-php-and-laravel/">
+  
+  <meta name="description" content="為什麼會有這篇文章？ 目前學習達到自己設立的階段性目標 總結這些日子學習心得、使用資源 藉機感謝 David、ZhgChg、Nick、Ron 的幫忙  背景介紹首先定義標題提到的，我這位「非本科生」。畢業於私立大學醫務管理學系，出社會第一份工作是做數位行銷。求學時算是有兩個接觸程式的時機點：第一次是">
+  
+  
+  <meta name="author" content="Alan Syue">
+  
+  <meta property="og:image" content="http://example.comundefined">
+  
+  <meta property="og:site_name" content="Alan Syue&#39;s Blog" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="非本科生程式自學心得 - PHP、Laravel" />
+  
+  <meta property="og:description" content="為什麼會有這篇文章？ 目前學習達到自己設立的階段性目標 總結這些日子學習心得、使用資源 藉機感謝 David、ZhgChg、Nick、Ron 的幫忙  背景介紹首先定義標題提到的，我這位「非本科生」。畢業於私立大學醫務管理學系，出社會第一份工作是做數位行銷。求學時算是有兩個接觸程式的時機點：第一次是">
+  
+  <meta property="og:url" content="http://example.com/2021/11/28/learn-php-and-laravel/" />
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="非本科生程式自學心得 - PHP、Laravel">
+  
+  <meta name="twitter:description" content="為什麼會有這篇文章？ 目前學習達到自己設立的階段性目標 總結這些日子學習心得、使用資源 藉機感謝 David、ZhgChg、Nick、Ron 的幫忙  背景介紹首先定義標題提到的，我這位「非本科生」。畢業於私立大學醫務管理學系，出社會第一份工作是做數位行銷。求學時算是有兩個接觸程式的時機點：第一次是">
+  
+  
+  <meta name="twitter:image" content="http://example.comundefined">
+  
+  <meta name="twitter:url" content="http://example.com/2021/11/28/learn-php-and-laravel/" />
+
+  <!-- Mobile Specific Metas
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Preload fonts
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="preload" href="../fonts/dm-serif-display-v4-latin-regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../fonts/inter-v2-latin-regular.woff2" as="font" type="font/woff2" crossorigin>
+
+  <!-- CSS
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  
+<link rel="stylesheet" href="/css/normalize.css">
+
+  
+<link rel="stylesheet" href="/css/skeleton.css">
+
+  
+<link rel="stylesheet" href="/css/custom.css">
+
+  
+<link rel="stylesheet" href="/css/prism-dark.css">
+
+  
+<link rel="stylesheet" href="/css/prism-line-numbers.css">
+
+  <!-- User css -->
+  
+  
+<link rel="stylesheet" href="/css/user.css">
+
+  
+
+  <!-- Favicon
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <link rel="icon" type="image/png" href="/images/favicon.png">
+
+  <!-- Custom Theme Color Style
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  <style>
+  a:not(.icon) {
+    text-decoration-color: #0FA0CE;
+    background-image: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0) 50%,
+      #0FA0CE 50%
+    );
+  }
+  blockquote {
+    border-left: 8px solid #0FA0CE;
+  }
+  .nanobar .bar {
+    background: #0FA0CE;
+  }
+  .button.button-primary:hover,
+  button.button-primary:hover,
+  input[type="submit"].button-primary:hover,
+  input[type="reset"].button-primary:hover,
+  input[type="button"].button-primary:hover,
+  .button.button-primary:focus,
+  button.button-primary:focus,
+  input[type="submit"].button-primary:focus,
+  input[type="reset"].button-primary:focus,
+  input[type="button"].button-primary:focus {
+    background-color: #0FA0CE;
+    border-color: #0FA0CE;
+  }
+  input[type="email"]:focus,
+  input[type="number"]:focus,
+  input[type="search"]:focus,
+  input[type="text"]:focus,
+  input[type="tel"]:focus,
+  input[type="url"]:focus,
+  input[type="password"]:focus,
+  textarea:focus,
+  select:focus {
+    border: 1px solid #0FA0CE;
+  }
+</style>
+
+  <!-- Google Analytics (With Privacy Settings On)
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+  
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+  <div class="container">
+    <div class="row">
+      <div>
+
+        <div class="row">
+  <div class="two columns" style="max-width: 50px">
+    <h1 class="mt-2 mode">
+      <div onclick=setDarkMode(true) id="darkBtn">☾</div>
+      <div onclick=setDarkMode(false) id="lightBtn" class=hidden>☀️</div>
+      <script >
+        if (localStorage.getItem('preferredTheme') == 'dark') {
+          setDarkMode(true)
+        }
+        function setDarkMode(isDark) {
+          var darkBtn = document.getElementById('darkBtn')
+          var lightBtn = document.getElementById('lightBtn')
+          if (isDark) {
+            lightBtn.style.display = "block"
+            darkBtn.style.display = "none"
+            localStorage.setItem('preferredTheme', 'dark');
+          } else {
+            lightBtn.style.display = "none"
+            darkBtn.style.display = "block"
+            localStorage.removeItem('preferredTheme');
+          }
+          document.body.classList.toggle("darkmode");
+        }
+      </script>
+    </h1>
+  </div>
+
+  <div class="six columns ml-1">
+    <h1 class="mt-2">
+      Alan Syue&#39;s blog
+    </h1>
+  </div>
+
+  <div class="twelve columns">
+    <div class="row">
+      <div class="nine columns left">
+        <a href="/">Home</a>
+        
+          
+          <a href="/Works" class="ml">Works</a>
+          
+        
+          
+          <a href="/About" class="ml">About</a>
+          
+        
+        
+          
+            <a href="mailto:b123105@gmail.com" target="_blank" class="ml">Email</a>
+          
+        
+      </div>
+    </div>
+    <hr style="margin-bottom: 2.6rem">
+  </div>
+</div>
+
+        <div class="trans">
+            <h2>非本科生程式自學心得 - PHP、Laravel</h2>
+
+  <p><img src="https://i.imgur.com/HWPbtAr.jpg" alt="Photo by Danial RiCaRoS on Unsplash"></p>
+<h1 id="為什麼會有這篇文章？"><a href="#為什麼會有這篇文章？" class="headerlink" title="為什麼會有這篇文章？"></a>為什麼會有這篇文章？</h1><ol>
+<li>目前學習達到自己設立的階段性目標</li>
+<li>總結這些日子學習心得、使用資源</li>
+<li>藉機感謝 David、ZhgChg、Nick、Ron 的幫忙</li>
+</ol>
+<h1 id="背景介紹"><a href="#背景介紹" class="headerlink" title="背景介紹"></a>背景介紹</h1><p>首先定義標題提到的，我這位「非本科生」。畢業於私立大學醫務管理學系，出社會第一份工作是做數位行銷。求學時算是有兩個接觸程式的時機點：第一次是高中電腦課教C++，第二次是大四的時候，修了通識課教 Java，不過大概都是學到迴圈而已。基本上跟資訊相關科系是扯不上邊。</p>
+<p>接下來提到關於程式的自學，都是發生在我開始工作後，觀察了一下時間點，Python 是 2017/11/1 安裝，2018/9/19 開始學習 HTML / CSS / JS / PHP、2019/1/14 開始學習 PHP 框架 Laravel。學習時間為下班後或假日，每周學習時間大約 10小時 - 20小時。</p>
+<h1 id="學習動機"><a href="#學習動機" class="headerlink" title="學習動機"></a>學習動機</h1><p>一開始學習程式動機是解決工作上的問題，也發現寫程式時，自己容易進入「心流」的狀態。也因為想自己做一個網站，就開始學習 PHP，也成功實作一個留言論壇。<br>那為什麼選擇 PHP 呢？其實原因很簡單，因為公司的網站就是用 PHP 架的，代表身邊就有一群寫 PHP 的高手，我有最快的途徑去向厲害的人請教。也很感謝 David、ZhgChg、Nick、Ron，真的給我很多的幫助！</p>
+<h1 id="PHP-學習心得"><a href="#PHP-學習心得" class="headerlink" title="PHP 學習心得"></a>PHP 學習心得</h1><p>說到最一開始學習 PHP，當時的思考邏輯是，如果要做一個網站，HTML / CSS / JS 大概都需要了解。剛好在 Udemy 看到一堂綜合包的基礎課程，而且有附贈網路空間做使用，於是我就買了。雖然沒有全部看完，但基本上每個單元的最開頭 ( 基礎教學、環境建置 ) 我都會確實看完，開始實作發現問題再搭配關鍵字搜尋找答案。</p>
+<p>課程大約看了 55.8%，圖片來源：Udemy基本上此階段常用到的資源有：</p>
+<ul>
+<li>Udemy 課程 - 建網百科全書-使用 HTML,CSS,JS, jQuery,php,mySQL 建立網站</li>
+<li>iT邦幫忙 - PHP 三十天就上手系列文章</li>
+<li>stackoverflow ( 通常是搭配 Google 關鍵字搜索 )</li>
+</ul>
+<p>階段性目標為建置有：會員功能(註冊登入)、文章發表、留言回覆功能的網站，大約花了三個月時間完成，每周學習加上實作時間平均為 15 小時。</p>
+<h1 id="Laravel-學習心得"><a href="#Laravel-學習心得" class="headerlink" title="Laravel 學習心得"></a>Laravel 學習心得</h1><p>十分吸引人，圖片來源：laravel.tw1 月的時候偶然得知所謂的 MVC 模式、OOP 物件導向，搜尋一下，卻意外發現 PHP 框架 Laravel，因為之前 PHP 寫法都是把邏輯跟前端畫面混雜在一起，於是就興起：「來學學框架吧」的念頭。也設定了階段性目標，把之前做的網站改用 Laravel 架構。</p>
+<p>一開始學習時其實對於 PSR-4、分成 Model、View、Controller 很不習慣，用 Laravel 的語法真的非常簡潔優雅，在重構的過程花最多時間的不是 coding，而是修改 error。不過前幾天也順利重構完成(雖然還有幾個小細節還沒改好…)，也開始習慣怎麼使用 Laravel。<br>此階段常用到的資源有：</p>
+<ul>
+<li>PHP也有Day 范聖佑 - Composer 從入門到實戰( 我用 Composer 安裝 Laravel )</li>
+<li>Laravel 免費線上教學 ( 我看到 EPISODE 8 開始實作 )</li>
+<li>iT邦幫忙- Laravel 教程</li>
+</ul>
+<p>階段性目標為重構原有網站，約1個月以內時間完成，每周學習加上實作時間平均為 6–8小時。</p>
+<p>階段性成果：<a target="_blank" rel="noopener" href="https://github.com/AlanSyue/BBS">https://github.com/AlanSyue/BBS</a></p>
+<h1 id="總結"><a href="#總結" class="headerlink" title="總結"></a>總結</h1><p>以自己自學的心得來說，設立階段性目標很重要，並且快速弄髒自己的手去實作，搭配查找資料去學習，累積成就感，對學習真的很有幫助。不過自己也反思學習比較碎片化，後續可以再去看一些有系統性脈絡的書籍或教學資源，也會很有幫助。<br>最後我覺得自己蠻幸運的，遇到很有愛的高手同事，減少我很多學習上的障礙，不過這就比較可遇不可求了，真心感謝！</p>
+
+  <p> — Nov 28, 2021</p>
+  
+
+
+          <div class="row mt-2">
+  
+</div>
+
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+  <script src="/js/nanobar.min.js"></script>
+  <script>
+    var options = {
+      classname: 'nanobar',
+      id: 'myNanobar'
+    };
+    var nanobar = new Nanobar(options);
+    nanobar.go(30);
+    nanobar.go(76);
+    nanobar.go(100);
+  </script>
+
+</body>
+
+</html>
