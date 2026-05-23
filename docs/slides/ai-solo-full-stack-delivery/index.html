@@ -742,23 +742,7 @@
       font-weight: 720;
     }
 
-    .note {
-      display: none;
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      min-height: 92px;
-      padding: 18px 88px;
-      border-top: 1px solid rgba(255,255,255,0.16);
-      background: rgba(5, 7, 10, 0.94);
-      color: #d5deea;
-      font-size: 18px;
-      line-height: 1.42;
-      z-index: 12;
-    }
-
-    body.show-notes .slide.active .note { display: block; }
+    .note { display: none; }
 
     .controls {
       position: fixed;
@@ -1585,7 +1569,6 @@
     <span id="pageText">01 / 20</span>
     <div class="bar"><span id="progress"></span></div>
     <button class="nav-button" id="nextBtn" type="button">›</button>
-    <span>N notes</span>
     <span>F full</span>
   </div>
 
@@ -1637,9 +1620,6 @@
       if (["ArrowLeft", "PageUp", "Backspace"].includes(event.key)) {
         event.preventDefault();
         showSlide(index - 1);
-      }
-      if (event.key.toLowerCase() === "n") {
-        document.body.classList.toggle("show-notes");
       }
       if (event.key.toLowerCase() === "f") {
         requestFullscreen();
