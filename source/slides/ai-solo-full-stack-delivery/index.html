@@ -58,10 +58,20 @@
       padding: 28px;
     }
 
-    .stage {
+    .viewport {
       width: min(100vw - 56px, calc((100vh - 56px) * 16 / 9));
       aspect-ratio: 16 / 9;
       position: relative;
+      overflow: hidden;
+    }
+
+    .stage {
+      width: 1600px;
+      height: 900px;
+      position: absolute;
+      top: 0;
+      left: 0;
+      transform-origin: top left;
       border: 1px solid rgba(255, 255, 255, 0.18);
       background:
         linear-gradient(120deg, rgba(255, 255, 255, 0.045), transparent 42%),
@@ -887,7 +897,8 @@
 </head>
 <body>
   <main class="deck" aria-live="polite">
-    <section class="stage" id="stage">
+    <div class="viewport">
+      <section class="stage" id="stage">
       <article class="slide active" data-section="opening">
         <div class="kicker">Engineering Field Report</div>
         <h1>一個人 + AI agent 交付完整商業 App</h1>
@@ -1443,7 +1454,8 @@
         </div>
         <aside class="note">最後一頁可以留給 Q&A，或補充實際案例與 demo。</aside>
       </article>
-    </section>
+      </section>
+    </div>
   </main>
 
   <div class="controls" aria-hidden="true">
@@ -1456,6 +1468,19 @@
   </div>
 
   <script>
+    const stageEl = document.getElementById("stage");
+    const viewportEl = stageEl.parentElement;
+
+    function fitStage() {
+      const scale = viewportEl.clientWidth / 1600;
+      stageEl.style.transform = `scale(${scale})`;
+    }
+
+    fitStage();
+    window.addEventListener("resize", fitStage);
+    window.addEventListener("orientationchange", fitStage);
+    document.addEventListener("fullscreenchange", fitStage);
+
     const slides = Array.from(document.querySelectorAll(".slide"));
     const progress = document.getElementById("progress");
     const pageText = document.getElementById("pageText");
@@ -1470,11 +1495,11 @@
     }
 
     function requestFullscreen() {
-      const stage = document.getElementById("stage");
-      if (!document.fullscreenElement && stage.requestFullscreen) {
-        stage.requestFullscreen();
+      const target = viewportEl;
+      if (!document.fullscreenElement && target.requestFullscreen) {
+        target.requestFullscreen().then(fitStage);
       } else if (document.exitFullscreen) {
-        document.exitFullscreen();
+        document.exitFullscreen().then(fitStage);
       }
     }
 
