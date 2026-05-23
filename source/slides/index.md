@@ -16,5 +16,5 @@ layout: page
 </ul>
 
 <blockquote>
-  <p>Tip: press <code>F</code> for fullscreen, <code>S</code> for speaker notes, <code>ESC</code> for overview.</p>
+  <p>Tip: <code>F</code> for fullscreen, <code>←</code> / <code>→</code> to navigate (or swipe on mobile).</p>
 </blockquote>
