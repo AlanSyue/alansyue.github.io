@@ -893,6 +893,138 @@
       .phone { width: 145px; height: 305px; border-width: 6px; border-radius: 22px; }
       .controls { display: none; }
     }
+
+    @media (max-width: 768px) {
+      html, body {
+        overflow: auto;
+        height: auto;
+      }
+
+      body::before { display: none; }
+
+      .deck {
+        height: auto;
+        width: 100%;
+        display: block;
+        padding: 0;
+      }
+
+      .viewport {
+        width: 100%;
+        aspect-ratio: auto;
+        overflow: visible;
+        height: auto;
+      }
+
+      .stage {
+        width: 100% !important;
+        height: auto !important;
+        position: static !important;
+        transform: none !important;
+        border: none;
+        box-shadow: none;
+        background: none;
+        overflow: visible;
+      }
+
+      .slide {
+        position: static;
+        display: block !important;
+        padding: 64px 20px 48px;
+        border-top: 1px solid rgba(255, 255, 255, 0.12);
+        height: auto;
+        min-height: 0;
+        inset: auto;
+      }
+
+      .slide:first-child { border-top: none; padding-top: 80px; }
+
+      .slide::after {
+        right: 18px;
+        top: 18px;
+        font-size: 11px;
+        letter-spacing: 0.14em;
+      }
+
+      .kicker {
+        font-size: 12px;
+        margin-bottom: 10px;
+        letter-spacing: 0.12em;
+      }
+
+      h1 { font-size: 28px !important; max-width: 100% !important; line-height: 1.15; }
+      h2 { font-size: 22px !important; max-width: 100% !important; line-height: 1.2; }
+      h3 { font-size: 16px !important; }
+
+      .lead {
+        font-size: 15px !important;
+        margin-top: 16px;
+        max-width: 100% !important;
+        line-height: 1.55;
+      }
+
+      .split,
+      .tradeoff {
+        grid-template-columns: 1fr !important;
+        gap: 16px !important;
+        margin-top: 20px !important;
+      }
+
+      /* Any other grid containers — single column on mobile */
+      [class^="grid-"],
+      [class*=" grid-"] {
+        grid-template-columns: 1fr !important;
+        gap: 14px !important;
+      }
+
+      .watermark { display: none; }
+
+      .terminal {
+        font-size: 13px !important;
+        padding: 12px 14px !important;
+        line-height: 1.5;
+      }
+
+      .big-number { font-size: 52px !important; }
+
+      .quote {
+        font-size: 18px !important;
+        padding-left: 14px !important;
+        border-left-width: 3px !important;
+        max-width: 100% !important;
+        margin-top: 22px !important;
+      }
+
+      .controls { display: none !important; }
+
+      .note {
+        display: block !important;
+        position: static !important;
+        padding: 14px 0 0 !important;
+        margin-top: 18px !important;
+        border-top: 1px dashed rgba(255, 255, 255, 0.18) !important;
+        background: transparent !important;
+        font-size: 13px !important;
+        color: rgba(213, 222, 234, 0.78);
+        min-height: 0 !important;
+      }
+
+      .back-link {
+        top: 12px !important;
+        left: 12px !important;
+        font-size: 12px !important;
+        padding: 3px 8px !important;
+      }
+
+      .card {
+        padding: 14px !important;
+      }
+
+      .metric b { font-size: 22px !important; }
+      .metric span { font-size: 12px !important; }
+
+      .tag-row { gap: 6px !important; flex-wrap: wrap; }
+    }
   </style>
 </head>
 <body>
@@ -1472,6 +1604,10 @@
     const viewportEl = stageEl.parentElement;
 
     function fitStage() {
+      if (window.matchMedia("(max-width: 768px)").matches) {
+        stageEl.style.transform = "";
+        return;
+      }
       const scale = viewportEl.clientWidth / 1600;
       stageEl.style.transform = `scale(${scale})`;
     }
