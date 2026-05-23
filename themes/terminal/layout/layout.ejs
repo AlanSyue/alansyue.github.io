@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="<%= config.language %>">
+<%- partial('_partial/head') %>
+<body>
+  <main class="container">
+    <%- partial('_partial/header') %>
+    <div class="content">
+      <%- body %>
+    </div>
+    <%- partial('_partial/footer') %>
+  </main>
+  <script src="<%- url_for('/js/theme.js') %>"></script>
+</body>
+</html>

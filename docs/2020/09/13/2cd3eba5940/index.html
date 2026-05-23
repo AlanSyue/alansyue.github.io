@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>開源專案初體驗 — 解 Issue 心得分享 — Alan Syue&#39;s Blog</title>
+  <meta name="description" content="Software engineer in Taiwan. Notes on PHP, Laravel, and self-learning.">
+  <meta name="author" content="Alan Syue">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Alan Syue&#39;s Blog">
+  <meta property="og:title" content="開源專案初體驗 — 解 Issue 心得分享">
+  <meta property="og:description" content="Software engineer in Taiwan. Notes on PHP, Laravel, and self-learning.">
+  <meta property="og:url" content="https://alansyue.github.io/2020/09/13/2cd3eba5940/">
+  <link rel="canonical" href="https://alansyue.github.io/2020/09/13/2cd3eba5940/">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <script>
+    (function(){
+      try {
+        if (localStorage.getItem('preferredTheme') !== 'light') {
+          document.documentElement.classList.add('darkmode-pre');
+        }
+      } catch(e){}
+    })();
+  </script>
+  <style>
+    html.darkmode-pre { background: #0d0d0d; }
+    html.darkmode-pre body { background: #0d0d0d; color: #e0e0e0; }
+  </style>
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <main class="container">
+    <header class="site-header">
+  <div class="brand">
+    <a href="/" class="brand-link">~/alansyue</a><span class="cursor">_</span>
+  </div>
+  <nav class="site-nav">
+    
+      <a href="/" class="nav-item">[home]</a>
+    
+      <a href="/archives/" class="nav-item">[posts]</a>
+    
+      <a href="/slides/" class="nav-item">[slides]</a>
+    
+      <a href="/about/" class="nav-item">[about]</a>
+    
+    <button type="button" class="theme-toggle" onclick="toggleTheme()" data-theme-btn aria-label="toggle theme">☾</button>
+  </nav>
+  <hr class="rule">
+</header>
+
+    <div class="content">
+      <article class="post">
+  <header class="post-header">
+    <h1 class="post-title-main">開源專案初體驗 — 解 Issue 心得分享</h1>
+    <p class="post-meta-line">
+      <span>$ date</span>
+      <time datetime="2020-09-13T03:31:00.000Z">2020-09-13 11:31</time>
+      
+    </p>
+  </header>
+  <div class="post-body">
+    <blockquote>
+<p>本文最初發表於 <a target="_blank" rel="noopener" href="https://medium.com/@b123105/%E9%96%8B%E6%BA%90%E5%B0%88%E6%A1%88%E5%88%9D%E9%AB%94%E9%A9%97-%E8%A7%A3-issue-%E5%BF%83%E5%BE%97%E5%88%86%E4%BA%AB-2cd3eba5940">Medium</a>，已搬運至個人 blog。</p>
+</blockquote>
+<p><em>自從參加了今年的 開源人年會（COSCUP），看到許多人努力貢獻開源專案，以及最近讀了 Starbugs Weekly 星巴哥技術專欄 的 別猶豫了，今天就上 Github 參與開源專案吧！ 便對貢獻開源專案躍躍欲試。</em></p>
+<hr>
+<h3 id="開源專案初體驗-—-解-Issue-心得分享"><a href="#開源專案初體驗-—-解-Issue-心得分享" class="headerlink" title="開源專案初體驗 — 解 Issue 心得分享"></a>開源專案初體驗 — 解 Issue 心得分享</h3><p><img src="/images/2cd3eba5940/1.png" alt="photo needpix"></p>
+<p><em><a target="_blank" rel="noopener" href="https://www.needpix.com/photo/221127/github-logo-social-coding-brand-developer-git-website">photo needpix</a></em></p>
+<p>自從參加了今年的 <a target="_blank" rel="noopener" href="https://coscup.org/2020/zh-TW/">開源人年會（COSCUP）</a>，看到許多人努力貢獻開源專案，以及最近讀了 <a target="_blank" rel="noopener" href="https://medium.com/starbugs">Starbugs Weekly 星巴哥技術專欄</a> 的 <a target="_blank" rel="noopener" href="https://medium.com/starbugs/start-contributing-to-open-source-projects-today-5daa4dda2b3e">別猶豫了，今天就上 Github 參與開源專案吧！</a> 便對貢獻開源專案躍躍欲試。</p>
+<h3 id="第一次貢獻開源經驗"><a href="#第一次貢獻開源經驗" class="headerlink" title="第一次貢獻開源經驗"></a>第一次貢獻開源經驗</h3><p>記得在還沒轉職工程師之前，因工作上需求，想獲取 Google Play 商店上 APP 的評論資訊，在 GitHub 上找到一個開源專案，但有些地方已經年久失修了，於是就 fork 一份回去修改，發 PR 給原作者也被 merge，應該算是第一次貢獻開源的經驗（?）</p>
+<p>參考文章：<a target="_blank" rel="noopener" href="https://medium.com/@b123105/3-%E6%AD%A5%E9%A9%9F%E7%8D%B2%E5%8F%96google-play-%E4%B8%ADapp%E6%95%B8%E6%93%9A-python-%E7%88%AC%E8%9F%B2-7bc8533cd6e9">3 步驟獲取Google Play 中APP數據 — Python 爬蟲</a></p>
+<p><img src="/images/2cd3eba5940/2.png" alt="被 merge 的 PR"></p>
+<p><em><a target="_blank" rel="noopener" href="https://github.com/ranjeet867/google-play-crawler/pull/2">被 merge 的 PR</a></em></p>
+<h3 id="從碰過的專案找-Issue"><a href="#從碰過的專案找-Issue" class="headerlink" title="從碰過的專案找 Issue"></a>從碰過的專案找 Issue</h3><p>根據 <a target="_blank" rel="noopener" href="https://medium.com/starbugs/start-contributing-to-open-source-projects-today-5daa4dda2b3e">別猶豫了，今天就上 Github 參與開源專案吧！</a> 文章建議，可以先挑自己有在用的 Library 或開發工具開始，不過我倒是找了之前覺得很有趣的專案：<a target="_blank" rel="noopener" href="https://github.com/Alex-Rose">Alex-Rose</a>&#x2F;<a target="_blank" rel="noopener" href="https://github.com/Alex-Rose/fb-messenger-cli">fb-messenger-cli</a>，之前覺得很有趣還有寫了一篇 <a target="_blank" rel="noopener" href="https://medium.com/@b123105/%E4%B8%8A%E7%8F%AD%E4%B8%80%E5%AE%9A%E8%A6%81%E7%9C%8B-%E8%AA%A4-fb-messenger-cli-%E5%B0%88%E6%A1%88%E4%BD%BF%E7%94%A8%E5%88%86%E4%BA%AB-151edd0c8941">上班一定要看（誤) ｜ fb-messenger-cli 專案使用分享</a>。</p>
+<p>雖然作者已經有段時間沒在更新了（上次 commit 時間是 2019–08–08），不過我還是到 Issues 去找找有什麼我這初心者能幫忙的。</p>
+<p><img src="/images/2cd3eba5940/3.png" alt="有許多 Issues"></p>
+<p><em>有許多 Issues</em></p>
+<p>剛好看到一個 Issue 是 <a target="_blank" rel="noopener" href="https://github.com/Alex-Rose/fb-messenger-cli/issues/218">#218 Crashing when trying to logout after resetting fb password</a>，問題大致上是說：</p>
+<blockquote>
+<p>使用 npm install 完 fb-messenger-cli，下了 &#x2F;logout 指令後，跳出以下錯誤訊息</p>
+</blockquote>
+<p><img src="/images/2cd3eba5940/4.png" alt="錯誤訊息"></p>
+<p><em>錯誤訊息</em></p>
+<p>看起來不是太難的問題，應該蠻適合我來嘗試看看。</p>
+<h3 id="開始解決問題"><a href="#開始解決問題" class="headerlink" title="開始解決問題"></a>開始解決問題</h3><p>我也嘗試下 &#x2F;logout 指令，確實出現一樣的錯誤訊息：</p>
+<p><img src="/images/2cd3eba5940/5.png"></p>
+<p>於是我 clone GitHub 上的原始碼，看了一下錯誤訊息的位置，程式碼看起來沒什麼問題，使用 fs.unlink 有加上 callback function。</p>
+<p><img src="/images/2cd3eba5940/6.png"></p>
+<p>執行 clone 回來的程式碼，下 &#x2F;logout 指令也沒有錯誤訊息</p>
+<p><img src="/images/2cd3eba5940/7.png"></p>
+<p>後來直接去查看 yarn、npm 載回來最新版 2.1.1 的程式碼，出錯的程式碼竟然跟 GitHub 上的不一樣，看起來就是這個問題啦。</p>
+<p><img src="/images/2cd3eba5940/8.png"></p>
+<h3 id="回覆-Issue"><a href="#回覆-Issue" class="headerlink" title="回覆 Issue"></a>回覆 Issue</h3><p>於是我把發現的問題回覆到原 Issue，也剛好看到有人回報一樣的 Issue，於是就兩個一起回，但也發現 <em><strong>我的英文真的超級爛 ，</strong></em>怎麼寫看起來都怪怪的，於是找人幫我修修句子，便留言回覆。</p>
+<p><img src="/images/2cd3eba5940/9.png"></p>
+<p>不過詢問者已經沒有在使用這個專案了，它就先把這個 Issue close。</p>
+<p><img src="/images/2cd3eba5940/10.png"></p>
+<h3 id="總結"><a href="#總結" class="headerlink" title="總結"></a>總結</h3><p>雖然這次先嘗試解決小 Issue，但過程真的蠻有趣的，之前在使用此工具也沒有很認真研究是怎麼做的，也透過這次機會了解一下作者怎麼設計和撰寫程式碼，覺得挺有趣的，希望往後能在嘗試解決其他 Issue，甚至是實作 Feature 發 PR 被作者 merge。</p>
+
+  </div>
+  <footer class="post-footer">
+    <a href="/archives/">← back to archives</a>
+  </footer>
+</article>
+
+    </div>
+    <footer class="site-footer">
+  <hr class="rule">
+  <div class="footer-inner">
+    <span>$ echo "&copy; 2021-2026 Alan Syue"</span>
+    <span class="footer-links">
+      
+        <a href="https://github.com/AlanSyue" target="_blank" rel="noopener">github</a>
+      
+        <a href="https://www.linkedin.com/in/alan-syue-284a83134/" target="_blank" rel="noopener">linkedin</a>
+      
+        <a href="https://twitter.com/alansyue" target="_blank" rel="noopener">twitter</a>
+      
+        <a href="mailto:b123105@gmail.com" target="_blank" rel="noopener">email</a>
+      
+    </span>
+  </div>
+</footer>
+
+  </main>
+  <script src="/js/theme.js"></script>
+</body>
+</html>

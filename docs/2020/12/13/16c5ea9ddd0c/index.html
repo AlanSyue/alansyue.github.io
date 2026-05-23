@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>用 Nest.js 開發 API 吧 (四) — Service — Alan Syue&#39;s Blog</title>
+  <meta name="description" content="Software engineer in Taiwan. Notes on PHP, Laravel, and self-learning.">
+  <meta name="author" content="Alan Syue">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Alan Syue&#39;s Blog">
+  <meta property="og:title" content="用 Nest.js 開發 API 吧 (四) — Service">
+  <meta property="og:description" content="Software engineer in Taiwan. Notes on PHP, Laravel, and self-learning.">
+  <meta property="og:url" content="https://alansyue.github.io/2020/12/13/16c5ea9ddd0c/">
+  <link rel="canonical" href="https://alansyue.github.io/2020/12/13/16c5ea9ddd0c/">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <script>
+    (function(){
+      try {
+        if (localStorage.getItem('preferredTheme') !== 'light') {
+          document.documentElement.classList.add('darkmode-pre');
+        }
+      } catch(e){}
+    })();
+  </script>
+  <style>
+    html.darkmode-pre { background: #0d0d0d; }
+    html.darkmode-pre body { background: #0d0d0d; color: #e0e0e0; }
+  </style>
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <main class="container">
+    <header class="site-header">
+  <div class="brand">
+    <a href="/" class="brand-link">~/alansyue</a><span class="cursor">_</span>
+  </div>
+  <nav class="site-nav">
+    
+      <a href="/" class="nav-item">[home]</a>
+    
+      <a href="/archives/" class="nav-item">[posts]</a>
+    
+      <a href="/slides/" class="nav-item">[slides]</a>
+    
+      <a href="/about/" class="nav-item">[about]</a>
+    
+    <button type="button" class="theme-toggle" onclick="toggleTheme()" data-theme-btn aria-label="toggle theme">☾</button>
+  </nav>
+  <hr class="rule">
+</header>
+
+    <div class="content">
+      <article class="post">
+  <header class="post-header">
+    <h1 class="post-title-main">用 Nest.js 開發 API 吧 (四) — Service</h1>
+    <p class="post-meta-line">
+      <span>$ date</span>
+      <time datetime="2020-12-13T13:25:01.000Z">2020-12-13 21:25</time>
+      
+    </p>
+  </header>
+  <div class="post-body">
+    <blockquote>
+<p>本文最初發表於 <a target="_blank" rel="noopener" href="https://medium.com/@b123105/%E7%94%A8-nest-js-%E9%96%8B%E7%99%BC-api-%E5%90%A7-%E5%9B%9B-service-16c5ea9ddd0c">Medium</a>，已搬運至個人 blog。</p>
+</blockquote>
+<p><em>上一篇介紹了 Nest.js 中 Controller 的使用方式，這次要來介紹 Service 的用法。<br>之前有提到：</em></p>
+<hr>
+<p><img src="/images/16c5ea9ddd0c/1.png" alt="Nest.js 官方網站"></p>
+<p><em><a target="_blank" rel="noopener" href="https://nestjs.com/">Nest.js 官方網站</a></em></p>
+<p>上一篇介紹了 Nest.js 中 Controller 的使用方式，這次要來介紹 Service 的用法。<br>之前有提到：</p>
+<blockquote>
+<p>Service 主要處理商業邏輯的操作，透過注入依賴的方式讓 Controller 和其他 Service 可以使用。</p>
+</blockquote>
+<p>因此當 Controller 接收到請求後，會呼叫 Service 進行商業邏輯的操作，再回應給 Client。</p>
+<p>讓我們來看以下程式碼範例：</p>
+<h3 id="一、在-module-注入-AppService"><a href="#一、在-module-注入-AppService" class="headerlink" title="一、在 module 注入 AppService"></a>一、在 module 注入 AppService</h3><p>&#x2F;src&#x2F;app.module.ts</p>
+<h3 id="二、在-controller-呼叫-service-方法"><a href="#二、在-controller-呼叫-service-方法" class="headerlink" title="二、在 controller 呼叫 service 方法"></a>二、在 controller 呼叫 service 方法</h3><p>在 controller 建構子(constructor) 引入 AppService:  </p>
+<p>private readonly appService: AppService  </p>
+<p>然後去呼叫 <strong>getHello</strong> 方法</p>
+<p>&#x2F;src&#x2F;app.controller.ts</p>
+<h3 id="三、在-service-撰寫商業邏輯"><a href="#三、在-service-撰寫商業邏輯" class="headerlink" title="三、在 service 撰寫商業邏輯"></a>三、在 service 撰寫商業邏輯</h3><p>在 AppService 撰寫 <strong>getHello</strong> 的 function，並回傳 <strong>Ｈello World</strong><br>&#x2F;src&#x2F;app.service.ts</p>
+<h3 id="四、實際呼叫-API"><a href="#四、實際呼叫-API" class="headerlink" title="四、實際呼叫 API"></a>四、實際呼叫 API</h3><p>用 Postman 去呼叫 <strong><a target="_blank" rel="noopener" href="http://localhost:3000/">http://localhost:3000</a></strong>，就會獲得 <strong>Hello World</strong> 字串。</p>
+<p><img src="/images/16c5ea9ddd0c/2.png"></p>
+<h3 id="小結"><a href="#小結" class="headerlink" title="小結"></a>小結</h3><p>今天介紹了如果從 Controller 引入 Service 使用，下次會分享 Nest.js 如何搭配 TypeOrm 來實作 CRUD，如果文章有任何錯誤或建議，歡迎告知！</p>
+
+  </div>
+  <footer class="post-footer">
+    <a href="/archives/">← back to archives</a>
+  </footer>
+</article>
+
+    </div>
+    <footer class="site-footer">
+  <hr class="rule">
+  <div class="footer-inner">
+    <span>$ echo "&copy; 2021-2026 Alan Syue"</span>
+    <span class="footer-links">
+      
+        <a href="https://github.com/AlanSyue" target="_blank" rel="noopener">github</a>
+      
+        <a href="https://www.linkedin.com/in/alan-syue-284a83134/" target="_blank" rel="noopener">linkedin</a>
+      
+        <a href="https://twitter.com/alansyue" target="_blank" rel="noopener">twitter</a>
+      
+        <a href="mailto:b123105@gmail.com" target="_blank" rel="noopener">email</a>
+      
+    </span>
+  </div>
+</footer>
+
+  </main>
+  <script src="/js/theme.js"></script>
+</body>
+</html>

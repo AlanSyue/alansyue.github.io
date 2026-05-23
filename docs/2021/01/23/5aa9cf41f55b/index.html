@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>用 Nest.js 開發 API 吧 (八) — CRUD — Alan Syue&#39;s Blog</title>
+  <meta name="description" content="Software engineer in Taiwan. Notes on PHP, Laravel, and self-learning.">
+  <meta name="author" content="Alan Syue">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Alan Syue&#39;s Blog">
+  <meta property="og:title" content="用 Nest.js 開發 API 吧 (八) — CRUD">
+  <meta property="og:description" content="Software engineer in Taiwan. Notes on PHP, Laravel, and self-learning.">
+  <meta property="og:url" content="https://alansyue.github.io/2021/01/23/5aa9cf41f55b/">
+  <link rel="canonical" href="https://alansyue.github.io/2021/01/23/5aa9cf41f55b/">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <script>
+    (function(){
+      try {
+        if (localStorage.getItem('preferredTheme') !== 'light') {
+          document.documentElement.classList.add('darkmode-pre');
+        }
+      } catch(e){}
+    })();
+  </script>
+  <style>
+    html.darkmode-pre { background: #0d0d0d; }
+    html.darkmode-pre body { background: #0d0d0d; color: #e0e0e0; }
+  </style>
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <main class="container">
+    <header class="site-header">
+  <div class="brand">
+    <a href="/" class="brand-link">~/alansyue</a><span class="cursor">_</span>
+  </div>
+  <nav class="site-nav">
+    
+      <a href="/" class="nav-item">[home]</a>
+    
+      <a href="/archives/" class="nav-item">[posts]</a>
+    
+      <a href="/slides/" class="nav-item">[slides]</a>
+    
+      <a href="/about/" class="nav-item">[about]</a>
+    
+    <button type="button" class="theme-toggle" onclick="toggleTheme()" data-theme-btn aria-label="toggle theme">☾</button>
+  </nav>
+  <hr class="rule">
+</header>
+
+    <div class="content">
+      <article class="post">
+  <header class="post-header">
+    <h1 class="post-title-main">用 Nest.js 開發 API 吧 (八) — CRUD</h1>
+    <p class="post-meta-line">
+      <span>$ date</span>
+      <time datetime="2021-01-23T02:35:59.000Z">2021-01-23 10:35</time>
+      
+    </p>
+  </header>
+  <div class="post-body">
+    <blockquote>
+<p>本文最初發表於 <a target="_blank" rel="noopener" href="https://medium.com/@b123105/%E7%94%A8-nest-js-%E9%96%8B%E7%99%BC-api-%E5%90%A7-%E5%85%AB-crud-5aa9cf41f55b">Medium</a>，已搬運至個人 blog。</p>
+</blockquote>
+<p><em>上篇分享到從建立 Entity、在 Module 註冊到 Service 使用 Repository，今天想分享要怎麼利用 TypeORM 做基本的 CRUD。</em></p>
+<hr>
+<p><img src="/images/5aa9cf41f55b/1.png" alt="Nest.js 官方網站"></p>
+<p><em><a target="_blank" rel="noopener" href="https://nestjs.com/">Nest.js 官方網站</a></em></p>
+<p>上篇分享到從建立 Entity、在 Module 註冊到 Service 使用 Repository，今天想分享要怎麼利用 TypeORM 做基本的 CRUD。</p>
+<h3 id="在-Service-建立-CRUD-method"><a href="#在-Service-建立-CRUD-method" class="headerlink" title="在 Service 建立 CRUD method"></a>在 Service 建立 CRUD method</h3><p>首先我們先建立 <code>src/service/users.service.ts</code>，並輸入以下程式碼：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">import &#123; Injectable &#125; from &#x27;@nestjs/common&#x27;;</span><br><span class="line">import &#123; InjectRepository &#125; from &#x27;@nestjs/typeorm&#x27;;</span><br><span class="line">import &#123; Repository &#125; from &#x27;typeorm&#x27;;</span><br><span class="line">import &#123; Users &#125; from &#x27;../entity/users.entity&#x27;;</span><br><span class="line">import &#123; UserDTO &#125; from &#x27;../DTO/users/user.dto&#x27;;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">@Injectable()</span><br><span class="line">export class UserService &#123;</span><br><span class="line">  constructor(</span><br><span class="line">    // 注入 Users Entity</span><br><span class="line">    @InjectRepository(Users)</span><br><span class="line">    private readonly usersRepository: Repository&lt;Users&gt;,</span><br><span class="line">  ) &#123;&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">  // 新增 User email &amp;&amp; password</span><br><span class="line">  async addUser(userData: &#123;email: string, password: string&#125;): Promise&lt;Object&gt; &#123;</span><br><span class="line">    const user = new Users();</span><br><span class="line">    user.email = userData.email;</span><br><span class="line">    user.password = hashSync(userData.password, 10);</span><br><span class="line">    return await this.usersRepository.save(user);</span><br><span class="line">  &#125;</span><br><span class="line">  // 撈出 Users 全部資料</span><br><span class="line">  async getAllUser(): Promise&lt;Object&gt; &#123;</span><br><span class="line">    return await this.usersRepository.find();</span><br><span class="line">  &#125;</span><br><span class="line">  // 透過 users.id 取得指定資料</span><br><span class="line">  async getUserById(userId: number): Promise&lt;Object&gt; &#123;</span><br><span class="line">    return await this.usersRepository.findOne(userId);</span><br><span class="line">  &#125;</span><br><span class="line">  // 更新指定 users.id 資料</span><br><span class="line">  async updateUserById(userId: number, userData): Promise&lt;Object&gt; &#123;</span><br><span class="line">    return await this.usersRepository.update(userId, userData);</span><br><span class="line">  &#125;</span><br><span class="line">  // 移除指定 users.id 資料</span><br><span class="line">  async deleteUserById(userId: number): Promise&lt;Object&gt; &#123;</span><br><span class="line">    return await this.usersRepository.delete(userId);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>上面程式碼，我們透過 <code>usersRepository</code> 做 CRUD，接下來就是要從 <code>Controller</code> 來呼叫。</p>
+<h3 id="Controller-呼叫-Service"><a href="#Controller-呼叫-Service" class="headerlink" title="Controller 呼叫 Service"></a>Controller 呼叫 Service</h3><p>之前的文章有提到，<code>Controller</code> 是 request 接收與輸出的出入口，因此我們要在 <code>Controller</code> 新增 route 並呼叫 Service method 來做 CRUD。</p>
+<p>我們建立 <code>src/controller/users.controller.ts</code> 並輸入以下程式碼:</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">import &#123; </span><br><span class="line">  Controller,</span><br><span class="line">  Get,</span><br><span class="line">  Post,</span><br><span class="line">  Put,</span><br><span class="line">  Delete,</span><br><span class="line">  Param,</span><br><span class="line">  Body</span><br><span class="line">&#125; from &#x27;@nestjs/common&#x27;;</span><br><span class="line">import &#123; UserService &#125; from &#x27;../service/users.service&#x27;;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">@Controller()</span><br><span class="line">export class UserController &#123;</span><br><span class="line">  constructor(</span><br><span class="line">    private readonly userService: UserService</span><br><span class="line">  ) &#123;&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">@Get(&#x27;users&#x27;)</span><br><span class="line">async allUsers(): Promise&lt;Object&gt; &#123;</span><br><span class="line">  return this.userService.getAllUser();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">@Get(&#x27;user/:userId&#x27;)</span><br><span class="line">async user(@Param(&#x27;userId&#x27;) id: number): Promise&lt;Object&gt; &#123;</span><br><span class="line">  return this.userService.getUserById(id);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">@Post(&#x27;user&#x27;)</span><br><span class="line">async addUser(</span><br><span class="line">  @Body() userPostData,</span><br><span class="line">): Promise&lt;Object&gt; &#123;</span><br><span class="line">  return this.userService.addUser(userPostData);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">@Put(&#x27;user/:userId&#x27;)</span><br><span class="line">async updateUserById(</span><br><span class="line">  @Param(&#x27;userId&#x27;) id: number,</span><br><span class="line">  @Body() userData,</span><br><span class="line">): Promise&lt;Object&gt; &#123;</span><br><span class="line">  return this.userService.updateUserById(id, userData);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">  @Delete(&#x27;user/:userId&#x27;)</span><br><span class="line">  async deleteUserById(@Param(&#x27;userId&#x27;) id: number): Promise&lt;Object&gt; &#123;</span><br><span class="line">    return this.userService.deleteUserById(id);</span><br><span class="line">  &#125; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>我們根據 <code>Get</code>、<code>Post</code>、<code>Put</code>、<code>Delete</code> 分別來實作 CRUD 方法，接下來我們可以打開 Postman 測試。</p>
+<h3 id="實際測試"><a href="#實際測試" class="headerlink" title="實際測試"></a>實際測試</h3><p>首先有 2 點先說明：</p>
+<ol>
+<li>範例我輸入的 url 為 <code>http://api.dev.itseed.tw:9229/</code>，主要是我有修改過 <code>/etc/host</code> 和 <code>port</code>，如果沒有做任何調整的讀者應該為 <code>http://localhost:3000</code>。</li>
+<li>新增 User 在存入密碼時，實際上需要加密，不能直接存入，但因為是範例，這部分就先忽略。</li>
+</ol>
+<h3 id="新增-User"><a href="#新增-User" class="headerlink" title="新增 User"></a>新增 User</h3><p>我們先來測試新增 User，因為 method 需要 <code>email</code>、<code>password</code>，所以 post 過去也要帶這兩個值:</p>
+<p><img src="/images/5aa9cf41f55b/2.png"></p>
+<h3 id="取得所有-User-及指定-User"><a href="#取得所有-User-及指定-User" class="headerlink" title="取得所有 User 及指定 User"></a>取得所有 User 及指定 User</h3><p>接下來是取得所有 User：</p>
+<p><img src="/images/5aa9cf41f55b/3.png"></p>
+<p>取得指定 User，需要給 users.id</p>
+<p><img src="/images/5aa9cf41f55b/4.png"></p>
+<h3 id="更新-User-資料"><a href="#更新-User-資料" class="headerlink" title="更新 User 資料"></a>更新 User 資料</h3><p>需要給 users.id，以及要更新欄位的值:</p>
+<p><img src="/images/5aa9cf41f55b/5.png"></p>
+<p>更新成功後，我們透過取得指定 User 確認看看：</p>
+<p><img src="/images/5aa9cf41f55b/6.png"></p>
+<h3 id="刪除-User-資料"><a href="#刪除-User-資料" class="headerlink" title="刪除 User 資料"></a>刪除 User 資料</h3><p>需要給 users.id</p>
+<p><img src="/images/5aa9cf41f55b/7.png"></p>
+<p>從取得所有 User 可以看到輸入的 users.id 資料被刪掉了。</p>
+<p><img src="/images/5aa9cf41f55b/8.png"></p>
+<h3 id="小結"><a href="#小結" class="headerlink" title="小結"></a>小結</h3><p>今天分享了關於如何利用 Nest.js 及 TypeORM 實作 CRUD 的 api，算是整個系列中相當重要的部分，希望對想實作的讀者有幫助，如果文章有任何錯誤或建議，歡迎告知！</p>
+
+  </div>
+  <footer class="post-footer">
+    <a href="/archives/">← back to archives</a>
+  </footer>
+</article>
+
+    </div>
+    <footer class="site-footer">
+  <hr class="rule">
+  <div class="footer-inner">
+    <span>$ echo "&copy; 2021-2026 Alan Syue"</span>
+    <span class="footer-links">
+      
+        <a href="https://github.com/AlanSyue" target="_blank" rel="noopener">github</a>
+      
+        <a href="https://www.linkedin.com/in/alan-syue-284a83134/" target="_blank" rel="noopener">linkedin</a>
+      
+        <a href="https://twitter.com/alansyue" target="_blank" rel="noopener">twitter</a>
+      
+        <a href="mailto:b123105@gmail.com" target="_blank" rel="noopener">email</a>
+      
+    </span>
+  </div>
+</footer>
+
+  </main>
+  <script src="/js/theme.js"></script>
+</body>
+</html>

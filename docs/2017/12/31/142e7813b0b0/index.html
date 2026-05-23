@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>從無到有，Google Analytics 學習心得分享 — Alan Syue&#39;s Blog</title>
+  <meta name="description" content="Software engineer in Taiwan. Notes on PHP, Laravel, and self-learning.">
+  <meta name="author" content="Alan Syue">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Alan Syue&#39;s Blog">
+  <meta property="og:title" content="從無到有，Google Analytics 學習心得分享">
+  <meta property="og:description" content="Software engineer in Taiwan. Notes on PHP, Laravel, and self-learning.">
+  <meta property="og:url" content="https://alansyue.github.io/2017/12/31/142e7813b0b0/">
+  <link rel="canonical" href="https://alansyue.github.io/2017/12/31/142e7813b0b0/">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <script>
+    (function(){
+      try {
+        if (localStorage.getItem('preferredTheme') !== 'light') {
+          document.documentElement.classList.add('darkmode-pre');
+        }
+      } catch(e){}
+    })();
+  </script>
+  <style>
+    html.darkmode-pre { background: #0d0d0d; }
+    html.darkmode-pre body { background: #0d0d0d; color: #e0e0e0; }
+  </style>
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <main class="container">
+    <header class="site-header">
+  <div class="brand">
+    <a href="/" class="brand-link">~/alansyue</a><span class="cursor">_</span>
+  </div>
+  <nav class="site-nav">
+    
+      <a href="/" class="nav-item">[home]</a>
+    
+      <a href="/archives/" class="nav-item">[posts]</a>
+    
+      <a href="/slides/" class="nav-item">[slides]</a>
+    
+      <a href="/about/" class="nav-item">[about]</a>
+    
+    <button type="button" class="theme-toggle" onclick="toggleTheme()" data-theme-btn aria-label="toggle theme">☾</button>
+  </nav>
+  <hr class="rule">
+</header>
+
+    <div class="content">
+      <article class="post">
+  <header class="post-header">
+    <h1 class="post-title-main">從無到有，Google Analytics 學習心得分享</h1>
+    <p class="post-meta-line">
+      <span>$ date</span>
+      <time datetime="2017-12-31T04:16:07.000Z">2017-12-31 12:16</time>
+      
+    </p>
+  </header>
+  <div class="post-body">
+    <blockquote>
+<p>本文最初發表於 <a target="_blank" rel="noopener" href="https://medium.com/@b123105/%E5%BE%9E%E7%84%A1%E5%88%B0%E6%9C%89-google-analytics-%E5%88%86%E6%9E%90-%E5%AD%B8%E7%BF%92%E5%BF%83%E5%BE%97%E5%88%86%E4%BA%AB-142e7813b0b0">Medium</a>，已搬運至個人 blog。</p>
+</blockquote>
+<p><em>是的，我是 Google 產品的狂熱者，Google 不斷更新自己的產品，讓我能一直沉浸在「學習」的挑戰及成就。今天要來談談我與 Google Analytics (網站分析工具) 的學習歷程。</em></p>
+<hr>
+<p><img src="/images/142e7813b0b0/1.jpg" alt="(圖片來源：pixabay.com)"></p>
+<p><em>(<a target="_blank" rel="noopener" href="https://pixabay.com/p-1385511/?no_redirect">圖片來源：pixabay.com</a>)</em></p>
+<p>是的，我是 Google 產品的狂熱者，Google 不斷更新自己的產品，讓我能一直沉浸在「學習」的挑戰及成就。今天要來談談我與 Google Analytics (網站分析工具) 的學習歷程。</p>
+<h3 id="在資種獲得入門的第一把鑰匙"><a href="#在資種獲得入門的第一把鑰匙" class="headerlink" title="在資種獲得入門的第一把鑰匙"></a>在資種獲得入門的第一把鑰匙</h3><p>第一次接觸到 Google Analytics (簡稱 GA) 是在加入資訊種子培訓計畫沒多久，還記得那時候我們上了一堂網路行銷課，講師是奇寶網路的 Bordy，Bordy 的課程帶我初入了網路行銷的世界，也引起了我對這個領域的興趣。最棒的是，Bordy 還邀請我們免費參加奇寶的三堂 GA 課程，於是開啟了我學習這項工具的大門……</p>
+<h3 id="為了熟悉工具而開始準備考照"><a href="#為了熟悉工具而開始準備考照" class="headerlink" title="為了熟悉工具而開始準備考照"></a>為了熟悉工具而開始準備考照</h3><p>上完三堂課程後，我想繼續自學學會這項工具，一開始我的作法是：用 Weebly 架一個簡單的網站，然後埋入 GA 的追蹤碼，想說這樣就可以測試 GA 裡面的功能。但是不久後發現……根本沒有流量啊啊啊啊！完全沒辦法去解讀、分析出什麼東西。強烈建議大家可以不用這種方法，Google 有提供 <a target="_blank" rel="noopener" href="https://support.google.com/analytics/answer/6367342?hl=zh-Hant">示範帳戶</a>，只需要去存取示範帳戶，裡面有很多數據可以讓大家玩玩～</p>
+<p>後來，發現這樣的學習也不是辦法，於是我轉念一想：啊！乾脆先準備 GA 的證照，過程中也可以學會一些基本的知識和觀念。於是我便開始上網爬文，尋找怎麼準備比較好，最後我採取了兩種方式：1. 觀看 Google 的<a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=kKPTZNjaKcY&index=1&list=PLI5YfMzCfRtZU5Qwzx57HjmZyNE2o5YDN">官方教學影片</a>，2. 看書(掌握行銷新趨勢 — 你不可不知的網站流量分析)。</p>
+<p>看 Google 教學影片，我是每天用搭捷運去實習的時間慢慢看，每天累積一定可以看完，不過都是全英文的，看的很吃力，如果能開著 GA 一起操作，我覺得效果會更好。</p>
+<p>看書的部分，我蠻推薦【掌握行銷新趨勢 — 你不可不知的網站流量分析】，除了是全中文XD 裡面還有模擬題目可以做練習。</p>
+<p>邊準備的過程我會邊嘗試考考看，因為作答時間蠻長的，建議可以把每個題目截圖下來，就算沒過也可以去找找看答案，考了兩次之後終於過了，也有了一些基礎觀念。</p>
+<hr>
+<h3 id="實習：將知識轉化為實際運用"><a href="#實習：將知識轉化為實際運用" class="headerlink" title="實習：將知識轉化為實際運用"></a>實習：將知識轉化為實際運用</h3><p>由於之前自己用 Weebly 架站，沒有任何流量可以觀察，所以我決定將目標鎖定在企業的網站，就一定會有數據了吧XD 所以當初實習，我設定了兩個學習目標，一個是數位廣告投放、另一個就是 GA。於是我大膽的提出想觀察 GA 數據，並輔以證照為背書，終於得以觀察一個有穩定流量和使用者行為數據的網站(也很感謝實習公司電子豹給我這樣的學習機會)。</p>
+<p>但在剛開始操作時，其實常常會腦袋一片空白，完全不知道該怎麼下手。這時候就得依靠 Google 大神了，其實 Google 的<a target="_blank" rel="noopener" href="https://support.google.com/analytics/?hl=zh-Hant#topic=3544906">官方文件</a>寫得非常詳細，當有問題時查看文件，幾乎 90% 的問題都可以解決。如果真的翻遍網路上的文章還找不到答案，也建議可以上 <a target="_blank" rel="noopener" href="https://www.zh.advertisercommunity.com/t5/Google-Analytics-%E5%88%86%E6%9E%90/ct-p/GA#">Google Analytics(分析)討論區</a> 詢問，不用怕發問的問題沒人理你，裡面可是有大神黃道育老師，超熱心的為大家解惑！</p>
+<p>看到這邊，或許有人會想說：這樣我不是直接動手做，邊查找網路資料，更能快速學會？我覺得不完全正確，老實說，基本的觀念和知識，能夠幫助你更快查找資料，以及遇到問題能舉一反三。否則很容易只能查找特定的資訊，而無法融會貫通這套工具。</p>
+<h3 id="工作：火箭般推進成長"><a href="#工作：火箭般推進成長" class="headerlink" title="工作：火箭般推進成長"></a>工作：火箭般推進成長</h3><p>不得不說，之前的課程學習加上實務經驗，是銜接工作的一個重要關鍵。在工作之前，我多半是想到什麼、看到什麼就去查資料、嘗試操作。但開始在職場上運用這項工具，就真的是開始利用它來解決問題。當遇到狀況，我需要找什麼樣的數據；如果我要得到這項數據，我需要怎麼做追蹤；找到這項數據，那它代表什麼意思。多了很多實務上的問題可以挑戰及解決，但我並不完全會，很幸運的是，公司裡面有許多厲害的高手可以詢問；另外因為我們有購買 GA 360 Suite，有一個專屬的顧問可以做詢問XD 在這段期間，快速學習、快速嘗試、快速累積，真的有如火箭般的成長。</p>
+<hr>
+<h3 id="真的太多可以學了……挑自己需要的先學"><a href="#真的太多可以學了……挑自己需要的先學" class="headerlink" title="真的太多可以學了……挑自己需要的先學"></a>真的太多可以學了……挑自己需要的先學</h3><p>說真的，GA 這套工具真的非常強大，我自己還是有很多東西沒有嘗試過，像是電子商務功能、多管道程序報表、智慧目標……等。不過我認為可以先從自己在操作上會實際用到的先做鑽研，否則有可能設定了一堆東西，可是資料的利用率卻很低。而熟練這套工具之後，一定會碰到的問題是：從這些數據，我能得到什麼 Insight，如果不能看出什麼端倪，解決什麼問題，老實說一點用都沒有XD 這部分我也還在學習，希望能將這套工具做最大的利用，然後來優化行銷的每個部份。</p>
+<p>說到 GA，就一定要提 Google 的另一項產品：<a target="_blank" rel="noopener" href="https://www.google.com/analytics/tag-manager/">Google 代碼管理工具</a>(Google Tag Manager，簡稱 GTM )，真的超級好用，有興趣的人可以去查查看，改天再來分享交流！</p>
+
+  </div>
+  <footer class="post-footer">
+    <a href="/archives/">← back to archives</a>
+  </footer>
+</article>
+
+    </div>
+    <footer class="site-footer">
+  <hr class="rule">
+  <div class="footer-inner">
+    <span>$ echo "&copy; 2021-2026 Alan Syue"</span>
+    <span class="footer-links">
+      
+        <a href="https://github.com/AlanSyue" target="_blank" rel="noopener">github</a>
+      
+        <a href="https://www.linkedin.com/in/alan-syue-284a83134/" target="_blank" rel="noopener">linkedin</a>
+      
+        <a href="https://twitter.com/alansyue" target="_blank" rel="noopener">twitter</a>
+      
+        <a href="mailto:b123105@gmail.com" target="_blank" rel="noopener">email</a>
+      
+    </span>
+  </div>
+</footer>
+
+  </main>
+  <script src="/js/theme.js"></script>
+</body>
+</html>

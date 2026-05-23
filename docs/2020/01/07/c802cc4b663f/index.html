@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>解決無法在 Heroku 持續儲存靜態資料問題 | 使用 Redis 記憶體資料庫 — Alan Syue&#39;s Blog</title>
+  <meta name="description" content="Software engineer in Taiwan. Notes on PHP, Laravel, and self-learning.">
+  <meta name="author" content="Alan Syue">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Alan Syue&#39;s Blog">
+  <meta property="og:title" content="解決無法在 Heroku 持續儲存靜態資料問題 | 使用 Redis 記憶體資料庫">
+  <meta property="og:description" content="Software engineer in Taiwan. Notes on PHP, Laravel, and self-learning.">
+  <meta property="og:url" content="https://alansyue.github.io/2020/01/07/c802cc4b663f/">
+  <link rel="canonical" href="https://alansyue.github.io/2020/01/07/c802cc4b663f/">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <script>
+    (function(){
+      try {
+        if (localStorage.getItem('preferredTheme') !== 'light') {
+          document.documentElement.classList.add('darkmode-pre');
+        }
+      } catch(e){}
+    })();
+  </script>
+  <style>
+    html.darkmode-pre { background: #0d0d0d; }
+    html.darkmode-pre body { background: #0d0d0d; color: #e0e0e0; }
+  </style>
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <main class="container">
+    <header class="site-header">
+  <div class="brand">
+    <a href="/" class="brand-link">~/alansyue</a><span class="cursor">_</span>
+  </div>
+  <nav class="site-nav">
+    
+      <a href="/" class="nav-item">[home]</a>
+    
+      <a href="/archives/" class="nav-item">[posts]</a>
+    
+      <a href="/slides/" class="nav-item">[slides]</a>
+    
+      <a href="/about/" class="nav-item">[about]</a>
+    
+    <button type="button" class="theme-toggle" onclick="toggleTheme()" data-theme-btn aria-label="toggle theme">☾</button>
+  </nav>
+  <hr class="rule">
+</header>
+
+    <div class="content">
+      <article class="post">
+  <header class="post-header">
+    <h1 class="post-title-main">解決無法在 Heroku 持續儲存靜態資料問題 | 使用 Redis 記憶體資料庫</h1>
+    <p class="post-meta-line">
+      <span>$ date</span>
+      <time datetime="2020-01-07T15:36:55.000Z">2020-01-07 23:36</time>
+      
+    </p>
+  </header>
+  <div class="post-body">
+    <blockquote>
+<p>本文最初發表於 <a target="_blank" rel="noopener" href="https://medium.com/@b123105/%E8%A7%A3%E6%B1%BA%E7%84%A1%E6%B3%95%E5%9C%A8-heroku-%E6%8C%81%E7%BA%8C%E5%84%B2%E5%AD%98%E9%9D%9C%E6%85%8B%E8%B3%87%E6%96%99%E5%95%8F%E9%A1%8C-%E4%BD%BF%E7%94%A8-redis-%E8%A8%98%E6%86%B6%E9%AB%94%E8%B3%87%E6%96%99%E5%BA%AB-c802cc4b663f">Medium</a>，已搬運至個人 blog。</p>
+</blockquote>
+<p><em>我把 Python script 部署在 Heroku 上，並透過 schedule 的 add-on 來定期執行。爬取過的資料原本我是打算用靜態檔來儲存，整理成 json 格式另存。 But …… 我發現每次執行程式後，完全沒有將資料儲存起來。後來查官方文件才知道，</em></p>
+<hr>
+<h3 id="解決無法在-Heroku-持續儲存靜態資料問題-使用-Redis-記憶體資料庫"><a href="#解決無法在-Heroku-持續儲存靜態資料問題-使用-Redis-記憶體資料庫" class="headerlink" title="解決無法在 Heroku 持續儲存靜態資料問題 | 使用 Redis 記憶體資料庫"></a>解決無法在 Heroku 持續儲存靜態資料問題 | 使用 Redis 記憶體資料庫</h3><p><img src="/images/c802cc4b663f/1.png"></p>
+<p>原文出處：<a target="_blank" rel="noopener" href="https://reurl.cc/oDM685">https://reurl.cc/oDM685</a></p>
+<p>前陣子幫朋友做了一個職缺自動通知的機器人，主要是用 Python 至指定頁面爬取職缺資訊，接著比對已經排取過的資料做排除，最後透過 LINE Notify API 來發送推播通知。</p>
+<p>我把 Python script 部署在 Heroku 上，並透過 schedule 的 add-on 來定期執行。爬取過的資料原本我是打算用靜態檔來儲存，整理成 json 格式另存。</p>
+<p>But …… 我發現每次執行程式後，完全沒有將資料儲存起來。後來查官方文件才知道， Heroku 的虛擬機 ( dyno ) 是 臨時硬碟 ( Ephemeral Disk )，文件中也有提到：</p>
+<p><strong>Heroku has an “ephemeral” hard drive, this means that you can write files to disk, but those files will not persist after the application is restarted.</strong></p>
+<p>於是，就打算嘗試將資料存到 Redis，Heroku 有提供免費的 <a target="_blank" rel="noopener" href="https://elements.heroku.com/addons/heroku-redis">Redis 資料庫服務</a> ( 有 25 MB )，不過這次是申請使用 <a target="_blank" rel="noopener" href="https://redislabs.com/">Redis Labs</a> ( 免費試用方案提供 30 MB )。</p>
+<p>以下分享申請步驟及如何實作：</p>
+<h3 id="一、申請-Redis-Labs"><a href="#一、申請-Redis-Labs" class="headerlink" title="一、申請 Redis Labs"></a>一、申請 Redis Labs</h3><p>至 Redis Labs 官網，留下 Email 點選 START FREE</p>
+<p><img src="/images/c802cc4b663f/2.png"></p>
+<p>首頁輸入信箱</p>
+<p>輸入完後，會請你至信箱收取認證信</p>
+<p><img src="/images/c802cc4b663f/3.png"></p>
+<p>送出完成畫面</p>
+<p>至信箱點選啟動按鈕</p>
+<p><img src="/images/c802cc4b663f/4.png"></p>
+<p>啟動信件</p>
+<p>填寫姓名後點選 Continue</p>
+<p><img src="/images/c802cc4b663f/5.png"></p>
+<h3 id="二、設置-Redis-資料庫"><a href="#二、設置-Redis-資料庫" class="headerlink" title="二、設置 Redis 資料庫"></a>二、設置 Redis 資料庫</h3><p>先選擇完左上方的雲端服務後，點選左下角基本方案 -&gt; 30 MB 免費方案。</p>
+<p><img src="/images/c802cc4b663f/6.png"></p>
+<p>此步驟是填寫要註冊的名稱。</p>
+<p><img src="/images/c802cc4b663f/7.png"></p>
+<p>接著是創建資料庫，填寫資料庫名稱後，記得把連線密碼記下來。最後按 Activate。</p>
+<p><img src="/images/c802cc4b663f/8.png"></p>
+<p>成功啟用！記得把 Endpoint 資料庫主機位置跟 port 也記下來唷！</p>
+<p><img src="/images/c802cc4b663f/9.png"></p>
+<h3 id="三、可以開始來寫程式囉"><a href="#三、可以開始來寫程式囉" class="headerlink" title="三、可以開始來寫程式囉"></a>三、可以開始來寫程式囉</h3><p>import redis module 後，把 host 設定剛剛記下來的資料庫主機位置， port 設定為主機位置後的阜號。password 也是設定上方步驟獲得的密碼。</p>
+<p>因為 redis 是 key-value 關係，所以可以看到我塞入 key &#x3D; ‘key’ ，value &#x3D; ‘hello world’，最後印出 key 值為 ’key‘ 的資料。</p>
+<p>執行此程式可以就能得到 hello world 啦！</p>
+<p><img src="/images/c802cc4b663f/10.png"></p>
+<p>只要搭配 Redis，就能把部署在 Heroku 的程式碼，將資料存在 Redis 中，不怕被 reset 掉囉！</p>
+
+  </div>
+  <footer class="post-footer">
+    <a href="/archives/">← back to archives</a>
+  </footer>
+</article>
+
+    </div>
+    <footer class="site-footer">
+  <hr class="rule">
+  <div class="footer-inner">
+    <span>$ echo "&copy; 2021-2026 Alan Syue"</span>
+    <span class="footer-links">
+      
+        <a href="https://github.com/AlanSyue" target="_blank" rel="noopener">github</a>
+      
+        <a href="https://www.linkedin.com/in/alan-syue-284a83134/" target="_blank" rel="noopener">linkedin</a>
+      
+        <a href="https://twitter.com/alansyue" target="_blank" rel="noopener">twitter</a>
+      
+        <a href="mailto:b123105@gmail.com" target="_blank" rel="noopener">email</a>
+      
+    </span>
+  </div>
+</footer>
+
+  </main>
+  <script src="/js/theme.js"></script>
+</body>
+</html>

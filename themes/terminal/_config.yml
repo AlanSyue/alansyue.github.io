@@ -1,0 +1,15 @@
+menu:
+  home: /
+  posts: /archives/
+  slides: /slides/
+  about: /about/
+
+social:
+  github: https://github.com/AlanSyue
+  linkedin: https://www.linkedin.com/in/alan-syue-284a83134/
+  twitter: https://twitter.com/alansyue
+  email: mailto:b123105@gmail.com
+
+footer:
+  copyright: "Alan Syue"
+  since: 2021

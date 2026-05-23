@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>用 Nest.js 開發 API 吧 (一) — Alan Syue&#39;s Blog</title>
+  <meta name="description" content="Software engineer in Taiwan. Notes on PHP, Laravel, and self-learning.">
+  <meta name="author" content="Alan Syue">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Alan Syue&#39;s Blog">
+  <meta property="og:title" content="用 Nest.js 開發 API 吧 (一)">
+  <meta property="og:description" content="Software engineer in Taiwan. Notes on PHP, Laravel, and self-learning.">
+  <meta property="og:url" content="https://alansyue.github.io/2020/11/14/c789d4d4efb3/">
+  <link rel="canonical" href="https://alansyue.github.io/2020/11/14/c789d4d4efb3/">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <script>
+    (function(){
+      try {
+        if (localStorage.getItem('preferredTheme') !== 'light') {
+          document.documentElement.classList.add('darkmode-pre');
+        }
+      } catch(e){}
+    })();
+  </script>
+  <style>
+    html.darkmode-pre { background: #0d0d0d; }
+    html.darkmode-pre body { background: #0d0d0d; color: #e0e0e0; }
+  </style>
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <main class="container">
+    <header class="site-header">
+  <div class="brand">
+    <a href="/" class="brand-link">~/alansyue</a><span class="cursor">_</span>
+  </div>
+  <nav class="site-nav">
+    
+      <a href="/" class="nav-item">[home]</a>
+    
+      <a href="/archives/" class="nav-item">[posts]</a>
+    
+      <a href="/slides/" class="nav-item">[slides]</a>
+    
+      <a href="/about/" class="nav-item">[about]</a>
+    
+    <button type="button" class="theme-toggle" onclick="toggleTheme()" data-theme-btn aria-label="toggle theme">☾</button>
+  </nav>
+  <hr class="rule">
+</header>
+
+    <div class="content">
+      <article class="post">
+  <header class="post-header">
+    <h1 class="post-title-main">用 Nest.js 開發 API 吧 (一)</h1>
+    <p class="post-meta-line">
+      <span>$ date</span>
+      <time datetime="2020-11-14T01:01:05.000Z">2020-11-14 09:01</time>
+      
+    </p>
+  </header>
+  <div class="post-body">
+    <blockquote>
+<p>本文最初發表於 <a target="_blank" rel="noopener" href="https://medium.com/@b123105/%E7%94%A8-nest-js-%E9%96%8B%E7%99%BC-api-%E5%90%A7-%E4%B8%80-c789d4d4efb3">Medium</a>，已搬運至個人 blog。</p>
+</blockquote>
+<p><em>原文出處：<a target="_blank" rel="noopener" href="https://newideas.coderbridge.io/2020/11/14/use-nestjs-develop-api/">https://newideas.coderbridge.io/2020/11/14/use-nestjs-develop-api/</a></em></p>
+<hr>
+<h3 id="用-Nest-js-開發-API-吧-一"><a href="#用-Nest-js-開發-API-吧-一" class="headerlink" title="用 Nest.js 開發 API 吧 (一)"></a>用 Nest.js 開發 API 吧 (一)</h3><p><img src="/images/c789d4d4efb3/1.png" alt="圖片來源：https://docs.nestjs.com/"></p>
+<p><em>圖片來源：<a target="_blank" rel="noopener" href="https://docs.nestjs.com/">https://docs.nestjs.com/</a></em></p>
+<p>原文出處：<a target="_blank" rel="noopener" href="https://newideas.coderbridge.io/2020/11/14/use-nestjs-develop-api/">https://newideas.coderbridge.io/2020/11/14/use-nestjs-develop-api/</a></p>
+<p>大約 8 月的時候，我開始計畫重寫 <a target="_blank" rel="noopener" href="https://www.itseed.tw/">資訊種子培訓計畫</a> 的官網。原本的程式碼經過大約 7 屆的迭代，比較缺乏維護重構，大多是因應招生計劃再重新設計，有點類似活動頁。評估過後因為包袱較少，就打算整個重寫，並嘗試用新一點的技術來開發，也讓我有機會碰 Nest.js。</p>
+<h3 id="為什麼選用-Nest-js"><a href="#為什麼選用-Nest-js" class="headerlink" title="為什麼選用 Nest.js"></a>為什麼選用 Nest.js</h3><p>當初打算重寫的時候，有和 15 屆的學弟一起討論，前端打算使用 Next.js。後來考慮到後續維護，就想說使用 Node.js，這樣維護的開發者只需要熟悉 JavaScript。</p>
+<p>當時的討論也在想說要用哪套 Node.js 框架，於是學弟有提出可以研究看看 Nest.js，是一套架構嚴謹的框架。由於後續維護者會是學生為主，有一套嚴謹架構的框架，可以保持一定的程式品質。</p>
+<p>研究之後發現了解到 Nest.js 有以下不錯的優點：<br>1. 基於 `Express`，但也可以選用配置 `Fastify`<br>2. 完美支援 `TypeScript`，強型別以及預先檢查減少開發上的預期外錯誤 (這各有擁護者，但我開發上覺得體驗不錯)<br>3. 嚴謹的分層，彈性高、鬆散耦合、高度可測試及維護<br>4. 官方文件完善，社群豐富</p>
+<p>於是就採用 Nest.js 做為此次專案的後端技術來做開發了。接下來的系列文章會以開發過程的實作紀錄來撰寫。</p>
+<h3 id="首先，先來安裝吧"><a href="#首先，先來安裝吧" class="headerlink" title="首先，先來安裝吧"></a>首先，先來安裝吧</h3><p>一開始先安裝 Nest.js 提供的 cli 套件：<br>```<br>yarn global add @nestjs&#x2F;cli<br>```<br>安裝完後要來創建專案，使用 cli 來建置：<br>```<br>nest new project-name<br>```<br>建置時會問你要使用 `npm` 還是 `yarn`，就選擇自己想用的</p>
+<p><img src="/images/c789d4d4efb3/2.png"></p>
+<h3 id="啟動專案"><a href="#啟動專案" class="headerlink" title="啟動專案"></a>啟動專案</h3><p>設置完後，移動到專案資料夾<br>```<br>cd project-name<br>```<br>接著輸入指令啟動<br>```<br>yarn start:dev<br>```<br>`啟動畫面`</p>
+<p><img src="/images/c789d4d4efb3/3.png"></p>
+<p>接著到瀏覽器輸入 `<a target="_blank" rel="noopener" href="http://localhost:3000/%60">http://localhost:3000/`</a>，看到預設的 `Hello World!` 字串代表你成功啟動了</p>
+<p><img src="/images/c789d4d4efb3/4.png"></p>
+<h3 id="小結"><a href="#小結" class="headerlink" title="小結"></a>小結</h3><p>第一篇介紹了<br>1. 選用 Nest.js 的原因<br>2. 如何安裝<br>3. 如何啟動</p>
+<p>下一篇預計分享 Nest.js 的專案架構。如果文章有任何錯誤或建議，歡迎告知！</p>
+
+  </div>
+  <footer class="post-footer">
+    <a href="/archives/">← back to archives</a>
+  </footer>
+</article>
+
+    </div>
+    <footer class="site-footer">
+  <hr class="rule">
+  <div class="footer-inner">
+    <span>$ echo "&copy; 2021-2026 Alan Syue"</span>
+    <span class="footer-links">
+      
+        <a href="https://github.com/AlanSyue" target="_blank" rel="noopener">github</a>
+      
+        <a href="https://www.linkedin.com/in/alan-syue-284a83134/" target="_blank" rel="noopener">linkedin</a>
+      
+        <a href="https://twitter.com/alansyue" target="_blank" rel="noopener">twitter</a>
+      
+        <a href="mailto:b123105@gmail.com" target="_blank" rel="noopener">email</a>
+      
+    </span>
+  </div>
+</footer>
+
+  </main>
+  <script src="/js/theme.js"></script>
+</body>
+</html>

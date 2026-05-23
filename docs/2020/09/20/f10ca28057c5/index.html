@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>開源專案開發紀錄 — 翻譯及新功能開發 — Alan Syue&#39;s Blog</title>
+  <meta name="description" content="Software engineer in Taiwan. Notes on PHP, Laravel, and self-learning.">
+  <meta name="author" content="Alan Syue">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Alan Syue&#39;s Blog">
+  <meta property="og:title" content="開源專案開發紀錄 — 翻譯及新功能開發">
+  <meta property="og:description" content="Software engineer in Taiwan. Notes on PHP, Laravel, and self-learning.">
+  <meta property="og:url" content="https://alansyue.github.io/2020/09/20/f10ca28057c5/">
+  <link rel="canonical" href="https://alansyue.github.io/2020/09/20/f10ca28057c5/">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <script>
+    (function(){
+      try {
+        if (localStorage.getItem('preferredTheme') !== 'light') {
+          document.documentElement.classList.add('darkmode-pre');
+        }
+      } catch(e){}
+    })();
+  </script>
+  <style>
+    html.darkmode-pre { background: #0d0d0d; }
+    html.darkmode-pre body { background: #0d0d0d; color: #e0e0e0; }
+  </style>
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <main class="container">
+    <header class="site-header">
+  <div class="brand">
+    <a href="/" class="brand-link">~/alansyue</a><span class="cursor">_</span>
+  </div>
+  <nav class="site-nav">
+    
+      <a href="/" class="nav-item">[home]</a>
+    
+      <a href="/archives/" class="nav-item">[posts]</a>
+    
+      <a href="/slides/" class="nav-item">[slides]</a>
+    
+      <a href="/about/" class="nav-item">[about]</a>
+    
+    <button type="button" class="theme-toggle" onclick="toggleTheme()" data-theme-btn aria-label="toggle theme">☾</button>
+  </nav>
+  <hr class="rule">
+</header>
+
+    <div class="content">
+      <article class="post">
+  <header class="post-header">
+    <h1 class="post-title-main">開源專案開發紀錄 — 翻譯及新功能開發</h1>
+    <p class="post-meta-line">
+      <span>$ date</span>
+      <time datetime="2020-09-19T16:25:02.000Z">2020-09-20 00:25</time>
+      
+    </p>
+  </header>
+  <div class="post-body">
+    <blockquote>
+<p>本文最初發表於 <a target="_blank" rel="noopener" href="https://medium.com/@b123105/%E9%96%8B%E6%BA%90%E5%B0%88%E6%A1%88%E9%96%8B%E7%99%BC%E7%B4%80%E9%8C%84-%E7%BF%BB%E8%AD%AF%E5%8F%8A%E6%96%B0%E5%8A%9F%E8%83%BD%E9%96%8B%E7%99%BC-f10ca28057c5">Medium</a>，已搬運至個人 blog。</p>
+</blockquote>
+<p><em>繼上次分享 開源專案初體驗 — 解 Issue 心得分享，上週又有些小心得想要記錄下來：分別是協助多國語系的翻譯以及新功能的開發：</em></p>
+<hr>
+<p><img src="/images/f10ca28057c5/1.png" alt="photo:needpix"></p>
+<p><em><a target="_blank" rel="noopener" href="https://www.needpix.com/photo/221127/github-logo-social-coding-brand-developer-git-website">photo:needpix</a></em></p>
+<p>繼上次分享 <a target="_blank" rel="noopener" href="https://medium.com/@b123105/%E9%96%8B%E6%BA%90%E5%B0%88%E6%A1%88%E5%88%9D%E9%AB%94%E9%A9%97-%E8%A7%A3-issue-%E5%BF%83%E5%BE%97%E5%88%86%E4%BA%AB-2cd3eba5940">開源專案初體驗 — 解 Issue 心得分享</a>，上週又有些小心得想要記錄下來：分別是協助多國語系的翻譯以及新功能的開發：</p>
+<h3 id="多國語系翻譯"><a href="#多國語系翻譯" class="headerlink" title="多國語系翻譯"></a>多國語系翻譯</h3><p>這次是協助 <a target="_blank" rel="noopener" href="https://github.com/wojtekmaj">wojtekmaj</a>&#x2F;<a target="_blank" rel="noopener" href="https://github.com/wojtekmaj/react-lifecycle-methods-diagram">react-lifecycle-methods-diagram</a> 做多國語系翻譯，主要是因為工作上在寫 React 時，有時會忘記 Lifecycle 的運作機制，查找時剛好找到作者開發的圖表，覺得還蠻完整的。</p>
+<p><a target="_blank" rel="noopener" href="https://projects.wojtekmaj.pl/react-lifecycle-methods-diagram/">React Lifecycle Methods diagram</a></p>
+<p>但是！卻發現裡面沒有繁體中文，看 GitHub 上有使用 i18n，於是我就依照我的想法翻譯，並送 PR 給作者，作者就幫我 merge 了。</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/wojtekmaj/react-lifecycle-methods-diagram/pull/68">doc: add Traditional Chinese by AlanSyue · Pull Request #68 ·…</a></p>
+<p>不過作者最近放假，還沒能把程式碼部署上去，需要再靜候一陣子哈哈。</p>
+<h3 id="新功能開發"><a href="#新功能開發" class="headerlink" title="新功能開發"></a>新功能開發</h3><p>上篇文章有提到 fb-messenger-cli 這個工具，這次看到一個 Issues 是：</p>
+<p><img src="/images/f10ca28057c5/2.png" alt="https://github.com/Alex-Rose/fb-messenger-cli/issues/190"></p>
+<p><em><a target="_blank" rel="noopener" href="https://github.com/Alex-Rose/fb-messenger-cli/issues/190">https://github.com/Alex-Rose/fb-messenger-cli/issues/190</a></em></p>
+<p>有位視障朋友提到他利用 <a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E8%9E%A2%E5%B9%95%E9%96%B1%E8%AE%80%E5%99%A8">screen reader</a> 使用此工具時，目前此工具的顯示方式會在同一個人多次傳送訊息時，印出此人的姓名，但對於他來說，screen reader 一直出現此訊息會造成干擾，希望可以有個功能讓同一個使用者多次傳送訊息時，摺疊成只出現一次姓名。</p>
+<p>看完覺得蠻有興趣的，於是就動手開發。開發完成發 PR 後，也在 Issues 上留言：</p>
+<p><img src="/images/f10ca28057c5/3.png"></p>
+<p>我多新增了一個指令是 <code>/repeat</code> ，預設值是開啟，也就是一般的模式，只要下此指令後，就可以摺疊訊息，方式其實就是在 <code>renderMessage</code> 的時候，去判斷上一個訊息發送者是不是跟現在的相同，相同的話就不印出此發送訊息者姓名。也很開心開 Issue 的人表示這是他想要的功能。</p>
+<p><img src="/images/f10ca28057c5/4.png" alt="https://github.com/Alex-Rose/fb-messenger-cli/pull/233"></p>
+<p><em><a target="_blank" rel="noopener" href="https://github.com/Alex-Rose/fb-messenger-cli/pull/233">https://github.com/Alex-Rose/fb-messenger-cli/pull/233</a></em></p>
+<p>不過在程式碼的部分，我覺得沒有寫得很完善，蠻希望作者能協助 code review ，不過作者似乎很久沒有在管理此專案了，期待他能回覆並 merge 此功能。</p>
+<h3 id="小結"><a href="#小結" class="headerlink" title="小結"></a>小結</h3><p>貢獻開源專案真的很有趣，印象深刻的是在開發 fb-messenger-cli 的功能時，Node.js 我並沒有很熟悉，但作者設計的架構其實蠻清楚易懂的，十分讚嘆他的技術。一樣期許之後能再多多奉獻，並持續分享。</p>
+
+  </div>
+  <footer class="post-footer">
+    <a href="/archives/">← back to archives</a>
+  </footer>
+</article>
+
+    </div>
+    <footer class="site-footer">
+  <hr class="rule">
+  <div class="footer-inner">
+    <span>$ echo "&copy; 2021-2026 Alan Syue"</span>
+    <span class="footer-links">
+      
+        <a href="https://github.com/AlanSyue" target="_blank" rel="noopener">github</a>
+      
+        <a href="https://www.linkedin.com/in/alan-syue-284a83134/" target="_blank" rel="noopener">linkedin</a>
+      
+        <a href="https://twitter.com/alansyue" target="_blank" rel="noopener">twitter</a>
+      
+        <a href="mailto:b123105@gmail.com" target="_blank" rel="noopener">email</a>
+      
+    </span>
+  </div>
+</footer>
+
+  </main>
+  <script src="/js/theme.js"></script>
+</body>
+</html>

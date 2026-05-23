@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>StarRocket 資料圖像化課程心得筆記 — Alan Syue&#39;s Blog</title>
+  <meta name="description" content="Software engineer in Taiwan. Notes on PHP, Laravel, and self-learning.">
+  <meta name="author" content="Alan Syue">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Alan Syue&#39;s Blog">
+  <meta property="og:title" content="StarRocket 資料圖像化課程心得筆記">
+  <meta property="og:description" content="Software engineer in Taiwan. Notes on PHP, Laravel, and self-learning.">
+  <meta property="og:url" content="https://alansyue.github.io/2018/01/08/ade6d597f48f/">
+  <link rel="canonical" href="https://alansyue.github.io/2018/01/08/ade6d597f48f/">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <script>
+    (function(){
+      try {
+        if (localStorage.getItem('preferredTheme') !== 'light') {
+          document.documentElement.classList.add('darkmode-pre');
+        }
+      } catch(e){}
+    })();
+  </script>
+  <style>
+    html.darkmode-pre { background: #0d0d0d; }
+    html.darkmode-pre body { background: #0d0d0d; color: #e0e0e0; }
+  </style>
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <main class="container">
+    <header class="site-header">
+  <div class="brand">
+    <a href="/" class="brand-link">~/alansyue</a><span class="cursor">_</span>
+  </div>
+  <nav class="site-nav">
+    
+      <a href="/" class="nav-item">[home]</a>
+    
+      <a href="/archives/" class="nav-item">[posts]</a>
+    
+      <a href="/slides/" class="nav-item">[slides]</a>
+    
+      <a href="/about/" class="nav-item">[about]</a>
+    
+    <button type="button" class="theme-toggle" onclick="toggleTheme()" data-theme-btn aria-label="toggle theme">☾</button>
+  </nav>
+  <hr class="rule">
+</header>
+
+    <div class="content">
+      <article class="post">
+  <header class="post-header">
+    <h1 class="post-title-main">StarRocket 資料圖像化課程心得筆記</h1>
+    <p class="post-meta-line">
+      <span>$ date</span>
+      <time datetime="2018-01-08T14:06:08.000Z">2018-01-08 22:06</time>
+      
+    </p>
+  </header>
+  <div class="post-body">
+    <blockquote>
+<p>本文最初發表於 <a target="_blank" rel="noopener" href="https://medium.com/@b123105/starrocket-%E8%B3%87%E6%96%99%E5%9C%96%E5%83%8F%E5%8C%96%E8%AA%B2%E7%A8%8B%E5%BF%83%E5%BE%97%E7%AD%86%E8%A8%98-ade6d597f48f">Medium</a>，已搬運至個人 blog。</p>
+</blockquote>
+<p><em>昨天 19:30 我參加了三創育成中心的資料圖像化課程，當初會報名是因為，工作上常常需要從資料中找到 Insight，以及後續怎麼呈現並報告給主管看。看了一下課程內容覺得還蠻吸引我便參加了。</em></p>
+<hr>
+<p><img src="/images/ade6d597f48f/1.jpg" alt="(圖片來源：www.pexels.com)"></p>
+<p><em>(圖片來源：<a target="_blank" rel="noopener" href="https://www.pexels.com/photo/woman-typing-writing-programming-7112/">www.pexels.com</a>)</em></p>
+<p>昨天 19:30 我參加了三創育成中心的資料圖像化課程，當初會報名是因為，工作上常常需要從資料中找到 Insight，以及後續怎麼呈現並報告給主管看。看了一下課程內容覺得還蠻吸引我便參加了。</p>
+<h3 id="先說對於課程內容的結論："><a href="#先說對於課程內容的結論：" class="headerlink" title="先說對於課程內容的結論："></a>先說對於課程內容的結論：</h3><ol>
+<li>一開始對於初次接觸 Data clean 會碰到的問題我覺得講師說得蠻詳細的</li>
+<li>對於工具 PowerBI 的基本操作介紹較少，課程上所說大致上都能用 Excel 快速完成</li>
+<li>總課程時間約一個半小時，時間較短導致許多內容無法完整</li>
+</ol>
+<hr>
+<h3 id="講師介紹"><a href="#講師介紹" class="headerlink" title="講師介紹"></a>講師介紹</h3><p>今天分享的講師 Ning Chen，曾任 Yahoo 的分析師，現在是 台北 R-Laides 的共同創辦人。</p>
+<p>講師此次課程上使用的是他透過 <a target="_blank" rel="noopener" href="http://d4sg.org/#aboutus">D4SG ( Data For Social Good)</a> 中替新竹縣環保局製作便利資訊看板，其中使用到的環保署水質監測 Open Data。來讓我們透過 Microsoft PowerBI 進行資料視覺化實作。</p>
+<h3 id="那什麼是-PowerBI-呢？"><a href="#那什麼是-PowerBI-呢？" class="headerlink" title="那什麼是 PowerBI 呢？"></a>那什麼是 PowerBI 呢？</h3><p>Microsoft PowerBI 是由微軟開發的商業智慧(Business Intelligence)工具，BI 工具可以將資料轉換成商業洞察(Business Insight)。簡單來說，我們可以將資料匯入 BI 工具，從中進行分析，得出結論或預測，來進行商業決策。</p>
+<p>據我所知道的工具還有 Tableau(需付費)、Google 的 Data studio(目前免費)。Tableau 我沒使用過，但在之前參加資策會 GA 數據課程，該堂課講師有說蠻強大的。而今天講師也有提到他覺得 Tableau 在視覺上比 PowerBI 更彈性，他舉了兩方利用 Titanic 的資料做出來的視覺化報表，大家可以比較看看。</p>
+<h3 id="Tableau-competition-—-Titanic-report"><a href="#Tableau-competition-—-Titanic-report" class="headerlink" title="Tableau competition — Titanic report"></a>Tableau competition — Titanic report</h3><p>( 資料來源：<a target="_blank" rel="noopener" href="https://public.tableau.com/views/Titanic_265/Titanic?:embed=y&:loadOrderID=0&:display_count=yes&:showVizHome=no" title="https://public.tableau.com/views/Titanic_265/Titanic?:embed=y&amp;:loadOrderID=0&amp;:display_count=yes&amp;:showVizHome=no">tableau.com</a>)</p>
+<p><a target="_blank" rel="noopener" href="https://public.tableau.com/views/Titanic_265/Titanic?:embed=y&:loadOrderID=0&:display_count=yes&:showVizHome=no">Titanic</a></p>
+<h3 id="PowerBI-competition-—-Titanic-report"><a href="#PowerBI-competition-—-Titanic-report" class="headerlink" title="PowerBI competition — Titanic report"></a>PowerBI competition — Titanic report</h3><p>(影片來源：<a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=kcAfjrLz7so">Berndt Hamboeck 頻道</a>)</p>
+<p><a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=kcAfjrLz7so">https://www.youtube.com/watch?v=kcAfjrLz7so</a></p>
+<p>而 Google 推出的 Data studio，我覺得整體功能上就較陽春，比較方便的是跟 Google 產品串接性很好(當然！因為都是他的產品)，舉凡像是 AdWords、Analytics。</p>
+<hr>
+<h3 id="課程上提到的基本教學"><a href="#課程上提到的基本教學" class="headerlink" title="課程上提到的基本教學"></a>課程上提到的基本教學</h3><ol>
+<li>) 匯入資料</li>
+</ol>
+<p>開啟 PowerBI 後利用左上角的「取得資料」來匯入想分析的資料，可以透過 Excel、CSV，也可以從資料庫中匯入。</p>
+<p><img src="/images/ade6d597f48f/2.png"></p>
+<p>2. ) 資料欄位與圖表工具</p>
+<p>匯入成功後可以在右手邊找到所匯入的資料(圈圈 1 )，同時也可以看見製作圖表的區域(圖表二)</p>
+<p><img src="/images/ade6d597f48f/3.png"></p>
+<p>3. ) 製作圖表</p>
+<p>點選要製作的圖表後，再將資料拖拉到「軸」及「值」(圈圈二的下方)，便可做出視覺化的圖表。</p>
+<p><img src="/images/ade6d597f48f/4.png" alt="(資料使用自環保局 Open data 水質監測數據)"></p>
+<p><em>(資料使用自環保局 Open data 水質監測數據)</em></p>
+<hr>
+<h3 id="後記-詢問講師的問題"><a href="#後記-詢問講師的問題" class="headerlink" title="後記 - 詢問講師的問題"></a>後記 - 詢問講師的問題</h3><p>課堂中，老師有請我們利用水質監測數據，試著找出一些自己認為可以報告的 Insight。關於這點其實我相當困惑，因為工作的時候我也問過類似相同的問題。從 GA 蒐集到許多的網站數據，但在茫茫數據海，我該怎麼找出 Insight。於是我舉手詢問講師，講師這麼回答我：</p>
+<p>他認為在做資料探索的過程，會不知道怎麼分析，可能有兩個原因</p>
+<blockquote>
+<p>一、Domain Knowledge 不足，如果夠了解，應該可以從知道問題，並用資料去驗證。舉例如果知道熟悉 Ubike 的人，可以知道 Ubike 下雨天的使用率很低，或是上下班時間使用率很高，便可以透過資料探索去驗證</p>
+</blockquote>
+<blockquote>
+<p>二、資料陷阱，許多資料不一定是正確的，或是需要從中視覺化的。舉例他某次在進行分析時，發現資料的樣本數非常低外，測量方式也是錯誤的。因此他認為這份資料其實無法提供什麼 Insight。</p>
+</blockquote>
+<p>聽完講師的回覆，其實心裡也有想到，之前並沒有很了解我們的商業模式，缺乏 Domain Knowledge 下好像真的很難發現問題。確實這部分是我需要補足的地方。</p>
+<p>整個課程結束後，回歸到前面的結論，我覺得時間太短真的太可惜了，沒能聽到更完整的分享。但也從中發現了一個有趣的工具可以去做嘗試！</p>
+
+  </div>
+  <footer class="post-footer">
+    <a href="/archives/">← back to archives</a>
+  </footer>
+</article>
+
+    </div>
+    <footer class="site-footer">
+  <hr class="rule">
+  <div class="footer-inner">
+    <span>$ echo "&copy; 2021-2026 Alan Syue"</span>
+    <span class="footer-links">
+      
+        <a href="https://github.com/AlanSyue" target="_blank" rel="noopener">github</a>
+      
+        <a href="https://www.linkedin.com/in/alan-syue-284a83134/" target="_blank" rel="noopener">linkedin</a>
+      
+        <a href="https://twitter.com/alansyue" target="_blank" rel="noopener">twitter</a>
+      
+        <a href="mailto:b123105@gmail.com" target="_blank" rel="noopener">email</a>
+      
+    </span>
+  </div>
+</footer>
+
+  </main>
+  <script src="/js/theme.js"></script>
+</body>
+</html>

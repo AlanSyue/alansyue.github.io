@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>來用 Docker 運行 InstaPy 吧！ — Alan Syue&#39;s Blog</title>
+  <meta name="description" content="Software engineer in Taiwan. Notes on PHP, Laravel, and self-learning.">
+  <meta name="author" content="Alan Syue">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Alan Syue&#39;s Blog">
+  <meta property="og:title" content="來用 Docker 運行 InstaPy 吧！">
+  <meta property="og:description" content="Software engineer in Taiwan. Notes on PHP, Laravel, and self-learning.">
+  <meta property="og:url" content="https://alansyue.github.io/2020/03/22/83255644740b/">
+  <link rel="canonical" href="https://alansyue.github.io/2020/03/22/83255644740b/">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <script>
+    (function(){
+      try {
+        if (localStorage.getItem('preferredTheme') !== 'light') {
+          document.documentElement.classList.add('darkmode-pre');
+        }
+      } catch(e){}
+    })();
+  </script>
+  <style>
+    html.darkmode-pre { background: #0d0d0d; }
+    html.darkmode-pre body { background: #0d0d0d; color: #e0e0e0; }
+  </style>
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <main class="container">
+    <header class="site-header">
+  <div class="brand">
+    <a href="/" class="brand-link">~/alansyue</a><span class="cursor">_</span>
+  </div>
+  <nav class="site-nav">
+    
+      <a href="/" class="nav-item">[home]</a>
+    
+      <a href="/archives/" class="nav-item">[posts]</a>
+    
+      <a href="/slides/" class="nav-item">[slides]</a>
+    
+      <a href="/about/" class="nav-item">[about]</a>
+    
+    <button type="button" class="theme-toggle" onclick="toggleTheme()" data-theme-btn aria-label="toggle theme">☾</button>
+  </nav>
+  <hr class="rule">
+</header>
+
+    <div class="content">
+      <article class="post">
+  <header class="post-header">
+    <h1 class="post-title-main">來用 Docker 運行 InstaPy 吧！</h1>
+    <p class="post-meta-line">
+      <span>$ date</span>
+      <time datetime="2020-03-22T05:28:51.000Z">2020-03-22 13:28</time>
+      
+    </p>
+  </header>
+  <div class="post-body">
+    <blockquote>
+<p>本文最初發表於 <a target="_blank" rel="noopener" href="https://medium.com/@b123105/%E4%BE%86%E7%94%A8-docker-%E9%81%8B%E8%A1%8C-instapy-%E5%90%A7-83255644740b">Medium</a>，已搬運至個人 blog。</p>
+</blockquote>
+<p><em>昨天介紹如何使用 InstaPy 這個專案來達到操作 Instagram 帳號來做到按讚、追蹤、留言等應用。今天想來分享怎麼在 Docker 上運行 InstaPy，方便部署到不同環境。</em></p>
+<hr>
+<h3 id="來用-Docker-運行-InstaPy-吧！"><a href="#來用-Docker-運行-InstaPy-吧！" class="headerlink" title="來用 Docker 運行 InstaPy 吧！"></a>來用 Docker 運行 InstaPy 吧！</h3><p>昨天介紹如何使用 InstaPy 這個專案來達到操作 Instagram 帳號來做到按讚、追蹤、留言等應用。今天想來分享怎麼在 Docker 上運行 InstaPy，方便部署到不同環境。</p>
+<p>基本上 InstaPy 也有另開一個專案叫 <code>instapy-docker</code> ，方便大家能快速用 Docker 去 build image 和 container，接下來就來分享該怎麼使用吧：</p>
+<h3 id="第一步：下載專案"><a href="#第一步：下載專案" class="headerlink" title="第一步：下載專案"></a>第一步：下載專案</h3><p>在 terminal 使用指令 : <code>git clone [https://github.com/InstaPy/instapy-docker.git](https://github.com/InstaPy/instapy-docker.git)</code></p>
+<h3 id="第二步：設定-docker-quickstart-py"><a href="#第二步：設定-docker-quickstart-py" class="headerlink" title="第二步：設定 docker_quickstart.py"></a>第二步：設定 docker_quickstart.py</h3><p>複製 <code>/docker-compose/docker_quickstart.py.example</code> 到專案根目錄，重新命名為 <code>docker_quickstart.py</code>，這個檔案可以照上一篇做的 <code>quickstart.py</code> 來做。</p>
+<h3 id="第三步：建立-image-和-container"><a href="#第三步：建立-image-和-container" class="headerlink" title="第三步：建立 image 和 container"></a>第三步：建立 image 和 container</h3><p>可以依照官方文件提供的指令來做執行，下面是我設定的指令，會 pull 官方 docker Hub 上的 image ，然後建立 container 執行，並且 container 中的 <code>docker_quickstart.py</code> 以及 <code>InstaPy</code> 資料夾會跟本機的連動，只要有做修改，container 的也會同步修改。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">docker pull instapy/instapy:latest &amp;&amp; \ docker run --name instapy \ -v /Users/alansyue/docker_quickstart.py:/code/docker_quickstart.py \ -v /Users/alansyue/InstaPy:/code/InstaPy \ -d instapy/instapy:latest</span><br></pre></td></tr></table></figure>
+
+<h3 id="最後：查看-container-運行狀況"><a href="#最後：查看-container-運行狀況" class="headerlink" title="最後：查看 container 運行狀況"></a>最後：查看 container 運行狀況</h3><p>可以透過 <code>docker logs -f instapy</code> 來查看目前 InstaPy 運行產生的 log。如果修改後要重啟可以使用 <code>docker restart instapy</code> 。</p>
+<h3 id="總結"><a href="#總結" class="headerlink" title="總結"></a>總結</h3><p>今天分享了用 Docker 運行 InstaPy，詳細文件可以參考官方提供的： <a target="_blank" rel="noopener" href="https://github.com/Herrox/instapy-docker/blob/master/documentation/docker.md">https://github.com/Herrox/instapy-docker/blob/master/documentation/docker.md</a> ，如果喜歡此專案也給作者一個 star！</p>
+
+  </div>
+  <footer class="post-footer">
+    <a href="/archives/">← back to archives</a>
+  </footer>
+</article>
+
+    </div>
+    <footer class="site-footer">
+  <hr class="rule">
+  <div class="footer-inner">
+    <span>$ echo "&copy; 2021-2026 Alan Syue"</span>
+    <span class="footer-links">
+      
+        <a href="https://github.com/AlanSyue" target="_blank" rel="noopener">github</a>
+      
+        <a href="https://www.linkedin.com/in/alan-syue-284a83134/" target="_blank" rel="noopener">linkedin</a>
+      
+        <a href="https://twitter.com/alansyue" target="_blank" rel="noopener">twitter</a>
+      
+        <a href="mailto:b123105@gmail.com" target="_blank" rel="noopener">email</a>
+      
+    </span>
+  </div>
+</footer>
+
+  </main>
+  <script src="/js/theme.js"></script>
+</body>
+</html>

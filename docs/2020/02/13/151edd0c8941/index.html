@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>上班一定要看（誤) ｜ fb-messenger-cli 專案使用分享 — Alan Syue&#39;s Blog</title>
+  <meta name="description" content="Software engineer in Taiwan. Notes on PHP, Laravel, and self-learning.">
+  <meta name="author" content="Alan Syue">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Alan Syue&#39;s Blog">
+  <meta property="og:title" content="上班一定要看（誤) ｜ fb-messenger-cli 專案使用分享">
+  <meta property="og:description" content="Software engineer in Taiwan. Notes on PHP, Laravel, and self-learning.">
+  <meta property="og:url" content="https://alansyue.github.io/2020/02/13/151edd0c8941/">
+  <link rel="canonical" href="https://alansyue.github.io/2020/02/13/151edd0c8941/">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <script>
+    (function(){
+      try {
+        if (localStorage.getItem('preferredTheme') !== 'light') {
+          document.documentElement.classList.add('darkmode-pre');
+        }
+      } catch(e){}
+    })();
+  </script>
+  <style>
+    html.darkmode-pre { background: #0d0d0d; }
+    html.darkmode-pre body { background: #0d0d0d; color: #e0e0e0; }
+  </style>
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <main class="container">
+    <header class="site-header">
+  <div class="brand">
+    <a href="/" class="brand-link">~/alansyue</a><span class="cursor">_</span>
+  </div>
+  <nav class="site-nav">
+    
+      <a href="/" class="nav-item">[home]</a>
+    
+      <a href="/archives/" class="nav-item">[posts]</a>
+    
+      <a href="/slides/" class="nav-item">[slides]</a>
+    
+      <a href="/about/" class="nav-item">[about]</a>
+    
+    <button type="button" class="theme-toggle" onclick="toggleTheme()" data-theme-btn aria-label="toggle theme">☾</button>
+  </nav>
+  <hr class="rule">
+</header>
+
+    <div class="content">
+      <article class="post">
+  <header class="post-header">
+    <h1 class="post-title-main">上班一定要看（誤) ｜ fb-messenger-cli 專案使用分享</h1>
+    <p class="post-meta-line">
+      <span>$ date</span>
+      <time datetime="2020-02-13T15:36:23.000Z">2020-02-13 23:36</time>
+      
+    </p>
+  </header>
+  <div class="post-body">
+    <blockquote>
+<p>本文最初發表於 <a target="_blank" rel="noopener" href="https://medium.com/@b123105/%E4%B8%8A%E7%8F%AD%E4%B8%80%E5%AE%9A%E8%A6%81%E7%9C%8B-%E8%AA%A4-fb-messenger-cli-%E5%B0%88%E6%A1%88%E4%BD%BF%E7%94%A8%E5%88%86%E4%BA%AB-151edd0c8941">Medium</a>，已搬運至個人 blog。</p>
+</blockquote>
+<p><em>原文出處：</em></p>
+<hr>
+<p><img src="/images/151edd0c8941/1.png"></p>
+<p>原文出處：<a target="_blank" rel="noopener" href="https://reurl.cc/D1GpdQ">https://reurl.cc/D1GpdQ</a></p>
+<p>今天在 GitHub 上發現一個很有趣的專案，叫做 <a target="_blank" rel="noopener" href="https://github.com/Alex-Rose/fb-messenger-cli">fb-messenger-cli</a>，可以在 terminal 上操作 facebook messenger，看起來很像在工作，又能偷偷跟朋友聊天 ( 誤 )。</p>
+<p>這個專案是用 Node.js，看了一下似乎是用 Puppeteer 來實現登入 messenger 及傳送訊息。 跟大家分享怎麼使用吧：</p>
+<h3 id="一、-如何安裝"><a href="#一、-如何安裝" class="headerlink" title="一、 如何安裝"></a>一、 如何安裝</h3><p>首先要下載 Node，先至 <a target="_blank" rel="noopener" href="https://nodejs.org/zh-tw/download/">官網</a> 下載，安裝完後可以在 terminal 輸入 <strong>node -v</strong> 檢查是否有安裝成功。</p>
+<p>接下來用 terminal 輸入 git clone <a target="_blank" rel="noopener" href="https://github.com/Alex-Rose/fb-messenger-cli.git%EF%BC%8C%E5%B0%87%E5%B0%88%E6%A1%88%E4%B8%8B%E8%BC%89%E4%B8%8B%E4%BE%86%E3%80%82">https://github.com/Alex-Rose/fb-messenger-cli.git，將專案下載下來。</a></p>
+<p><img src="/images/151edd0c8941/2.png"></p>
+<p>下載完後，用 terminal 至專案目錄下，使用 npm install 指令，下載所需套件。</p>
+<p><img src="/images/151edd0c8941/3.png"></p>
+<h3 id="二、-如何使用"><a href="#二、-如何使用" class="headerlink" title="二、 如何使用"></a>二、 如何使用</h3><p>在 terminal 輸入指令 node cli.js 或 fb-messenger-cli，就會執行程式，請你輸入帳號密碼登入。</p>
+<p><img src="/images/151edd0c8941/4.png"></p>
+<p>成功登入後會出現最近聊過天的朋友列表，可輸入最左邊的編號，即可進入聊天室</p>
+<p><img src="/images/151edd0c8941/5.png"></p>
+<p>打完字輸入 Enter 後就可以送出囉，不過要刷新訊息可以透過 &#x2F;r 指令來強制更新最新訊息。</p>
+<p><img src="/images/151edd0c8941/6.png"></p>
+<p>其他指令可以透過 -h 來查看，目前操作起來覺得體驗還算滿好的，真佩服作者。如果覺得很棒記得給他一個 star 。</p>
+<p><img src="/images/151edd0c8941/7.png"></p>
+
+  </div>
+  <footer class="post-footer">
+    <a href="/archives/">← back to archives</a>
+  </footer>
+</article>
+
+    </div>
+    <footer class="site-footer">
+  <hr class="rule">
+  <div class="footer-inner">
+    <span>$ echo "&copy; 2021-2026 Alan Syue"</span>
+    <span class="footer-links">
+      
+        <a href="https://github.com/AlanSyue" target="_blank" rel="noopener">github</a>
+      
+        <a href="https://www.linkedin.com/in/alan-syue-284a83134/" target="_blank" rel="noopener">linkedin</a>
+      
+        <a href="https://twitter.com/alansyue" target="_blank" rel="noopener">twitter</a>
+      
+        <a href="mailto:b123105@gmail.com" target="_blank" rel="noopener">email</a>
+      
+    </span>
+  </div>
+</footer>
+
+  </main>
+  <script src="/js/theme.js"></script>
+</body>
+</html>

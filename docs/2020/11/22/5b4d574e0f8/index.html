@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>用 Nest.js 開發 API 吧 (二) — 專案架構 — Alan Syue&#39;s Blog</title>
+  <meta name="description" content="Software engineer in Taiwan. Notes on PHP, Laravel, and self-learning.">
+  <meta name="author" content="Alan Syue">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Alan Syue&#39;s Blog">
+  <meta property="og:title" content="用 Nest.js 開發 API 吧 (二) — 專案架構">
+  <meta property="og:description" content="Software engineer in Taiwan. Notes on PHP, Laravel, and self-learning.">
+  <meta property="og:url" content="https://alansyue.github.io/2020/11/22/5b4d574e0f8/">
+  <link rel="canonical" href="https://alansyue.github.io/2020/11/22/5b4d574e0f8/">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <script>
+    (function(){
+      try {
+        if (localStorage.getItem('preferredTheme') !== 'light') {
+          document.documentElement.classList.add('darkmode-pre');
+        }
+      } catch(e){}
+    })();
+  </script>
+  <style>
+    html.darkmode-pre { background: #0d0d0d; }
+    html.darkmode-pre body { background: #0d0d0d; color: #e0e0e0; }
+  </style>
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <main class="container">
+    <header class="site-header">
+  <div class="brand">
+    <a href="/" class="brand-link">~/alansyue</a><span class="cursor">_</span>
+  </div>
+  <nav class="site-nav">
+    
+      <a href="/" class="nav-item">[home]</a>
+    
+      <a href="/archives/" class="nav-item">[posts]</a>
+    
+      <a href="/slides/" class="nav-item">[slides]</a>
+    
+      <a href="/about/" class="nav-item">[about]</a>
+    
+    <button type="button" class="theme-toggle" onclick="toggleTheme()" data-theme-btn aria-label="toggle theme">☾</button>
+  </nav>
+  <hr class="rule">
+</header>
+
+    <div class="content">
+      <article class="post">
+  <header class="post-header">
+    <h1 class="post-title-main">用 Nest.js 開發 API 吧 (二) — 專案架構</h1>
+    <p class="post-meta-line">
+      <span>$ date</span>
+      <time datetime="2020-11-22T12:28:57.000Z">2020-11-22 20:28</time>
+      
+    </p>
+  </header>
+  <div class="post-body">
+    <blockquote>
+<p>本文最初發表於 <a target="_blank" rel="noopener" href="https://medium.com/@b123105/%E7%94%A8-nest-js-%E9%96%8B%E7%99%BC-api-%E5%90%A7-%E4%BA%8C-%E5%B0%88%E6%A1%88%E6%9E%B6%E6%A7%8B-5b4d574e0f8">Medium</a>，已搬運至個人 blog。</p>
+</blockquote>
+<p><em>原文出處：<a target="_blank" rel="noopener" href="https://pse.is/395g4u">https://pse.is/395g4u</a></em></p>
+<hr>
+<p><img src="/images/5b4d574e0f8/1.png" alt="圖片來源：https://nestjs.com/"></p>
+<p><em>圖片來源：<a target="_blank" rel="noopener" href="https://nestjs.com/">https://nestjs.com/</a></em></p>
+<p>原文出處：<a target="_blank" rel="noopener" href="https://pse.is/395g4u">https://pse.is/395g4u</a></p>
+<p>上一篇說明了我為什麼選用 Nest.js 開發，之後安裝並啟動了專案。今天要來分享 Nest.js 的專案架構。</p>
+<p>Nest.js 的基本架構主要分為：<br>1. Main<br>2. Module<br>3. Controller<br>3. Service</p>
+<h3 id="Main"><a href="#Main" class="headerlink" title="Main"></a>Main</h3><p>可以從 src&#x2F;main.ts 檔案來看，執行 yarn start:dev 後的進入點。</p>
+<p>從程式碼可以看出來 main.ts 會決定要使用哪個 module 以及 port，預設是使用 <strong>AppModule</strong> 以及 <strong>3000 port</strong></p>
+<h3 id="Module"><a href="#Module" class="headerlink" title="Module"></a>Module</h3><p>上一篇有提到 Nest.js 有許多借鑒 Angular 的風格，其中 Module 就類似於 Angular 的 NgModule，讓我們把類型或功能相似的程式封裝成一個一個不同的模組。如果到 app.module.ts 檔案可以看到檔案分成三個部分：</p>
+<h4 id="1-import"><a href="#1-import" class="headerlink" title="1. import"></a>1. import</h4><blockquote>
+<p>the list of imported modules that export the providers which are required in this module</p>
+</blockquote>
+<p>import 主要是可以掛載並導入到 providers 所需要的 modules</p>
+<h4 id="2-controller"><a href="#2-controller" class="headerlink" title="2. controller"></a>2. controller</h4><blockquote>
+<p>the set of controllers defined in this module which have to be instantiated</p>
+</blockquote>
+<p>此 module 需要呼叫的 Controller</p>
+<h4 id="3-providers"><a href="#3-providers" class="headerlink" title="3. providers"></a>3. providers</h4><blockquote>
+<p>the providers that will be instantiated by the Nest injector and that may be shared at least across this module</p>
+</blockquote>
+<p>此 module 需要被呼叫並注入依賴的服務，這些服務可以在此 module 被共用</p>
+<h3 id="Controller"><a href="#Controller" class="headerlink" title="Controller"></a>Controller</h3><p>控制器，從 Module 被呼叫，並擁有基本路由設定，主要負責接收 client 端的 requests 以及 response。</p>
+<p>從 app.controller.ts 程式碼可以看到：<br>1. 透過 <a target="_blank" rel="noopener" href="http://twitter.com/Controller" title="Twitter profile for @Controller">@Controller</a> 可以定義此檔案為 Controller<br>2. <a target="_blank" rel="noopener" href="http://twitter.com/Get" title="Twitter profile for @Get">@Get</a>() 可以決定請求方式為 get，route 為 <a target="_blank" rel="noopener" href="http://localhost:3000/%60">http://localhost:3000/</a>，舉例若 <a target="_blank" rel="noopener" href="http://twitter.com/Post" title="Twitter profile for @Post">@Post</a>(‘users’)，請求方式便為 Post，route 為 <a target="_blank" rel="noopener" href="http://localhost:3000/users%60">http://localhost:3000/users</a></p>
+<h3 id="Service"><a href="#Service" class="headerlink" title="Service"></a>Service</h3><p>service 主要處理商業邏輯的操作，透過注入依賴的方式讓 Controller 和其他 Service 可以使用。</p>
+<p>從 app.service.ts 的程式碼可以看到 @Injectable() 定義此類別為 service，並定義 getHello() 這個 method，會回傳 Hello World 這個 string。</p>
+<p>我們可以看剛剛 app.controller.ts 這個控制器有呼叫 app.service.ts 的 getHello() method。</p>
+<blockquote>
+<p>return this.appService.getHello();</p>
+</blockquote>
+<p>所以如果 request <a target="_blank" rel="noopener" href="http://localhost:3000/%60">http://localhost:3000/</a> 就會接收到 Hello World 這個字串 (可以參考上一篇啟動畫面的結果)</p>
+<h3 id="小結"><a href="#小結" class="headerlink" title="小結"></a>小結</h3><p>今天介紹了 Nest.js 的基本架構<br>1. Main<br>2. Module<br>2. Controller<br>3. Service</p>
+<p>如果文章有任何錯誤或建議，歡迎告知！</p>
+
+  </div>
+  <footer class="post-footer">
+    <a href="/archives/">← back to archives</a>
+  </footer>
+</article>
+
+    </div>
+    <footer class="site-footer">
+  <hr class="rule">
+  <div class="footer-inner">
+    <span>$ echo "&copy; 2021-2026 Alan Syue"</span>
+    <span class="footer-links">
+      
+        <a href="https://github.com/AlanSyue" target="_blank" rel="noopener">github</a>
+      
+        <a href="https://www.linkedin.com/in/alan-syue-284a83134/" target="_blank" rel="noopener">linkedin</a>
+      
+        <a href="https://twitter.com/alansyue" target="_blank" rel="noopener">twitter</a>
+      
+        <a href="mailto:b123105@gmail.com" target="_blank" rel="noopener">email</a>
+      
+    </span>
+  </div>
+</footer>
+
+  </main>
+  <script src="/js/theme.js"></script>
+</body>
+</html>

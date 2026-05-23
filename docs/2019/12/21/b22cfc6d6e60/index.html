@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Google Analytics 搭配 Google Sheet，客製化數據報表且能自動化更新 — Alan Syue&#39;s Blog</title>
+  <meta name="description" content="Software engineer in Taiwan. Notes on PHP, Laravel, and self-learning.">
+  <meta name="author" content="Alan Syue">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Alan Syue&#39;s Blog">
+  <meta property="og:title" content="Google Analytics 搭配 Google Sheet，客製化數據報表且能自動化更新">
+  <meta property="og:description" content="Software engineer in Taiwan. Notes on PHP, Laravel, and self-learning.">
+  <meta property="og:url" content="https://alansyue.github.io/2019/12/21/b22cfc6d6e60/">
+  <link rel="canonical" href="https://alansyue.github.io/2019/12/21/b22cfc6d6e60/">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <script>
+    (function(){
+      try {
+        if (localStorage.getItem('preferredTheme') !== 'light') {
+          document.documentElement.classList.add('darkmode-pre');
+        }
+      } catch(e){}
+    })();
+  </script>
+  <style>
+    html.darkmode-pre { background: #0d0d0d; }
+    html.darkmode-pre body { background: #0d0d0d; color: #e0e0e0; }
+  </style>
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <main class="container">
+    <header class="site-header">
+  <div class="brand">
+    <a href="/" class="brand-link">~/alansyue</a><span class="cursor">_</span>
+  </div>
+  <nav class="site-nav">
+    
+      <a href="/" class="nav-item">[home]</a>
+    
+      <a href="/archives/" class="nav-item">[posts]</a>
+    
+      <a href="/slides/" class="nav-item">[slides]</a>
+    
+      <a href="/about/" class="nav-item">[about]</a>
+    
+    <button type="button" class="theme-toggle" onclick="toggleTheme()" data-theme-btn aria-label="toggle theme">☾</button>
+  </nav>
+  <hr class="rule">
+</header>
+
+    <div class="content">
+      <article class="post">
+  <header class="post-header">
+    <h1 class="post-title-main">Google Analytics 搭配 Google Sheet，客製化數據報表且能自動化更新</h1>
+    <p class="post-meta-line">
+      <span>$ date</span>
+      <time datetime="2019-12-21T08:32:42.000Z">2019-12-21 16:32</time>
+      
+    </p>
+  </header>
+  <div class="post-body">
+    <blockquote>
+<p>本文最初發表於 <a target="_blank" rel="noopener" href="https://medium.com/@b123105/google-analytics-%E6%90%AD%E9%85%8D-google-sheet-%E5%AE%A2%E8%A3%BD%E5%8C%96%E6%95%B8%E6%93%9A%E5%A0%B1%E8%A1%A8%E4%B8%94%E8%83%BD%E8%87%AA%E5%8B%95%E5%8C%96%E6%9B%B4%E6%96%B0-b22cfc6d6e60">Medium</a>，已搬運至個人 blog。</p>
+</blockquote>
+<p><em>原文出處：<a target="_blank" rel="noopener" href="https://reurl.cc/4gM0DK">https://reurl.cc/4gM0DK</a></em></p>
+<hr>
+<p>原文出處：<a target="_blank" rel="noopener" href="https://reurl.cc/4gM0DK">https://reurl.cc/4gM0DK</a></p>
+<h3 id="你是否遇過這樣的狀況？"><a href="#你是否遇過這樣的狀況？" class="headerlink" title="你是否遇過這樣的狀況？"></a>你是否遇過這樣的狀況？</h3><p>在操作 Google Analytics ( 以下簡稱 GA ) 要拉出自訂報表的時候，礙於表格欄位及 Dimensions、Metrics 的設計，無法整理出想要的資料格式。</p>
+<p>舉例來說，過往想整理一個活動流程的流量及頁面轉換率，如下圖：</p>
+<p><img src="/images/b22cfc6d6e60/1.png"></p>
+<p>但因為 「 到達網頁、網頁 」是 Metrics，會放置在報表左側，「 工作階段、瀏覽量 」是 Dimensions，會放在報表上方，而這個格式的轉換率更無法在 GA 報表實現。</p>
+<p>通常遇到這個情況，可以用兩個方法解決：</p>
+<ol>
+<li>利用 GA 的 API 取得資料做處理</li>
+<li>手動複製貼上到 Excel 整理</li>
+</ol>
+<p>但其實可以利用 Google 提供的 Google Analytics add ons 來解決這個問題。以下分享使用的步驟提供參考：</p>
+<h3 id="STEP-1："><a href="#STEP-1：" class="headerlink" title="STEP 1："></a>STEP 1：</h3><p>創建 Google Sheet，點選外掛程式 -&gt; 取得外掛程式</p>
+<p><img src="/images/b22cfc6d6e60/2.png"></p>
+<h3 id="STEP-2："><a href="#STEP-2：" class="headerlink" title="STEP 2："></a>STEP 2：</h3><p>搜尋 Google Analytics ， 點選有 GA icon 的外掛工具。</p>
+<p><img src="/images/b22cfc6d6e60/3.png"></p>
+<p>點選安裝來新增此 Google Analytics 外掛程式，過程中會詢問是否同意授權存取 GA 帳戶 ( 特別注意此 Google 帳戶需要有 GA 的管理員權限才可授權 )</p>
+<p><img src="/images/b22cfc6d6e60/4.png"></p>
+<p>安裝完後就可以看到外掛程式多了 Google Analytics，將游標移到上方會出現三個項目，後面都會說明每項的功能，可以先點選 Create new report。</p>
+<p><img src="/images/b22cfc6d6e60/5.png"></p>
+<h3 id="STEP-3："><a href="#STEP-3：" class="headerlink" title="STEP 3："></a>STEP 3：</h3><p>點選後畫面右方會出現下方的對話方塊，可以依序填入</p>
+<ol>
+<li>Name your report ： 試算表名稱，產生的資料出現在下方 tab 要叫什麼</li>
+<li>Select a view ：找到你要撈取資料的 property 和 view</li>
+<li>Choose configuration options：可以放入想要撈出的 Metrics (維度)、Dimensions (指標)，Segments (區隔，自訂的區隔也會在裡面唷)，像我選擇 Metrics：Sessions，Dimensions ：date，就會是指定日期的工作階段數。</li>
+</ol>
+<p>選好後按下 Create Report 來創建報表。</p>
+<p><img src="/images/b22cfc6d6e60/6.png"></p>
+<h3 id="STEP-4："><a href="#STEP-4：" class="headerlink" title="STEP 4："></a>STEP 4：</h3><p>創建完後，會看到下方的 tab 多了一個 Configuration 的表，可以看到圖片最左方出現剛剛新增的 table name 這張報表，下方有 Start Date 跟 End Date 設定資料的起始時間。</p>
+<p>如果想加上新的報表可以直接在欄位上新增資訊，不過可能會遇到不知道 Metrics 和 Dimensions 的名稱要怎麼打。通常有兩個方式</p>
+<ol>
+<li>再依照上面的流程，Create new report，就可以建出新的 report</li>
+<li>可以觀察到名稱都是 “ga:” 加上 Metrics 或 Dimensions 的英文名稱 (如果是兩個單字以上會以 <a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E9%A7%9D%E5%B3%B0%E5%BC%8F%E5%A4%A7%E5%B0%8F%E5%AF%AB"><strong>Camel-Case</strong></a> 命名，像是 bounce rate -&gt; bounceRate )</li>
+</ol>
+<p>設定完都沒問題後，可以選取上方列 外掛程式 -&gt; Google Analytics -&gt; Run reports</p>
+<p><img src="/images/b22cfc6d6e60/7.png"></p>
+<h3 id="STEP-5："><a href="#STEP-5：" class="headerlink" title="STEP 5："></a>STEP 5：</h3><p>執行完沒問題後，可以看到下方出現 Report Name 命名的 sheet，點進去可以看到如下方圖片一樣的原始資料，這時我常用的方法是把想要的資料都產生出原始資料，再用函式整理到另一個 sheet，這樣就可以客製出我要的報表類型了。</p>
+<p><img src="/images/b22cfc6d6e60/8.png"></p>
+<h3 id="客製化報表"><a href="#客製化報表" class="headerlink" title="客製化報表"></a>客製化報表</h3><p>只要把資料代入新的試算表，就能自製表格、圖表樣式囉！</p>
+<h3 id="額外分享"><a href="#額外分享" class="headerlink" title="額外分享"></a>額外分享</h3><p>上面有提到在上方列的 Google Analytics 中有個 Schedule Reports，這是一個可以排程 call api 來撈取並更新你設定的資料，最小單位可以到小時。</p>
+<p>之前很常應用在觀察每天行銷活動，GA 的流量及轉換狀況，我就會先在 Google Sheet 拉出報表，並把起始時間設定好，再來透過此排程更新資料，用函數代入到自製的試算表中，非常的方便且自動化。</p>
+<p><img src="/images/b22cfc6d6e60/9.png"></p>
+
+  </div>
+  <footer class="post-footer">
+    <a href="/archives/">← back to archives</a>
+  </footer>
+</article>
+
+    </div>
+    <footer class="site-footer">
+  <hr class="rule">
+  <div class="footer-inner">
+    <span>$ echo "&copy; 2021-2026 Alan Syue"</span>
+    <span class="footer-links">
+      
+        <a href="https://github.com/AlanSyue" target="_blank" rel="noopener">github</a>
+      
+        <a href="https://www.linkedin.com/in/alan-syue-284a83134/" target="_blank" rel="noopener">linkedin</a>
+      
+        <a href="https://twitter.com/alansyue" target="_blank" rel="noopener">twitter</a>
+      
+        <a href="mailto:b123105@gmail.com" target="_blank" rel="noopener">email</a>
+      
+    </span>
+  </div>
+</footer>
+
+  </main>
+  <script src="/js/theme.js"></script>
+</body>
+</html>

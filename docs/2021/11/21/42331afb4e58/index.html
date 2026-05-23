@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Saboteur 矮人礦坑開發經驗分享 — Alan Syue&#39;s Blog</title>
+  <meta name="description" content="Software engineer in Taiwan. Notes on PHP, Laravel, and self-learning.">
+  <meta name="author" content="Alan Syue">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Alan Syue&#39;s Blog">
+  <meta property="og:title" content="Saboteur 矮人礦坑開發經驗分享">
+  <meta property="og:description" content="Software engineer in Taiwan. Notes on PHP, Laravel, and self-learning.">
+  <meta property="og:url" content="https://alansyue.github.io/2021/11/21/42331afb4e58/">
+  <link rel="canonical" href="https://alansyue.github.io/2021/11/21/42331afb4e58/">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <script>
+    (function(){
+      try {
+        if (localStorage.getItem('preferredTheme') !== 'light') {
+          document.documentElement.classList.add('darkmode-pre');
+        }
+      } catch(e){}
+    })();
+  </script>
+  <style>
+    html.darkmode-pre { background: #0d0d0d; }
+    html.darkmode-pre body { background: #0d0d0d; color: #e0e0e0; }
+  </style>
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <main class="container">
+    <header class="site-header">
+  <div class="brand">
+    <a href="/" class="brand-link">~/alansyue</a><span class="cursor">_</span>
+  </div>
+  <nav class="site-nav">
+    
+      <a href="/" class="nav-item">[home]</a>
+    
+      <a href="/archives/" class="nav-item">[posts]</a>
+    
+      <a href="/slides/" class="nav-item">[slides]</a>
+    
+      <a href="/about/" class="nav-item">[about]</a>
+    
+    <button type="button" class="theme-toggle" onclick="toggleTheme()" data-theme-btn aria-label="toggle theme">☾</button>
+  </nav>
+  <hr class="rule">
+</header>
+
+    <div class="content">
+      <article class="post">
+  <header class="post-header">
+    <h1 class="post-title-main">Saboteur 矮人礦坑開發經驗分享</h1>
+    <p class="post-meta-line">
+      <span>$ date</span>
+      <time datetime="2021-11-21T04:25:15.000Z">2021-11-21 12:25</time>
+      
+    </p>
+  </header>
+  <div class="post-body">
+    <blockquote>
+<p>本文最初發表於 <a target="_blank" rel="noopener" href="https://medium.com/@b123105/saboteur-%E7%9F%AE%E4%BA%BA%E7%A4%A6%E5%9D%91%E9%96%8B%E7%99%BC%E7%B6%93%E9%A9%97%E5%88%86%E4%BA%AB-42331afb4e58">Medium</a>，已搬運至個人 blog。</p>
+</blockquote>
+<p><em>今年疫情爆發進入三級警戒時，工作開始轉為遠端，當時幾乎很少踏出家門。於是跟女友開始以彼此都很喜歡的桌遊 — 矮人礦坑當作 Side Project 來當休閒娛樂(?)，沒想到大部分主要功能都完成了(以前很多 Side Project 半成品)，於是想來紀錄一下開發的過程。</em></p>
+<hr>
+<p><img src="/images/42331afb4e58/1.png" alt="Home Page"></p>
+<p><em>Home Page</em></p>
+<p>今年疫情爆發進入三級警戒時，工作開始轉為遠端，當時幾乎很少踏出家門。於是跟女友開始以彼此都很喜歡的桌遊 — <a target="_blank" rel="noopener" href="https://andyventure.com/boardgame-saboteur/">矮人礦坑</a>當作 Side Project 來當休閒娛樂(?)，沒想到大部分主要功能都完成了(以前很多 Side Project 半成品)，於是想來紀錄一下開發的過程。</p>
+<p><a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=qd_t6VVE56U">https://www.youtube.com/watch?v=qd_t6VVE56U</a></p>
+<h3 id="分工、使用技術、系統架構"><a href="#分工、使用技術、系統架構" class="headerlink" title="分工、使用技術、系統架構"></a>分工、使用技術、系統架構</h3><p>女友主要負責視覺設計、前端開發；我負責後端，以及一些自動化部屬、Server 等處理。</p>
+<p>前端主要以 HTML、CSS、JQuery 開發，沒有使用前端框架。有針對手機版做 RWD。</p>
+<p>後端選用 Node.js 的 Express 框架來開 API，主要是看上 Express 的輕量化，另外使用之前一直想好好研究的 TypeScript。</p>
+<p>因為有實作連線功能，使用了 <a target="_blank" rel="noopener" href="https://socket.io/">Socket.IO</a> 來做長連線。Socket.IO 可以很方便的在 Client 和 Server 做使用，也有實作遊戲室所需要的 Room 功能。</p>
+<p>資料庫選用 MongoDB，其實是想說把遊戲室所有資訊都放在同一個 Collection 就好，不太需要考慮正規化。</p>
+<p>主機是架在 <a target="_blank" rel="noopener" href="https://www.linode.com/pricing/#compute-dedicated">Linode Shared CPU Plans</a> 最便宜的方案，一個月 $5。網域是之前在 GoDaddy 購買。目前是在主機裡面安裝 Nginx 做 Reverse Proxy，前端就會直接導到靜態檔案，後端看是 Http Request 或是 WebSocket 連線，對應到不同的 Server，後端 Server 會再跟 Database 互動。</p>
+<p>大略的架構圖如下：</p>
+<p><img src="/images/42331afb4e58/2.png"></p>
+<h3 id="協作方式"><a href="#協作方式" class="headerlink" title="協作方式"></a>協作方式</h3><p>開發任務狀態管理是採用 Asana，要開發的項目會新增一張 Ticket，透過不同 Column 來確認狀態流 (參考目前公司的管理方式)。</p>
+<p>基本上會把需要開發的 Ticket 先建立在 Backlog，開始往 To Do、In Progress、Test、Complete 流動，然後可以 Assign 是誰負責。</p>
+<p>開發目標會優先將主要功能 (連線、遊戲流程) 交付，盡快將第一版完成，才能讓使用者實際測試，優化細節則是主要功能沒問題後再來調整。</p>
+<p><img src="/images/42331afb4e58/3.png"></p>
+<p>程式碼版本控制是用 Git (雖然大多時候都自己做直接 push)，一開始部署都是我去 Server Pull，後來受不了這個重複動作，就用 GitHub Action 來自動部署了。</p>
+<p><img src="/images/42331afb4e58/4.png"></p>
+<p>參考文章：<a target="_blank" rel="noopener" href="https://b123105.medium.com/%E7%94%A8-github-action-%E8%87%AA%E5%8B%95%E9%83%A8%E7%BD%B2%E7%A8%8B%E5%BC%8F%E7%A2%BC%E5%88%B0-linode-d0cf9a7b324c">用 GitHub Action 自動部署程式碼到 Linode</a></p>
+<h3 id="功能介紹"><a href="#功能介紹" class="headerlink" title="功能介紹"></a>功能介紹</h3><p>這次的開發實作最主要的功能有：</p>
+<ul>
+<li>遊戲室連線(開局、加入、遊戲互動)</li>
+<li>卡牌規則、位置及方向判斷、玩家狀態、遊戲勝負</li>
+</ul>
+<h4 id="遊戲室連線"><a href="#遊戲室連線" class="headerlink" title="遊戲室連線"></a>遊戲室連線</h4><p>連線遊戲這部分我覺得有蠻多細節要處理的，目前主要功能流程為：</p>
+<ol>
+<li>開局</li>
+</ol>
+<p>由房主開啟新局，並複製房間邀請連結給其他參與玩家</p>
+<p><img src="/images/42331afb4e58/5.gif"></p>
+<p>2. 遊戲等候室</p>
+<p>被邀請的玩家透過邀請連結進入後，會需要同步目前參與者狀態給房間內所有參與者。當然，離開、斷線等狀態也都需要 handle。</p>
+<p><img src="/images/42331afb4e58/6.gif"></p>
+<p>3. 遊戲互動</p>
+<p>開始遊戲後需要處理的細節也滿多的，像是：</p>
+<ul>
+<li>卡牌放置後，發新的卡給玩家</li>
+<li>卡牌放置後同步房間內所有玩家目前桌面上的牌況</li>
+<li>玩家個人狀態（輪到誰？道具是否有被 Ban？）</li>
+<li>連線問題處理 (重整頁面或斷線後重新加入怎麼取得當前所有資訊)</li>
+<li>遊戲每回合的 Log 同步</li>
+</ul>
+<p><img src="/images/42331afb4e58/7.gif"></p>
+<h4 id="遊戲規則"><a href="#遊戲規則" class="headerlink" title="遊戲規則"></a>遊戲規則</h4><p>目前遊戲是根據實際桌遊的規則，可以支援到 10 人一同遊玩，這邊其實花了滿多的時間在處理：</p>
+<ul>
+<li>卡牌放置位置(地圖卡只能點終點、道具卡只能點玩家、道路卡只能放可以放的位置)</li>
+<li>卡牌旋轉、旋轉後放置到地圖上的連接判斷</li>
+<li>勝負判斷</li>
+</ul>
+<p>如何判斷道路成功連到終點卡也是花了不少時間在測試跟研究，剛好看到國外也有人有做一個蠻酷的<a target="_blank" rel="noopener" href="https://github.com/annsonn/saboteur">矮人礦坑 Project</a>，就去參考他的演算法。</p>
+<p>後續測試發現結束後要能夠讓同批玩家快速重啟新局，會是比較好的遊戲體驗，就有將此功能加入。</p>
+<p><img src="/images/42331afb4e58/8.png" alt="道路獲勝判斷"></p>
+<p><em>道路獲勝判斷</em></p>
+<p><img src="/images/42331afb4e58/9.png" alt="勝利通知"></p>
+<p><em>勝利通知</em></p>
+<p><img src="/images/42331afb4e58/10.png" alt="戰敗通知"></p>
+<p><em>戰敗通知</em></p>
+<h3 id="總結"><a href="#總結" class="headerlink" title="總結"></a>總結</h3><p>這次的 Side Project 真的蠻好玩的，平常比較少接觸連線遊戲的設計，透過此次機會踩到了一些雷，也補進了相關設計知識。很享受做產品的樂趣，還有很多想做的功能還沒完成，目前這個 Project 也還在持續開發中。另外也想把後端的驗證機制、自動化測試補完整。後續有新的進度再寫成文章跟大家分享！</p>
+<p><a target="_blank" rel="noopener" href="https://liker.land/alan-syue-1020/civic">讚賞公民</a></p>
+
+  </div>
+  <footer class="post-footer">
+    <a href="/archives/">← back to archives</a>
+  </footer>
+</article>
+
+    </div>
+    <footer class="site-footer">
+  <hr class="rule">
+  <div class="footer-inner">
+    <span>$ echo "&copy; 2021-2026 Alan Syue"</span>
+    <span class="footer-links">
+      
+        <a href="https://github.com/AlanSyue" target="_blank" rel="noopener">github</a>
+      
+        <a href="https://www.linkedin.com/in/alan-syue-284a83134/" target="_blank" rel="noopener">linkedin</a>
+      
+        <a href="https://twitter.com/alansyue" target="_blank" rel="noopener">twitter</a>
+      
+        <a href="mailto:b123105@gmail.com" target="_blank" rel="noopener">email</a>
+      
+    </span>
+  </div>
+</footer>
+
+  </main>
+  <script src="/js/theme.js"></script>
+</body>
+</html>

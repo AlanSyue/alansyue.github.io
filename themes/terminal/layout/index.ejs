@@ -1,0 +1,45 @@
+<section class="home-block hero">
+  <h1 class="hero-title">
+    <span class="hero-prompt">$</span> echo "alan syue"
+  </h1>
+  <p class="hero-sub">// Software Engineer · Taiwan · Golang / Ruby on Rails / Node.js</p>
+</section>
+
+<section class="home-block">
+  <p class="bio">$ whoami<br>Hi, I&#39;m Alan — a software engineer from Taiwan. I love software development and sharing what I learn. Lately I&#39;ve been into using AI to boost productivity. This blog logs my learning journey — I believe sharing is how I grow.</p>
+</section>
+
+<section class="home-block">
+  <h2 class="prompt">$ ls posts/</h2>
+  <ul class="post-list">
+    <% site.posts.sort('-date').slice(0, 5).forEach(function(post){ %>
+      <li>
+        <span class="post-date"><%= date(post.date, 'YYYY-MM-DD') %></span>
+        <a href="<%- url_for(post.path) %>" class="post-title"><%= post.title %></a>
+      </li>
+    <% }) %>
+  </ul>
+  <a class="more" href="<%- url_for('/archives/') %>">→ see all posts</a>
+</section>
+
+<section class="home-block">
+  <h2 class="prompt">$ ls slides/</h2>
+  <ul class="post-list">
+    <li>
+      <span class="post-date">deck</span>
+      <a href="<%- url_for('/slides/ai-solo-full-stack-delivery/') %>" class="post-title">ai-solo-full-stack-delivery</a>
+      <span class="post-meta">— 用 AI Coding 工具獨自打造一個 full-stack app 的歷程與架構</span>
+    </li>
+  </ul>
+  <a class="more" href="<%- url_for('/slides/') %>">→ slides index</a>
+</section>
+
+<section class="home-block">
+  <h2 class="prompt">$ cat links.txt</h2>
+  <ul class="link-list">
+    <li>github   → <a href="https://github.com/AlanSyue" target="_blank" rel="noopener">github.com/AlanSyue</a></li>
+    <li>linkedin → <a href="https://www.linkedin.com/in/alan-syue-284a83134/" target="_blank" rel="noopener">linkedin.com/in/alan-syue</a></li>
+    <li>twitter  → <a href="https://twitter.com/alansyue" target="_blank" rel="noopener">@alansyue</a></li>
+    <li>email    → <a href="mailto:b123105@gmail.com">b123105@gmail.com</a></li>
+  </ul>
+</section>

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>用 Nest.js 開發 API 吧 (五) — Postgresql — Alan Syue&#39;s Blog</title>
+  <meta name="description" content="Software engineer in Taiwan. Notes on PHP, Laravel, and self-learning.">
+  <meta name="author" content="Alan Syue">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Alan Syue&#39;s Blog">
+  <meta property="og:title" content="用 Nest.js 開發 API 吧 (五) — Postgresql">
+  <meta property="og:description" content="Software engineer in Taiwan. Notes on PHP, Laravel, and self-learning.">
+  <meta property="og:url" content="https://alansyue.github.io/2020/12/20/bbf9f94eec8/">
+  <link rel="canonical" href="https://alansyue.github.io/2020/12/20/bbf9f94eec8/">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <script>
+    (function(){
+      try {
+        if (localStorage.getItem('preferredTheme') !== 'light') {
+          document.documentElement.classList.add('darkmode-pre');
+        }
+      } catch(e){}
+    })();
+  </script>
+  <style>
+    html.darkmode-pre { background: #0d0d0d; }
+    html.darkmode-pre body { background: #0d0d0d; color: #e0e0e0; }
+  </style>
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <main class="container">
+    <header class="site-header">
+  <div class="brand">
+    <a href="/" class="brand-link">~/alansyue</a><span class="cursor">_</span>
+  </div>
+  <nav class="site-nav">
+    
+      <a href="/" class="nav-item">[home]</a>
+    
+      <a href="/archives/" class="nav-item">[posts]</a>
+    
+      <a href="/slides/" class="nav-item">[slides]</a>
+    
+      <a href="/about/" class="nav-item">[about]</a>
+    
+    <button type="button" class="theme-toggle" onclick="toggleTheme()" data-theme-btn aria-label="toggle theme">☾</button>
+  </nav>
+  <hr class="rule">
+</header>
+
+    <div class="content">
+      <article class="post">
+  <header class="post-header">
+    <h1 class="post-title-main">用 Nest.js 開發 API 吧 (五) — Postgresql</h1>
+    <p class="post-meta-line">
+      <span>$ date</span>
+      <time datetime="2020-12-20T15:05:52.000Z">2020-12-20 23:05</time>
+      
+    </p>
+  </header>
+  <div class="post-body">
+    <blockquote>
+<p>本文最初發表於 <a target="_blank" rel="noopener" href="https://medium.com/@b123105/%E7%94%A8-nest-js-%E9%96%8B%E7%99%BC-api-%E5%90%A7-%E4%BA%94-postgresql-bbf9f94eec8">Medium</a>，已搬運至個人 blog。</p>
+</blockquote>
+<p><em>前兩篇介紹了 Controller 及 Service 的用法，接下來預計分享 Nest.js 及 TypeOrm。再介紹 TypeOrm 之前，我們需要先來架設資料庫(db)，要使用的是 Postgresql。</em></p>
+<hr>
+<p><img src="/images/bbf9f94eec8/1.png" alt="Nest.js 官方網站"></p>
+<p><em><a target="_blank" rel="noopener" href="https://nestjs.com/">Nest.js 官方網站</a></em></p>
+<p>前兩篇介紹了 <code>Controller</code> 及 <code>Service</code> 的用法，接下來預計分享 Nest.js 及 TypeOrm。再介紹 TypeOrm 之前，我們需要先來架設資料庫(db)，要使用的是 Postgresql。</p>
+<h3 id="用-Docker-啟用-Postgresql"><a href="#用-Docker-啟用-Postgresql" class="headerlink" title="用 Docker 啟用 Postgresql"></a>用 Docker 啟用 Postgresql</h3><p>首先，先 pull Postgresql 的 docker image</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">docker pull postgres</span><br></pre></td></tr></table></figure>
+
+<p>再來，建立一個資料夾，用來儲存 Postgresql 的紀錄。</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">mkdir $&#123;HOME&#125;/postgres-data/</span><br></pre></td></tr></table></figure>
+
+<p>接著，執行下面的指令，build 出 Postgresql 的 container</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">docker run -d \</span><br><span class="line">    --name dev-postgres \</span><br><span class="line">    -e POSTGRES_PASSWORD=&#123;YOUR PASSWORD&#125; \</span><br><span class="line">    -v $&#123;HOME&#125;/postgres-data/:/var/lib/postgresql/data \</span><br><span class="line">    -p 5432:5432 \</span><br><span class="line">    postgres</span><br></pre></td></tr></table></figure>
+
+<h3 id="用-Docker-啟用-pgAdmin"><a href="#用-Docker-啟用-pgAdmin" class="headerlink" title="用 Docker 啟用 pgAdmin"></a>用 Docker 啟用 pgAdmin</h3><p>接下來我們要來建立 pgAdmin，透過 pgAdmin 就能有 GUI 來管理 Postgresql。<br>第一步也是先 pull docker image:</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">docker pull dpage/pgadmin4</span><br></pre></td></tr></table></figure>
+
+<p>再來執行以下指令，build 出 pgAdmin 的 container:</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">docker run -d \</span><br><span class="line">    --name dev-pgadmin \</span><br><span class="line">    -e &#x27;PGADMIN_DEFAULT_EMAIL=&#123;YOUR EMAIL ACCOUNT&#125;&#x27; \</span><br><span class="line">    -e &#x27;PGADMIN_DEFAULT_PASSWORD=&#123;YOUR PASSWORD&#125;&#x27; \</span><br><span class="line">    -p 80:80 \</span><br><span class="line">    dpage/pgadmin4</span><br></pre></td></tr></table></figure>
+
+<h3 id="啟用-pgAdmin-連接本地端-Postgresql"><a href="#啟用-pgAdmin-連接本地端-Postgresql" class="headerlink" title="啟用 pgAdmin 連接本地端 Postgresql"></a>啟用 pgAdmin 連接本地端 Postgresql</h3><p>我們先在 terminal 輸入:</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">docker ps</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/bbf9f94eec8/2.png"></p>
+<p>根據上圖，可以看到已經建立兩個 container 了，接著輸入：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">docker inspect dev-postgres -f &quot;&#123;&#123;json .NetworkSettings.Networks &#125;&#125;&quot;</span><br></pre></td></tr></table></figure>
+
+<p>可以看到以下資訊：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;bridge&quot;:&#123;</span><br><span class="line">      &quot;IPAMConfig&quot;:null,</span><br><span class="line">      &quot;Links&quot;:null,</span><br><span class="line">      &quot;Aliases&quot;:null,</span><br><span class="line">      &quot;NetworkID&quot;:&quot;dc0eeecb88ba55574ec6854415e1dff0f65a56061967fed2146aae95e34cf814&quot;,</span><br><span class="line">      &quot;EndpointID&quot;:&quot;9f820ae73f6293b6293c29ce3aabba4dc56b2d8a28382f5c490e78c6c59b0df9&quot;,</span><br><span class="line">      &quot;Gateway&quot;:&quot;172.17.0.1&quot;,</span><br><span class="line">      &quot;IPAddress&quot;:&quot;172.17.0.2&quot;,</span><br><span class="line">      &quot;IPPrefixLen&quot;:16,</span><br><span class="line">      &quot;IPv6Gateway&quot;:&quot;&quot;,</span><br><span class="line">      &quot;GlobalIPv6Address&quot;:&quot;&quot;,</span><br><span class="line">      &quot;GlobalIPv6PrefixLen&quot;:0,</span><br><span class="line">      &quot;MacAddress&quot;:&quot;02:42:ac:11:00:02&quot;,</span><br><span class="line">      &quot;DriverOpts&quot;:null</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>我們把其中的 <code>&quot;IPAddress&quot;:&quot;172.17.0.2&quot;</code> 記下來，然後再瀏覽器輸入：<br><code>http://localhost:80</code>，會到 pgAdmin 的登入畫面。輸入在 <code>用 Docker 啟用 pgAdmin</code> 創建的 <code>PGADMIN_DEFAULT_EMAIL</code> 及 <code>PGADMIN_DEFAULT_PASSWORD</code> 即可登入。</p>
+<p><img src="/images/bbf9f94eec8/3.png"></p>
+<p>成功登入後，我們在主畫面點選 <code>Add New Server</code></p>
+<p><img src="/images/bbf9f94eec8/4.png"></p>
+<p>接著在 <code>general</code> 輸入 db 的名稱，如下圖範例，我輸入的是 <code>itseed</code></p>
+<p><img src="/images/bbf9f94eec8/5.png"></p>
+<p>再來，我們要來連接到用 docker build 出來的 Postgresql，我們在 <code>Host name/address</code> 輸入剛剛記下的 <code>IPAddress</code>。<br><code>Username</code> 填入 <code>postgres</code>，<code>Password</code> 則是上面執行指令時輸入的 <code>POSTGRES_PASSWORD</code>，如下圖所示，都沒問題後就按 <code>Save</code></p>
+<p><img src="/images/bbf9f94eec8/6.png"></p>
+<p>成功畫面：</p>
+<p><img src="/images/bbf9f94eec8/7.png"></p>
+<h3 id="小結"><a href="#小結" class="headerlink" title="小結"></a>小結</h3><p>今天分享了使用 docker 建立 Postgresql 以及 pgAdmin，然後可以在 pgAdmin 成功連接資料庫。下一篇預計進入 TypeOrm 操作 Postgresql 的分享，如果文章有任何錯誤或建議，歡迎告知！</p>
+<h3 id="參考來源"><a href="#參考來源" class="headerlink" title="參考來源"></a>參考來源</h3><p><a target="_blank" rel="noopener" href="https://towardsdatascience.com/local-development-set-up-of-postgresql-with-docker-c022632f13ea">Local Development Set-Up of PostgreSQL with Docker</a></p>
+
+  </div>
+  <footer class="post-footer">
+    <a href="/archives/">← back to archives</a>
+  </footer>
+</article>
+
+    </div>
+    <footer class="site-footer">
+  <hr class="rule">
+  <div class="footer-inner">
+    <span>$ echo "&copy; 2021-2026 Alan Syue"</span>
+    <span class="footer-links">
+      
+        <a href="https://github.com/AlanSyue" target="_blank" rel="noopener">github</a>
+      
+        <a href="https://www.linkedin.com/in/alan-syue-284a83134/" target="_blank" rel="noopener">linkedin</a>
+      
+        <a href="https://twitter.com/alansyue" target="_blank" rel="noopener">twitter</a>
+      
+        <a href="mailto:b123105@gmail.com" target="_blank" rel="noopener">email</a>
+      
+    </span>
+  </div>
+</footer>
+
+  </main>
+  <script src="/js/theme.js"></script>
+</body>
+</html>

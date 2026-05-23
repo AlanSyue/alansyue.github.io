@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>工作隨筆小記 — 任務分派自動化 — Alan Syue&#39;s Blog</title>
+  <meta name="description" content="Software engineer in Taiwan. Notes on PHP, Laravel, and self-learning.">
+  <meta name="author" content="Alan Syue">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Alan Syue&#39;s Blog">
+  <meta property="og:title" content="工作隨筆小記 — 任務分派自動化">
+  <meta property="og:description" content="Software engineer in Taiwan. Notes on PHP, Laravel, and self-learning.">
+  <meta property="og:url" content="https://alansyue.github.io/2020/06/28/8ae44288d535/">
+  <link rel="canonical" href="https://alansyue.github.io/2020/06/28/8ae44288d535/">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <script>
+    (function(){
+      try {
+        if (localStorage.getItem('preferredTheme') !== 'light') {
+          document.documentElement.classList.add('darkmode-pre');
+        }
+      } catch(e){}
+    })();
+  </script>
+  <style>
+    html.darkmode-pre { background: #0d0d0d; }
+    html.darkmode-pre body { background: #0d0d0d; color: #e0e0e0; }
+  </style>
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <main class="container">
+    <header class="site-header">
+  <div class="brand">
+    <a href="/" class="brand-link">~/alansyue</a><span class="cursor">_</span>
+  </div>
+  <nav class="site-nav">
+    
+      <a href="/" class="nav-item">[home]</a>
+    
+      <a href="/archives/" class="nav-item">[posts]</a>
+    
+      <a href="/slides/" class="nav-item">[slides]</a>
+    
+      <a href="/about/" class="nav-item">[about]</a>
+    
+    <button type="button" class="theme-toggle" onclick="toggleTheme()" data-theme-btn aria-label="toggle theme">☾</button>
+  </nav>
+  <hr class="rule">
+</header>
+
+    <div class="content">
+      <article class="post">
+  <header class="post-header">
+    <h1 class="post-title-main">工作隨筆小記 — 任務分派自動化</h1>
+    <p class="post-meta-line">
+      <span>$ date</span>
+      <time datetime="2020-06-28T14:03:36.000Z">2020-06-28 22:03</time>
+      
+    </p>
+  </header>
+  <div class="post-body">
+    <blockquote>
+<p>本文最初發表於 <a target="_blank" rel="noopener" href="https://medium.com/@b123105/%E5%B7%A5%E4%BD%9C%E9%9A%A8%E7%AD%86%E5%B0%8F%E8%A8%98-%E4%BB%BB%E5%8B%99%E5%88%86%E6%B4%BE%E8%87%AA%E5%8B%95%E5%8C%96-8ae44288d535">Medium</a>，已搬運至個人 blog。</p>
+</blockquote>
+<p><em>最近上班完成一項專案，故且讓我稱它為 「任務分派自動化」。做完覺得蠻有趣，因此想紀錄下來。</em></p>
+<hr>
+<p><img src="/images/8ae44288d535/1.png" alt="engine auto work workers，圖片來源：https://pixabay.com/"></p>
+<p><em><a target="_blank" rel="noopener" href="https://pixabay.com/vectors/factory-car-engine-assembling-35104/">engine auto work workers</a>，圖片來源：<a target="_blank" rel="noopener" href="https://pixabay.com/">https://pixabay.com/</a></em></p>
+<p>最近上班完成一項專案，故且讓我稱它為 「任務分派自動化」。做完覺得蠻有趣，因此想紀錄下來。</p>
+<h3 id="專案緣起"><a href="#專案緣起" class="headerlink" title="專案緣起"></a>專案緣起</h3><p>這次的專案主要是想把一些例行性任務改由系統自動處理，減少不必要的重複性工作，進而轉做更有生產力的項目。讓我先說明原先的工作流程：</p>
+<h3 id="基本配置"><a href="#基本配置" class="headerlink" title="基本配置"></a>基本配置</h3><ol>
+<li>商品池：裡面有一大堆商品，稍微分類成 productA, productB, productC</li>
+<li>處理人員：負責處理商品的人員，處理流程會是先到 workerFirst -&gt; workerSecond</li>
+<li>Manager：負責分派任務，從商品池挑出需要處理的商品，分派給 workerFirst 或 workerSecond</li>
+</ol>
+<h3 id="過往模式"><a href="#過往模式" class="headerlink" title="過往模式"></a>過往模式</h3><p>過往的工作模式是 Manager 會從商品池的介面，分派商品給處理人員，並需時時確認處理人員的狀況，以利流程順利進行。但 Manager 也無法每時每刻都盯著商品池及處理人員工作狀況，這時就會造成處理人員未取得商品的閒置期。</p>
+<h3 id="調整流程"><a href="#調整流程" class="headerlink" title="調整流程"></a>調整流程</h3><p>這次專案是希望能抽離 Manager 分配商品的這層任務，將其自動化。調整方式為若處理人員一開始會領到一個商品，若完成此商品的處理，系統便會分配下一個商品，若商品池暫無商品可處理，則待有商品時，系統自動通知處理人員並分配商品給他。</p>
+<h3 id="設計方式"><a href="#設計方式" class="headerlink" title="設計方式"></a>設計方式</h3><p>一開始我開了一張 table，用來控制處理人員是否有商品在處理、以及是否為上線模式，如下表：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">|id| userId | hasItem | isLogin | created_at | updated_at |</span><br><span class="line">|--|--------|---------|---------|------------|------------|</span><br><span class="line">|1 |519     |        0|        0|2020-06-28  |2020-06-28  |</span><br></pre></td></tr></table></figure>
+
+<p>這時會有一隻 cronjob 定時去執行，檢查此表中是否有 isLogin &#x3D; 1 以及 hasItem &#x3D; 0 的人員，如果有找到，就會從商品池撈出相當數量的商品，並根據處理類型，分配 workerFirst 或 workerSecond，並在分配到時發送 slack 通知，再將被分配到商品的人員 hasItem 更新成 1。</p>
+<p>另外每個處理人員都有自己的待處理商品頁面，裡面會有被分配的一筆商品，處理完此商品後按下「已完成」，假設自己是 workerFirst，這檔便會被指派到 isLogin &#x3D; 1 且 hasItem &#x3D; 0 的 workerSecond，並且再去商品池撈出一檔商品。假設自己是 workerSecond，則會讓商品進入後續流程，並且再從商品池取出 workerFirst 完成的商品。</p>
+<p>過程中只要取不到商品，就會將 hasItem 更新成 0，以等待 cronjob 撈到時再分配，並透過 slack 訊息就可以知道是否收到了。</p>
+<h3 id="總結"><a href="#總結" class="headerlink" title="總結"></a>總結</h3><p>新模式在開發、測試、上線運行後，最後在每日完成的商品處理數量上，平均翻了一倍。可以歸功在系統自動化分配導入後減少的等待商品時間所產生的閒置。</p>
+<p>技術上我覺得這套自動化是建構在原先有在運行的工作模式，在整體開發上並沒有遇到太多困難，只是剛開始對於照套工作流程不太熟悉，多是在處理背後邏輯產生的認知誤差。</p>
+<p>不過對於上線後提昇的效率數據以及看到處理人員操作自己做出來的介面，心裡也覺得蠻有成就感的。</p>
+
+  </div>
+  <footer class="post-footer">
+    <a href="/archives/">← back to archives</a>
+  </footer>
+</article>
+
+    </div>
+    <footer class="site-footer">
+  <hr class="rule">
+  <div class="footer-inner">
+    <span>$ echo "&copy; 2021-2026 Alan Syue"</span>
+    <span class="footer-links">
+      
+        <a href="https://github.com/AlanSyue" target="_blank" rel="noopener">github</a>
+      
+        <a href="https://www.linkedin.com/in/alan-syue-284a83134/" target="_blank" rel="noopener">linkedin</a>
+      
+        <a href="https://twitter.com/alansyue" target="_blank" rel="noopener">twitter</a>
+      
+        <a href="mailto:b123105@gmail.com" target="_blank" rel="noopener">email</a>
+      
+    </span>
+  </div>
+</footer>
+
+  </main>
+  <script src="/js/theme.js"></script>
+</body>
+</html>

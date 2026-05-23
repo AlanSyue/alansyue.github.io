@@ -1,0 +1,11 @@
+<footer class="site-footer">
+  <hr class="rule">
+  <div class="footer-inner">
+    <span>$ echo "&copy; <%= theme.footer.since %>-<%= new Date().getFullYear() %> <%= theme.footer.copyright %>"</span>
+    <span class="footer-links">
+      <% for (let key in theme.social) { %>
+        <a href="<%= theme.social[key] %>" target="_blank" rel="noopener"><%= key %></a>
+      <% } %>
+    </span>
+  </div>
+</footer>

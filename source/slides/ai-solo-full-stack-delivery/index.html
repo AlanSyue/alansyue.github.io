@@ -1,0 +1,1531 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AI Solo Full-Stack App Delivery</title>
+  <style>
+    :root {
+      --bg: #07090d;
+      --panel: #111722;
+      --panel-2: #18212f;
+      --ink: #f3f7fb;
+      --muted: #8fa0b8;
+      --line: rgba(255, 255, 255, 0.13);
+      --cyan: #44d7ff;
+      --green: #58f0a7;
+      --amber: #ffc857;
+      --red: #ff5d73;
+      --blue: #7aa7ff;
+      --violet: #b88cff;
+      --stage-w: 1600;
+      --stage-h: 900;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      width: 100%;
+      min-height: 100%;
+      background:
+        radial-gradient(circle at 12% 14%, rgba(68, 215, 255, 0.18), transparent 26%),
+        radial-gradient(circle at 82% 20%, rgba(255, 200, 87, 0.13), transparent 24%),
+        linear-gradient(135deg, #05070a 0%, #0a1018 45%, #080a0f 100%);
+      color: var(--ink);
+      font-family: "Avenir Next", "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+      overflow: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.28;
+      background-image:
+        linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+      background-size: 44px 44px;
+      mask-image: linear-gradient(to bottom, black, transparent 82%);
+    }
+
+    .deck {
+      height: 100vh;
+      width: 100vw;
+      display: grid;
+      place-items: center;
+      padding: 28px;
+    }
+
+    .stage {
+      width: min(100vw - 56px, calc((100vh - 56px) * 16 / 9));
+      aspect-ratio: 16 / 9;
+      position: relative;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      background:
+        linear-gradient(120deg, rgba(255, 255, 255, 0.045), transparent 42%),
+        rgba(7, 9, 13, 0.88);
+      box-shadow: 0 28px 80px rgba(0, 0, 0, 0.55);
+      overflow: hidden;
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      display: none;
+      padding: 74px 88px 78px;
+      overflow: hidden;
+    }
+
+    .slide.active { display: block; }
+
+    .slide::after {
+      content: attr(data-section);
+      position: absolute;
+      right: 42px;
+      top: 28px;
+      color: rgba(255, 255, 255, 0.32);
+      font-size: 14px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+
+    .kicker {
+      color: var(--cyan);
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      margin-bottom: 18px;
+    }
+
+    h1, h2, h3, p { margin: 0; }
+
+    h1 {
+      max-width: 1050px;
+      font-size: 76px;
+      line-height: 0.98;
+      letter-spacing: 0;
+      font-weight: 820;
+    }
+
+    h2 {
+      max-width: 980px;
+      font-size: 50px;
+      line-height: 1.06;
+      letter-spacing: 0;
+      font-weight: 780;
+    }
+
+    h3 {
+      font-size: 25px;
+      line-height: 1.2;
+      font-weight: 760;
+    }
+
+    .lead {
+      max-width: 900px;
+      margin-top: 26px;
+      color: #cbd6e7;
+      font-size: 26px;
+      line-height: 1.45;
+      font-weight: 500;
+    }
+
+    .small {
+      color: var(--muted);
+      font-size: 17px;
+      line-height: 1.55;
+    }
+
+    .grid {
+      display: grid;
+      gap: 18px;
+    }
+
+    .two { grid-template-columns: 1fr 1fr; }
+    .three { grid-template-columns: repeat(3, 1fr); }
+    .four { grid-template-columns: repeat(4, 1fr); }
+
+    .card {
+      position: relative;
+      min-height: 142px;
+      padding: 22px;
+      border: 1px solid var(--line);
+      background: linear-gradient(160deg, rgba(255,255,255,0.07), rgba(255,255,255,0.025));
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .card strong {
+      display: block;
+      margin-bottom: 9px;
+      color: var(--ink);
+      font-size: 24px;
+    }
+
+    .card p, .card li {
+      color: #b9c6d8;
+      font-size: 18px;
+      line-height: 1.45;
+    }
+
+    ul {
+      margin: 18px 0 0;
+      padding-left: 22px;
+    }
+
+    li { margin: 10px 0; }
+
+    .metric-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-top: 42px;
+    }
+
+    .metric {
+      min-height: 145px;
+      padding: 22px;
+      border-top: 3px solid var(--cyan);
+      background: rgba(17, 23, 34, 0.82);
+      border-radius: 8px;
+    }
+
+    .metric b {
+      display: block;
+      margin-bottom: 10px;
+      color: var(--cyan);
+      font-size: 42px;
+      line-height: 1;
+    }
+
+    .metric span {
+      color: #c4d0df;
+      font-size: 18px;
+      line-height: 1.35;
+    }
+
+    .matrix {
+      display: grid;
+      grid-template-columns: 0.85fr repeat(4, 1fr);
+      margin-top: 38px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .matrix div {
+      min-height: 78px;
+      padding: 18px;
+      border-right: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      color: #c6d2e3;
+      font-size: 18px;
+      line-height: 1.35;
+    }
+
+    .matrix div:nth-child(5n) { border-right: 0; }
+    .matrix div:nth-last-child(-n+5) { border-bottom: 0; }
+    .matrix .head { color: var(--ink); background: rgba(68, 215, 255, 0.11); font-weight: 760; }
+    .matrix .axis { color: var(--amber); background: rgba(255, 200, 87, 0.08); font-weight: 760; }
+
+    .timeline {
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 18px;
+      margin-top: 56px;
+    }
+
+    .timeline::before {
+      content: "";
+      position: absolute;
+      left: 8%;
+      right: 8%;
+      top: 33px;
+      height: 2px;
+      background: linear-gradient(90deg, var(--cyan), var(--green), var(--amber));
+    }
+
+    .step {
+      position: relative;
+      padding-top: 70px;
+    }
+
+    .step::before {
+      content: attr(data-step);
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 66px;
+      height: 66px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      border: 2px solid rgba(255, 255, 255, 0.26);
+      background: #0c121b;
+      color: var(--cyan);
+      font-size: 20px;
+      font-weight: 800;
+      z-index: 2;
+    }
+
+    .step b {
+      display: block;
+      margin-bottom: 10px;
+      font-size: 23px;
+    }
+
+    .step span {
+      color: #b9c6d8;
+      font-size: 17px;
+      line-height: 1.42;
+    }
+
+    .pipeline {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-top: 42px;
+    }
+
+    .pipe {
+      min-height: 210px;
+      padding: 24px;
+      border: 1px solid rgba(68, 215, 255, 0.25);
+      border-radius: 8px;
+      background: rgba(11, 17, 25, 0.92);
+    }
+
+    .pipe .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 22px;
+      color: var(--green);
+      font-family: "SFMono-Regular", Consolas, monospace;
+      font-size: 15px;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 18px var(--green);
+    }
+
+    .flow {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+      margin-top: 42px;
+    }
+
+    .flow .card {
+      min-height: 185px;
+      border-color: rgba(88, 240, 167, 0.22);
+    }
+
+    .flow .card::before {
+      content: "";
+      position: absolute;
+      right: -10px;
+      top: 50%;
+      width: 28px;
+      height: 2px;
+      background: var(--green);
+      box-shadow: 0 0 14px var(--green);
+    }
+
+    .flow .card:last-child::before { display: none; }
+
+    .cycle-wrap {
+      display: grid;
+      grid-template-columns: 1fr 0.92fr;
+      gap: 36px;
+      align-items: center;
+      margin-top: 24px;
+    }
+
+    .cycle {
+      position: relative;
+      width: 500px;
+      height: 500px;
+      margin: 0 auto;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 50% 50%, rgba(7, 9, 13, 0.92) 0 38%, transparent 39%),
+        conic-gradient(from -90deg, rgba(68,215,255,0.88), rgba(88,240,167,0.88), rgba(255,200,87,0.88), rgba(122,167,255,0.88), rgba(68,215,255,0.88));
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.14), 0 26px 64px rgba(0,0,0,0.34);
+    }
+
+    .cycle::before {
+      content: "";
+      position: absolute;
+      inset: 64px;
+      border-radius: 50%;
+      border: 2px dashed rgba(255,255,255,0.18);
+    }
+
+    .cycle-core {
+      position: absolute;
+      inset: 168px;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      padding: 20px;
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 50%;
+      background: rgba(9, 14, 21, 0.96);
+      color: #eaf3ff;
+      font-size: 23px;
+      line-height: 1.25;
+      font-weight: 780;
+      z-index: 3;
+    }
+
+    .cycle-node {
+      position: absolute;
+      width: 152px;
+      min-height: 78px;
+      padding: 13px;
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 8px;
+      background: rgba(12, 18, 27, 0.94);
+      box-shadow: 0 18px 36px rgba(0,0,0,0.28);
+      z-index: 4;
+    }
+
+    .cycle-node b {
+      display: block;
+      color: var(--ink);
+      font-size: 17px;
+      margin-bottom: 6px;
+    }
+
+    .cycle-node span {
+      display: block;
+      color: #aebbd0;
+      font-size: 12px;
+      line-height: 1.32;
+    }
+
+    .cycle-node.n1 { left: 174px; top: 6px; }
+    .cycle-node.n2 { right: -8px; top: 112px; }
+    .cycle-node.n3 { right: 24px; bottom: 70px; }
+    .cycle-node.n4 { left: 174px; bottom: 6px; }
+    .cycle-node.n5 { left: 24px; bottom: 70px; }
+    .cycle-node.n6 { left: -8px; top: 112px; }
+
+    .cycle-list {
+      display: grid;
+      gap: 14px;
+    }
+
+    .cycle-list .card {
+      min-height: 104px;
+      padding: 18px;
+    }
+
+    .cycle-list .card strong {
+      font-size: 21px;
+      margin-bottom: 6px;
+    }
+
+    .cycle-list .card p {
+      font-size: 16px;
+    }
+
+    .mini-cycle {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 0;
+      align-items: stretch;
+      margin-top: 42px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .mini-cycle div {
+      position: relative;
+      min-height: 170px;
+      padding: 24px 18px;
+      background: rgba(12, 18, 27, 0.88);
+      border-right: 1px solid var(--line);
+    }
+
+    .mini-cycle div:last-child { border-right: 0; }
+
+    .mini-cycle div::after {
+      content: "→";
+      position: absolute;
+      right: -14px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 28px;
+      height: 28px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: #101824;
+      color: var(--green);
+      z-index: 2;
+      font-size: 20px;
+    }
+
+    .mini-cycle div:last-child::after {
+      content: "↺";
+      right: 12px;
+      top: auto;
+      bottom: 14px;
+      color: var(--amber);
+    }
+
+    .mini-cycle b {
+      display: block;
+      color: var(--cyan);
+      font-size: 22px;
+      margin-bottom: 10px;
+    }
+
+    .mini-cycle span {
+      color: #b9c6d8;
+      font-size: 16px;
+      line-height: 1.4;
+    }
+
+    .automation-flow {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      grid-template-rows: repeat(3, 132px);
+      gap: 22px 28px;
+      margin-top: 34px;
+      position: relative;
+    }
+
+    .flow-box {
+      position: relative;
+      padding: 18px;
+      border: 1px solid rgba(255,255,255,0.17);
+      border-radius: 8px;
+      background: rgba(12, 18, 27, 0.92);
+      box-shadow: 0 18px 36px rgba(0,0,0,0.22);
+      z-index: 2;
+    }
+
+    .flow-box::after {
+      content: "";
+      position: absolute;
+      right: -29px;
+      top: 50%;
+      width: 28px;
+      height: 2px;
+      background: rgba(68, 215, 255, 0.72);
+      box-shadow: 0 0 14px rgba(68, 215, 255, 0.5);
+    }
+
+    .flow-box.down::after {
+      right: 50%;
+      top: auto;
+      bottom: -24px;
+      width: 2px;
+      height: 24px;
+      background: rgba(88, 240, 167, 0.72);
+      box-shadow: 0 0 14px rgba(88, 240, 167, 0.5);
+    }
+
+    .flow-box.left::after {
+      left: -29px;
+      right: auto;
+      background: rgba(122, 167, 255, 0.72);
+    }
+
+    .flow-box.loop::after {
+      content: "↺";
+      right: -18px;
+      top: -18px;
+      width: 36px;
+      height: 36px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      border: 1px solid rgba(255, 200, 87, 0.45);
+      background: #111722;
+      color: var(--amber);
+      font-size: 24px;
+      box-shadow: 0 0 18px rgba(255, 200, 87, 0.28);
+    }
+
+    .flow-box.end::after { display: none; }
+
+    .flow-box b {
+      display: block;
+      color: var(--ink);
+      font-size: 19px;
+      margin-bottom: 8px;
+    }
+
+    .flow-box span {
+      display: block;
+      color: #adbad0;
+      font-size: 14px;
+      line-height: 1.35;
+    }
+
+    .flow-box.input { border-color: rgba(68, 215, 255, 0.34); }
+    .flow-box.agent { border-color: rgba(88, 240, 167, 0.34); }
+    .flow-box.verify { border-color: rgba(255, 200, 87, 0.36); }
+    .flow-box.deploy { border-color: rgba(122, 167, 255, 0.36); }
+    .flow-box.qa { border-color: rgba(255, 93, 115, 0.36); }
+
+    .flow-label {
+      position: absolute;
+      z-index: 1;
+      padding: 8px 11px;
+      border: 1px solid rgba(255,255,255,0.14);
+      border-radius: 999px;
+      background: rgba(7, 9, 13, 0.84);
+      color: #cbd6e7;
+      font-size: 13px;
+      font-family: "SFMono-Regular", Consolas, monospace;
+    }
+
+    .screen-row {
+      display: grid;
+      grid-template-columns: 0.92fr 1fr;
+      gap: 44px;
+      align-items: center;
+      height: 650px;
+    }
+
+    .video-slide {
+      display: grid;
+      grid-template-columns: 1.18fr 0.82fr;
+      gap: 34px;
+      align-items: center;
+      margin-top: 34px;
+    }
+
+    .video-frame {
+      position: relative;
+      aspect-ratio: 16 / 9;
+      border: 1px solid rgba(68, 215, 255, 0.32);
+      border-radius: 8px;
+      overflow: hidden;
+      background: #05070a;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.42);
+    }
+
+    .video-frame video {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      background: #05070a;
+    }
+
+    .video-badge {
+      position: absolute;
+      left: 16px;
+      top: 16px;
+      padding: 8px 11px;
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 999px;
+      background: rgba(5, 7, 10, 0.76);
+      color: #dbe7f7;
+      font-family: "SFMono-Regular", Consolas, monospace;
+      font-size: 13px;
+      z-index: 2;
+    }
+
+
+    .phone-bank {
+      display: flex;
+      align-items: center;
+      gap: 26px;
+    }
+
+    .phone {
+      width: 250px;
+      height: 520px;
+      border: 10px solid #1c2532;
+      border-radius: 34px;
+      overflow: hidden;
+      background: #111722;
+      box-shadow: 0 28px 58px rgba(0, 0, 0, 0.42);
+      position: relative;
+    }
+
+    .phone img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: blur(8px) brightness(0.72) saturate(0.82);
+      transform: scale(1.06);
+    }
+
+    .phone::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(to bottom, rgba(7, 9, 13, 0.08), rgba(7, 9, 13, 0.54)),
+        repeating-linear-gradient(0deg, rgba(255,255,255,0.04), rgba(255,255,255,0.04) 1px, transparent 1px, transparent 6px);
+    }
+
+    .phone-caption {
+      position: absolute;
+      left: 18px;
+      right: 18px;
+      bottom: 18px;
+      z-index: 2;
+      padding: 12px;
+      border: 1px solid rgba(255,255,255,0.18);
+      background: rgba(7, 9, 13, 0.72);
+      border-radius: 8px;
+      color: #dfe8f5;
+      font-size: 16px;
+      line-height: 1.35;
+    }
+
+    .terminal {
+      margin-top: 36px;
+      padding: 26px;
+      border-radius: 8px;
+      border: 1px solid rgba(88, 240, 167, 0.28);
+      background: #07100d;
+      font-family: "SFMono-Regular", Consolas, monospace;
+      color: #bdf8d8;
+      font-size: 18px;
+      line-height: 1.7;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.04);
+    }
+
+    .terminal .dim { color: rgba(189, 248, 216, 0.52); }
+    .terminal .warn { color: var(--amber); }
+    .terminal .bad { color: var(--red); }
+
+    .tradeoff {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 22px;
+      margin-top: 42px;
+    }
+
+    .tradeoff .card:first-child { border-color: rgba(68, 215, 255, 0.32); }
+    .tradeoff .card:last-child { border-color: rgba(255, 200, 87, 0.32); }
+
+    .quote {
+      max-width: 970px;
+      margin-top: 42px;
+      padding-left: 30px;
+      border-left: 5px solid var(--amber);
+      color: #e7edf7;
+      font-size: 38px;
+      line-height: 1.28;
+      font-weight: 720;
+    }
+
+    .note {
+      display: none;
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      min-height: 92px;
+      padding: 18px 88px;
+      border-top: 1px solid rgba(255,255,255,0.16);
+      background: rgba(5, 7, 10, 0.94);
+      color: #d5deea;
+      font-size: 18px;
+      line-height: 1.42;
+      z-index: 12;
+    }
+
+    body.show-notes .slide.active .note { display: block; }
+
+    .controls {
+      position: fixed;
+      left: 50%;
+      bottom: 14px;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      z-index: 20;
+      color: rgba(255,255,255,0.72);
+      font-family: "SFMono-Regular", Consolas, monospace;
+      font-size: 13px;
+      user-select: none;
+    }
+
+    .bar {
+      width: 220px;
+      height: 5px;
+      border-radius: 99px;
+      background: rgba(255,255,255,0.14);
+      overflow: hidden;
+    }
+
+    .bar span {
+      display: block;
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--cyan), var(--green), var(--amber));
+    }
+
+    .nav-button {
+      width: 34px;
+      height: 28px;
+      border: 1px solid rgba(255,255,255,0.17);
+      border-radius: 6px;
+      background: rgba(255,255,255,0.06);
+      color: rgba(255,255,255,0.8);
+      cursor: pointer;
+    }
+
+    .watermark {
+      position: absolute;
+      right: -120px;
+      bottom: -92px;
+      color: rgba(255,255,255,0.035);
+      font-size: 210px;
+      font-weight: 900;
+      letter-spacing: 0;
+      pointer-events: none;
+    }
+
+    .big-number {
+      color: var(--cyan);
+      font-size: 126px;
+      line-height: 0.9;
+      font-weight: 900;
+    }
+
+    .split {
+      display: grid;
+      grid-template-columns: 0.95fr 1.05fr;
+      gap: 48px;
+      align-items: start;
+      margin-top: 40px;
+    }
+
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 34px;
+    }
+
+    .tag {
+      padding: 10px 13px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.16);
+      background: rgba(255,255,255,0.055);
+      color: #c4d1e3;
+      font-size: 17px;
+    }
+
+    .risk-grid {
+      display: grid;
+      grid-template-columns: 0.85fr 1.15fr;
+      gap: 28px;
+      margin-top: 38px;
+      align-items: stretch;
+    }
+
+    .risk {
+      padding: 34px;
+      border: 1px solid rgba(255, 93, 115, 0.4);
+      border-radius: 8px;
+      background: linear-gradient(155deg, rgba(255, 93, 115, 0.16), rgba(255,255,255,0.025));
+    }
+
+    .risk b {
+      color: var(--red);
+      font-size: 80px;
+      line-height: 0.9;
+      display: block;
+      margin-bottom: 24px;
+    }
+
+    .compare {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 14px;
+      margin-top: 34px;
+    }
+
+    .compare .card {
+      min-height: 230px;
+    }
+
+    .compare .card:nth-child(1) { border-color: rgba(68, 215, 255, 0.26); }
+    .compare .card:nth-child(2) { border-color: rgba(88, 240, 167, 0.26); }
+    .compare .card:nth-child(3) { border-color: rgba(255, 200, 87, 0.28); }
+
+    @media (max-width: 900px) {
+      .deck { padding: 10px; }
+      .stage { width: calc(100vw - 20px); }
+      .slide { padding: 38px 42px 54px; }
+      h1 { font-size: 46px; }
+      h2 { font-size: 34px; }
+      .lead { font-size: 19px; }
+      .card p, .card li, .matrix div, .step span { font-size: 13px; }
+      .card strong, h3 { font-size: 17px; }
+      .metric b { font-size: 32px; }
+      .phone { width: 145px; height: 305px; border-width: 6px; border-radius: 22px; }
+      .controls { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <main class="deck" aria-live="polite">
+    <section class="stage" id="stage">
+      <article class="slide active" data-section="opening">
+        <div class="kicker">Engineering Field Report</div>
+        <h1>一個人 + AI agent 交付完整商業 App</h1>
+        <p class="lead">從 PRD、API、後台、iOS、Android 到 QA 回報修正，把「跨平台團隊」壓縮成一套可驗證的 agent workflow。</p>
+        <div class="metric-row">
+          <div class="metric"><b>1</b><span>人類負責決策、驗收與收斂問題</span></div>
+          <div class="metric"><b>2</b><span>行動平台：TestFlight 與 internal test</span></div>
+          <div class="metric"><b>3</b><span>主要產品面：API、後台、App 端</span></div>
+          <div class="metric"><b>4</b><span>核心技術棧：Go、Web、Swift、Kotlin</span></div>
+        </div>
+        <div class="watermark">AI</div>
+        <aside class="note">開場先定義這不是 demo toy project，而是一個有後台、有行動端、有部署、有 QA 流程的完整商業 App。</aside>
+      </article>
+
+      <article class="slide" data-section="system">
+        <div class="kicker">System Complexity</div>
+        <h2>它不是單一 app，而是一組互相牽動的產品系統。</h2>
+        <div class="metric-row">
+          <div class="metric"><b>Admin</b><span>後台頁面、權限、訂單、內容與營運管理</span></div>
+          <div class="metric"><b>API</b><span>App API、Admin API、Auth、付款 callback</span></div>
+          <div class="metric"><b>iOS</b><span>Swift app、Figma 對齊、TestFlight 發佈</span></div>
+          <div class="metric"><b>Android</b><span>Kotlin app、Swift 邏輯轉譯、internal test 發佈</span></div>
+        </div>
+        <div class="terminal">
+          <span class="dim">$ delivery-surface --list</span><br>
+          admin-api / app-api / auth / payments / admin-web / ios / android / qa-loop / deploy
+        </div>
+        <aside class="note">讓聽眾先理解複雜度：這不是單純把一個畫面做出來，而是產品、資料、營運、部署、測試都有。</aside>
+      </article>
+
+      <article class="slide" data-section="system">
+        <div class="kicker">Feature Map</div>
+        <h2>功能面一展開，agent 要處理的是完整營運後台與使用者流程。</h2>
+        <div class="grid four" style="margin-top: 34px;">
+          <div class="card"><strong>商品與課程</strong><p>方案、首購方案、課程、期課、匯入、日曆、課程選項</p></div>
+          <div class="card"><strong>交易與營運</strong><p>購物車、金流結帳、付款 callback、訂單、電子發票、優惠、退款狀態</p></div>
+          <div class="card"><strong>人員與權限</strong><p>用戶、老師、場館、後台使用者、角色、稽核紀錄</p></div>
+          <div class="card"><strong>延伸流程</strong><p>預約、簽到、租借教室、設備、活動報名與票券</p></div>
+        </div>
+        <div class="tag-row">
+          <span class="tag">CRUD 不是終點</span>
+          <span class="tag">跨資源關聯</span>
+          <span class="tag">付款與訂單狀態</span>
+          <span class="tag">電子發票串接</span>
+          <span class="tag">營運例外處理</span>
+          <span class="tag">行動端一致性</span>
+        </div>
+        <aside class="note">這頁可以用來說明為什麼 agent 需要明確 task boundary，也需要足夠好的測試回饋。</aside>
+      </article>
+
+
+      <article class="slide" data-section="system">
+        <div class="kicker">Commerce Loop</div>
+        <h2>真正的複雜度在「可以收錢、開發票、對帳、處理例外」。</h2>
+        <div class="flow">
+          <div class="card"><strong>Checkout</strong><p>App 端送出購物車、付款方式與發票資料，後端建立訂單與 payment。</p></div>
+          <div class="card"><strong>Payment Gateway</strong><p>串接第三方金流，支援信用卡、ATM、超商代碼/條碼等付款資訊。</p></div>
+          <div class="card"><strong>Callback</strong><p>接收付款結果、驗證來源、記錄原始 callback、更新付款與訂單狀態。</p></div>
+          <div class="card"><strong>Fulfillment</strong><p>付款成功後發放方案、更新使用權益，並讓後台可查詢與追蹤。</p></div>
+        </div>
+        <div class="compare">
+          <div class="card"><strong>電子發票</strong><p>個人、公司戶、會員載具、手機條碼、自然人憑證，開立失敗要可追蹤。</p></div>
+          <div class="card"><strong>後台營運</strong><p>訂單列表、付款狀態、金流編號、發票狀態、作廢與例外處理。</p></div>
+          <div class="card"><strong>測試難點</strong><p>金流 callback、發票加解密、非同步狀態、0 元訂單、取消與退款情境。</p></div>
+        </div>
+        <aside class="note">這頁補上商業系統最重要的複雜度：錢、發票、callback 與狀態一致性。這也是 AI agent 最需要測試護欄的地方。</aside>
+      </article>
+
+      <article class="slide" data-section="stack">
+        <div class="kicker">Tech Stack</div>
+        <h2>技術選型沒有追求炫技，重點是 agent 能理解、能 build、能測。</h2>
+        <div class="matrix">
+          <div class="head">面向</div><div class="head">API</div><div class="head">後台</div><div class="head">iOS</div><div class="head">Android</div>
+          <div class="axis">語言</div><div>Go</div><div>HTML / CSS / JavaScript</div><div>Swift</div><div>Kotlin</div>
+          <div class="axis">框架</div><div>Gin / GORM</div><div>jQuery / Bootstrap style</div><div>UIKit / native app</div><div>Native Android</div>
+          <div class="axis">驗證</div><div>unit test / curl</div><div>agent-browser E2E</div><div>build / simulator screenshot</div><div>build / emulator screenshot</div>
+          <div class="axis">發佈</div><div>GitHub Actions</div><div>同 API deployment</div><div>TestFlight</div><div>Internal test</div>
+        </div>
+        <aside class="note">技術棧本身不複雜，但跨平台上下文很大。穩定、明確、可自動化比追最新框架更重要。</aside>
+      </article>
+
+      <article class="slide" data-section="opening">
+        <div class="kicker">Thesis</div>
+        <h2>重點不是「AI 幫忙寫 code」，而是把交付流程設計到 agent 可以接手。</h2>
+        <div class="quote">可部署、可測試、可回報、可切任務，agent 才能從工具變成協作者。</div>
+        <div class="tag-row">
+          <span class="tag">PRD to task</span>
+          <span class="tag">Parallel agents</span>
+          <span class="tag">Local API tests</span>
+          <span class="tag">Browser E2E</span>
+          <span class="tag">Simulator screenshots</span>
+          <span class="tag">Asana QA loop</span>
+        </div>
+        <aside class="note">這頁先把分享主軸拉出來：不是單點 prompt 技巧，而是整個 SDLC 的重新設計。</aside>
+      </article>
+
+      <article class="slide" data-section="automation">
+        <div class="kicker">Prerequisite 1</div>
+        <h2>先把 API 與後台部署自動化，agent 才能交付到可測環境。</h2>
+        <div class="pipeline">
+          <div class="pipe"><span class="status"><i class="dot"></i>push main</span><h3>GitHub Actions</h3><p class="small">主分支觸發部署流程，避免人工 SSH 上機操作成為瓶頸。</p></div>
+          <div class="pipe"><span class="status"><i class="dot"></i>fetch</span><h3>EC2 checkout</h3><p class="small">伺服器拉最新 main，確保環境與 repo 狀態一致。</p></div>
+          <div class="pipe"><span class="status"><i class="dot"></i>deploy</span><h3>Blue-Green</h3><p class="small">用部署腳本切換服務，降低發佈風險。</p></div>
+          <div class="pipe"><span class="status"><i class="dot"></i>verify</span><h3>Health check</h3><p class="small">部署完成後用服務狀態與 logs 追蹤問題。</p></div>
+        </div>
+        <aside class="note">這頁講第一個前置投資：agent 寫完 code 如果不能自動上測試環境，後面 QA loop 會卡住。</aside>
+      </article>
+
+      <article class="slide" data-section="automation">
+        <div class="kicker">Prerequisite 2</div>
+        <h2>行動端也要能自動送測，不然 agent 做完還是回到人工發包。</h2>
+        <div class="split">
+          <div class="card">
+            <strong>iOS</strong>
+            <ul>
+              <li>Build archive</li>
+              <li>簽章與版本號處理</li>
+              <li>上傳 TestFlight</li>
+              <li>QA 可直接拿最新 build</li>
+            </ul>
+          </div>
+          <div class="card">
+            <strong>Android</strong>
+            <ul>
+              <li>Gradle build</li>
+              <li>產生測試版 artifact</li>
+              <li>送 Google Play Console internal test</li>
+              <li>讓跨平台修正能快速驗收</li>
+            </ul>
+          </div>
+        </div>
+        <div class="terminal">
+          <span class="dim">$ mobile-release-loop</span><br>
+          code -> build -> upload -> QA install -> Asana feedback
+        </div>
+        <aside class="note">強調 mobile deployment automation 是 AI 開發前置，不是後期 nice-to-have。</aside>
+      </article>
+
+      <article class="slide" data-section="automation">
+        <div class="kicker">Automation Flow</div>
+        <h2>整個工作流程是一張自動化 flow chart，不是單次 prompt。</h2>
+        <div class="automation-flow">
+          <div class="flow-box input" style="grid-column:1;grid-row:1;"><b>Google Doc PRD</b><span>產品需求、流程、規格與驗收方向</span></div>
+          <div class="flow-box input" style="grid-column:2;grid-row:1;"><b>Split Tasks</b><span>拆成 API、Admin、iOS、Android、QA 任務</span></div>
+          <div class="flow-box input down" style="grid-column:3;grid-row:1;"><b>Asana Queue</b><span>任務狀態、留言、附件、驗收條件</span></div>
+          <div class="flow-box agent" style="grid-column:3;grid-row:2;"><b>Agent Dispatch</b><span>agent 讀 task，決定進 API / Admin / Mobile repo</span></div>
+          <div class="flow-box agent" style="grid-column:4;grid-row:2;"><b>Implement</b><span>改 code、補測試、接 API、處理 UI 狀態</span></div>
+          <div class="flow-box verify down" style="grid-column:5;grid-row:2;"><b>Local Verify</b><span>unit test、curl、browser E2E、simulator screenshot</span></div>
+          <div class="flow-box deploy left" style="grid-column:5;grid-row:3;"><b>Push Code</b><span>commit / push 觸發平台部署</span></div>
+          <div class="flow-box deploy left" style="grid-column:4;grid-row:3;"><b>Auto Deploy</b><span>API/Admin、TestFlight、internal test</span></div>
+          <div class="flow-box qa left" style="grid-column:3;grid-row:3;"><b>QA Install & Test</b><span>測試最新 build，回報問題到 Asana</span></div>
+          <div class="flow-box qa loop" style="grid-column:2;grid-row:3;"><b>Clarify / Fix</b><span>模糊則追問，清楚則回到 agent 修正</span></div>
+          <div class="flow-box end" style="grid-column:1;grid-row:3;"><b>Ready</b><span>狀態移動、comment 完成、交回驗收</span></div>
+          <div class="flow-label" style="left:48%;top:35%;">repo-aware execution</div>
+          <div class="flow-label" style="right:4%;top:62%;">deployable output</div>
+          <div class="flow-label" style="left:24%;bottom:6%;">feedback returns to Asana</div>
+        </div>
+        <aside class="note">這張是全局圖：前半段把需求變任務，中段 agent 實作與驗證，後段自動部署給 QA，問題再回 Asana 形成下一輪。</aside>
+      </article>
+
+      <article class="slide" data-section="workflow">
+        <div class="kicker">Input Pipeline</div>
+        <h2>需求不是丟給 agent，而是進入一個可重跑的開發 cycle。</h2>
+        <div class="cycle-wrap">
+          <div class="cycle" aria-label="PRD to Asana to agent development cycle">
+            <div class="cycle-core">Task<br>Operating<br>System</div>
+            <div class="cycle-node n1"><b>PRD</b><span>Google Doc 定義需求與流程</span></div>
+            <div class="cycle-node n2"><b>Split</b><span>切 API / Admin / iOS / Android</span></div>
+            <div class="cycle-node n3"><b>Asana</b><span>任務、驗收、狀態集中</span></div>
+            <div class="cycle-node n4"><b>Agent</b><span>讀任務、搜尋 repo、實作</span></div>
+            <div class="cycle-node n5"><b>Verify</b><span>測試、截圖、E2E 回饋</span></div>
+            <div class="cycle-node n6"><b>Refine</b><span>補問、修正、更新任務</span></div>
+          </div>
+          <div class="cycle-list">
+            <div class="card"><strong>Cycle 的目的</strong><p>把模糊需求轉成 agent 能執行、能驗收、能回報的工程單位。</p></div>
+            <div class="card"><strong>人類的位置</strong><p>決定優先序、判斷 tradeoff、處理模糊需求，不負責逐行操作。</p></div>
+            <div class="card"><strong>Agent 的位置</strong><p>在明確邊界內讀 code、改 code、跑測試、回報結果。</p></div>
+          </div>
+        </div>
+        <aside class="note">這裡可以講 task granularity：agent 最怕的是大而模糊、沒有完成定義的需求。</aside>
+      </article>
+
+      <article class="slide" data-section="workflow">
+        <div class="kicker">Parallel Work</div>
+        <h2>Agent 分頭做，但靠相同任務系統與測試訊號收斂。</h2>
+        <div class="flow">
+          <div class="card"><strong>讀 Asana</strong><p>理解需求、留言、附件、驗收條件。</p></div>
+          <div class="card"><strong>建立 API</strong><p>model、migration、handler、service、unit test。</p></div>
+          <div class="card"><strong>建立後台</strong><p>頁面、表單、狀態、API 串接、權限。</p></div>
+          <div class="card"><strong>本地驗證</strong><p>curl + local API + agent-browser E2E。</p></div>
+        </div>
+        <div class="terminal">
+          <span class="dim">$ agent task inspect</span><br>
+          scope: backend + admin<br>
+          checks: go test ./... / curl / browser e2e
+        </div>
+        <aside class="note">這頁說明 API 與後台是第一段主戰場，因為 mobile 端很多功能會依賴 API contract。</aside>
+      </article>
+
+      <article class="slide" data-section="workflow">
+        <div class="kicker">Backend/Admin Loop</div>
+        <h2>後台不是「看起來有畫面」就完成，而是要用瀏覽器跑完整 E2E。</h2>
+        <div class="mini-cycle">
+          <div><b>Code</b><span>建立 API contract、service、handler、後台頁面。</span></div>
+          <div><b>Unit</b><span>測核心邏輯、資料狀態、邊界條件。</span></div>
+          <div><b>curl</b><span>打 local API 驗證 request、response、錯誤碼。</span></div>
+          <div><b>Browser</b><span>agent-browser 操作後台，測表單與真實 UI。</span></div>
+          <div><b>Patch</b><span>把失敗案例回饋成下一輪修正。</span></div>
+        </div>
+        <div class="terminal">
+          <span class="dim">$ verify-admin-change</span><br>
+          go test ./internal/...<br>
+          curl localhost/api...<br>
+          agent-browser run scenario...
+        </div>
+        <aside class="note">這頁可以帶到「agent 需要可以自己看到結果」，否則 UI 問題很容易只停留在猜測。</aside>
+      </article>
+
+      <article class="slide" data-section="build">
+        <div class="kicker">Simulator Build</div>
+        <h2>本地 build 模擬器的目的，是讓 agent 取得「實際 rendering」而不是猜 UI。</h2>
+        <div class="mini-cycle">
+          <div><b>Select Device</b><span>固定 iOS simulator / Android emulator，避免截圖尺寸與字體差異。</span></div>
+          <div><b>Build</b><span>用 Xcode/Gradle 編譯 debug build，確認 code 真能跑。</span></div>
+          <div><b>Install</b><span>把 app 安裝到 simulator/emulator，清狀態或保留登入狀態。</span></div>
+          <div><b>Drive</b><span>用 Maestro 走到指定畫面，處理權限、登入、popup。</span></div>
+          <div><b>Capture</b><span>截圖、log、失敗點一起回給 agent 修正。</span></div>
+        </div>
+        <div class="terminal">
+          <span class="dim">$ local-visual-check</span><br>
+          build debug -> boot simulator -> install app -> run Maestro flow -> capture screenshot
+        </div>
+        <aside class="note">這頁講本地 build 的價值：它不是為了發佈，而是把 UI 與互動變成 agent 可以觀察的客觀輸入。</aside>
+      </article>
+
+      <article class="slide" data-section="ios">
+        <div class="kicker">iOS Phase 1</div>
+        <div class="screen-row">
+          <div class="phone-bank">
+            <div class="phone"><img src="01_app_launch.png" alt=""><div class="phone-caption">Figma-driven first pass</div></div>
+            <div class="phone"><img src="02_home_screen.png" alt=""><div class="phone-caption">Native Swift implementation</div></div>
+          </div>
+          <div>
+            <h2>用 Figma API 抓圖與規格，第一輪可以做到約 70%。</h2>
+            <p class="lead">Layout、色彩、字級、間距、元件階層，多數能被 agent 從設計稿推導出來；真正卡的是細節與狀態。</p>
+          </div>
+        </div>
+        <aside class="note">圖片故意模糊作背景，避免可讀品牌或敏感資訊；講法聚焦 Figma to native 的完成度。</aside>
+      </article>
+
+      <article class="slide" data-section="ios">
+        <div class="kicker">Prompt Bottleneck</div>
+        <h2>前期靠人類下 prompt 微調 UI，成本很快升高。</h2>
+        <div class="risk-grid">
+          <div class="risk"><b>70%</b><h3>第一輪很快</h3><p class="small">但越接近設計稿，越需要精準描述差異。</p></div>
+          <div class="card">
+            <strong>問題不是 agent 不會改，而是 feedback 太主觀</strong>
+            <ul>
+              <li>「再往下一點」不等於可驗證需求</li>
+              <li>人類很難完整描述 spacing、alignment、state 差異</li>
+              <li>UI 微調容易在同一 session 內反覆繞圈</li>
+              <li>缺少客觀截圖比對時，agent 容易自認完成</li>
+            </ul>
+          </div>
+        </div>
+        <aside class="note">這頁把瓶頸說清楚：人類 prompt 不是不能用，而是不可規模化。</aside>
+      </article>
+
+      <article class="slide" data-section="ios">
+        <div class="kicker">iOS Phase 2</div>
+        <h2>後期改成 build 模擬器截圖，再跟 Figma 比對後回饋修正。</h2>
+        <div class="cycle-wrap">
+          <div class="cycle" aria-label="Mobile visual correction cycle">
+            <div class="cycle-core">Visual<br>Feedback<br>Loop</div>
+            <div class="cycle-node n1"><b>Figma</b><span>目標畫面與規格來源</span></div>
+            <div class="cycle-node n2"><b>Build</b><span>編譯 Swift app 到 simulator</span></div>
+            <div class="cycle-node n3"><b>Capture</b><span>抓實際 rendering 截圖</span></div>
+            <div class="cycle-node n4"><b>Compare</b><span>列出 spacing / state 差異</span></div>
+            <div class="cycle-node n5"><b>Patch</b><span>修 constraints、字級、狀態</span></div>
+            <div class="cycle-node n6"><b>Repeat</b><span>直到差異可接受</span></div>
+          </div>
+          <div>
+            <p class="lead">把「感覺不像」變成「這些像素、狀態、元件不一致」。</p>
+            <div class="terminal">
+              <span class="dim">$ visual-loop</span><br>
+              figma target -> simulator screenshot<br>
+              compare -> actionable deltas -> patch
+            </div>
+          </div>
+        </div>
+        <aside class="note">這頁是 iOS workflow 的關鍵轉折：feedback 變客觀後，agent 的 UI 收斂能力明顯提升。</aside>
+      </article>
+
+      <article class="slide" data-section="android">
+        <div class="kicker">Android Strategy</div>
+        <h2>Android 不是從零重做，而是讓 agent 讀 Swift code 轉 Kotlin。</h2>
+        <div class="split">
+          <div class="card"><strong>輸入</strong><p>iOS 已完成的畫面結構、API flow、狀態機、文案與 edge cases。</p></div>
+          <div class="card"><strong>輸出</strong><p>Kotlin native implementation，完成度約 90%，再靠 emulator 截圖修細節。</p></div>
+        </div>
+        <div class="terminal">
+          <span class="dim">$ translate-platform --source swift --target kotlin</span><br>
+          reuse: api contract / view state / copy / validation<br>
+          rebuild: native layout / navigation / platform behavior
+        </div>
+        <aside class="note">核心是把 iOS 當規格來源之一，而不是讓 Android agent 重新猜產品邏輯。</aside>
+      </article>
+
+      <article class="slide" data-section="android">
+        <div class="kicker">Android Loop</div>
+        <h2>完成度 90% 後，剩下 10% 通常是平台細節與視覺誤差。</h2>
+        <div class="compare">
+          <div class="card"><strong>Build emulator</strong><p>確認 Kotlin code 可以實際跑，不只停在靜態編譯。</p></div>
+          <div class="card"><strong>Screenshot diff</strong><p>對照 Figma 與 iOS 行為，找出間距、scroll、dialog、表單狀態差異。</p></div>
+          <div class="card"><strong>Regression pass</strong><p>用 Maestro 或人工 QA 流程覆蓋核心路徑。</p></div>
+        </div>
+        <div class="tag-row">
+          <span class="tag">Kotlin</span>
+          <span class="tag">Gradle</span>
+          <span class="tag">Emulator</span>
+          <span class="tag">Screenshot feedback</span>
+          <span class="tag">Internal test</span>
+        </div>
+        <aside class="note">這頁說明 Android 收斂方式與 iOS 類似，但起點更高，因為已有 Swift 版本作為參考。</aside>
+      </article>
+
+      <article class="slide" data-section="build">
+        <div class="kicker">iOS Build Details</div>
+        <h2>iOS 有兩條 build 路徑：本地模擬器驗證，以及 CI 簽章上 TestFlight。</h2>
+        <div class="compare">
+          <div class="card"><strong>Local simulator</strong><p>選固定 Xcode 與 simulator，build debug app，安裝後用 Maestro 走畫面並截圖。</p></div>
+          <div class="card"><strong>Release build</strong><p>CI 選 Xcode、安裝 certificate、provisioning profile、App Store Connect API key。</p></div>
+          <div class="card"><strong>Fastlane</strong><p>更新 build number、設定 manual signing、build app，最後 upload TestFlight。</p></div>
+        </div>
+        <div class="terminal">
+          <span class="dim">$ ios-release-pipeline</span><br>
+          xcode-select -> keychain/cert -> provisioning profile -> fastlane build_app -> upload_to_testflight
+        </div>
+        <aside class="note">這頁要區分 debug simulator 與 TestFlight build：前者用於快速修 UI，後者用於 QA 可安裝的正式測試版。</aside>
+      </article>
+
+      <article class="slide" data-section="build">
+        <div class="kicker">Android Build Details</div>
+        <h2>Android 同樣分成本地 emulator 驗證，以及 CI 產 AAB 發 internal test。</h2>
+        <div class="compare">
+          <div class="card"><strong>Local emulator</strong><p>用 Gradle build debug/release variant，安裝到 emulator，再用 Maestro 跑 E2E 與截圖。</p></div>
+          <div class="card"><strong>Release AAB</strong><p>CI 設 JDK 17、Gradle cache、解 google-services 與 release keystore，執行 bundleRelease。</p></div>
+          <div class="card"><strong>Internal test</strong><p>把 AAB artifact 上傳到 Google Play internal track，QA 從測試通道安裝。</p></div>
+        </div>
+        <div class="terminal">
+          <span class="dim">$ android-release-pipeline</span><br>
+          setup JDK 17 -> decode secrets -> ./gradlew bundleRelease -> upload AAB -> internal track
+        </div>
+        <aside class="note">Android 的技術細節重點是 AAB、keystore、versionCode/build number、google-services 與 internal track。</aside>
+      </article>
+
+      <article class="slide" data-section="build">
+        <div class="kicker">Build Pain Points</div>
+        <h2>Build 模擬器很有用，但它本身也會製造 context 與穩定性問題。</h2>
+        <div class="compare">
+          <div class="card"><strong>環境漂移</strong><p>Xcode 版本、iOS runtime、Android SDK、JDK、Gradle cache 不一致，都可能讓 agent 追錯問題。</p></div>
+          <div class="card"><strong>簽章與 secrets</strong><p>release build 需要 certificate、profile、keystore、API key；本地 agent 通常不能直接碰完整機密。</p></div>
+          <div class="card"><strong>時間成本</strong><p>clean build、啟動模擬器、安裝 app、跑 E2E 都慢，容易拖長 feedback loop。</p></div>
+        </div>
+        <div class="tradeoff">
+          <div class="card"><strong>做法</strong><p>把 build 指令、裝置、API 環境、測試帳號、Maestro flow 都固定化，讓 agent 少做猜測。</p></div>
+          <div class="card"><strong>取捨</strong><p>小 UI 改動可用局部 build + 截圖；高風險交易流程才跑完整 E2E 與發佈驗收。</p></div>
+        </div>
+        <aside class="note">這頁補困難：build-based feedback 很可靠，但不是免費的，必須設計何時跑完整流程、何時只跑局部。</aside>
+      </article>
+
+      <article class="slide" data-section="app e2e">
+        <div class="kicker">App E2E</div>
+        <h2>App E2E 用 Maestro 跑真機型流程，目標是驗證「使用者真的走得完」。</h2>
+        <div class="mini-cycle">
+          <div><b>Launch</b><span>清狀態啟動 app，處理通知權限與 debug login。</span></div>
+          <div><b>Navigate</b><span>等首頁、切 tab、進購買點數或課程詳情。</span></div>
+          <div><b>Interact</b><span>點方案、滾條款、同意 popup、填表單。</span></div>
+          <div><b>Assert</b><span>等待文字、確認狀態、檢查關鍵 UI 出現。</span></div>
+          <div><b>Capture</b><span>每個重要節點截圖，失敗時回給 agent 分析。</span></div>
+        </div>
+        <div class="terminal">
+          <span class="dim">$ maestro test</span><br>
+          launchApp -> Debug Login -> 首頁 -> 購買點數 -> 結帳 -> 發票資訊 -> ECPay WebView
+        </div>
+        <aside class="note">這頁說 App E2E 的定位：不是替代 unit test，而是驗證跨畫面、跨 API、跨 WebView 的使用者路徑。</aside>
+      </article>
+
+      <article class="slide" data-section="app e2e">
+        <div class="kicker">E2E Coverage</div>
+        <h2>真正有價值的 E2E，是挑會跨系統的高風險路徑。</h2>
+        <div class="grid three" style="margin-top: 38px;">
+          <div class="card"><strong>登入與首頁</strong><p>debug login、首頁載入、通知權限、tab navigation，先確認 app 可操作。</p></div>
+          <div class="card"><strong>課程與預約</strong><p>課程詳情、期課顯示、點數 popup、取消紀錄，測 API 資料與 UI 狀態一致。</p></div>
+          <div class="card"><strong>結帳與發票</strong><p>購買點數、條款 popup、個人/公司戶發票、載具欄位、ECPay WebView。</p></div>
+        </div>
+        <div class="compare">
+          <div class="card"><strong>iOS</strong><p>流程可深入到金流信用卡表單，填卡號、效期、CVV、姓名、手機與 email。</p></div>
+          <div class="card"><strong>Android</strong><p>流程進到 ECPay WebView 即截圖停止，避免在 production-like 環境真的扣款。</p></div>
+          <div class="card"><strong>共同策略</strong><p>用截圖當 proof，讓 agent 能看實際畫面，而不是只看文字 log。</p></div>
+        </div>
+        <aside class="note">這頁把 coverage 講具體：E2E 優先測金流、發票、popup、跨頁狀態，因為這些最容易在單元測試外壞掉。</aside>
+      </article>
+
+      <article class="slide" data-section="app e2e">
+        <div class="kicker">E2E Demo</div>
+        <h2>Demo：用 E2E test 自動輸入第三方支付頁資訊。</h2>
+        <div class="video-slide">
+          <div class="video-frame">
+            <div class="video-badge">Maestro payment flow</div>
+            <video src="assets/ecpay-e2e-demo.mp4" controls preload="metadata" playsinline></video>
+          </div>
+          <div class="cycle-list">
+            <div class="card"><strong>測試目的</strong><p>確認 app 能從結帳進入第三方支付 WebView，並自動操作付款表單。</p></div>
+            <div class="card"><strong>Agent 可用訊號</strong><p>錄影搭配 Maestro flow、截圖與失敗點，比單純文字描述更容易定位問題。</p></div>
+            <div class="card"><strong>安全邊界</strong><p>高風險付款流程要明確定義停在哪一步，避免測試環境與正式環境混淆。</p></div>
+          </div>
+        </div>
+        <aside class="note">播放影片時說明：這段展示的是 E2E 自動填第三方支付資訊，重點不是完成付款，而是驗證跨 app 與 WebView 的操作能力。</aside>
+      </article>
+
+      <article class="slide" data-section="app e2e">
+        <div class="kicker">E2E Difficulties</div>
+        <h2>App E2E 最難的不是寫腳本，而是讓測試穩定、可重現、可解讀。</h2>
+        <div class="compare">
+          <div class="card"><strong>非同步與等待</strong><p>首頁載入、API 回應、動畫、WebView 轉場都需要 extended wait；等太短 flaky，等太長拖慢 feedback。</p></div>
+          <div class="card"><strong>第三方 WebView</strong><p>金流頁 DOM 不受 app 控制，文字可能變、popup 可能擋住、測試環境提示會中斷流程。</p></div>
+          <div class="card"><strong>資料與環境</strong><p>測試帳號、方案資料、付款狀態、發票欄位、build 指向的 API 都會影響結果。</p></div>
+        </div>
+        <div class="tradeoff">
+          <div class="card"><strong>Agent 常見卡點</strong><p>看到錄影或失敗截圖，但不知道當時帳號狀態、API payload、前一步是否真的成功。</p></div>
+          <div class="card"><strong>改善方式</strong><p>每段 flow 都留 screenshot、使用穩定文字/id、把測試停在安全邊界，並把環境條件寫進 ticket。</p></div>
+        </div>
+        <aside class="note">這頁連到 context 限制：E2E 失敗如果沒有環境與截圖脈絡，agent 很容易修錯層，例如改 UI 其實是資料問題。</aside>
+      </article>
+
+      <article class="slide" data-section="qa">
+        <div class="kicker">QA Loop</div>
+        <h2>QA 回報進 Asana，agent 再把修正流程跑完。</h2>
+        <div class="cycle-wrap">
+          <div class="cycle" aria-label="QA repair and delivery cycle">
+            <div class="cycle-core">QA<br>Repair<br>Loop</div>
+            <div class="cycle-node n1"><b>Report</b><span>QA 回報問題與截圖</span></div>
+            <div class="cycle-node n2"><b>Analyze</b><span>agent 定位 API / Admin / App</span></div>
+            <div class="cycle-node n3"><b>Clarify</b><span>模糊時 comment 追問</span></div>
+            <div class="cycle-node n4"><b>Fix</b><span>修正並補測試</span></div>
+            <div class="cycle-node n5"><b>Deploy</b><span>push 觸發自動部署</span></div>
+            <div class="cycle-node n6"><b>Update</b><span>移動 Asana 狀態並回覆</span></div>
+          </div>
+          <div class="cycle-list">
+            <div class="card"><strong>模糊 ticket 不硬做</strong><p>agent 先 comment 追問，避免修錯方向。</p></div>
+            <div class="card"><strong>修正不等於完成</strong><p>要測試、push、等自動部署，再交回 QA。</p></div>
+            <div class="card"><strong>Asana 是狀態機</strong><p>任務狀態、測試結果、回覆紀錄形成下一輪輸入。</p></div>
+          </div>
+        </div>
+        <aside class="note">這頁是完整閉環：不是 agent 寫完就結束，而是 QA ticket 成為下一輪輸入。</aside>
+      </article>
+
+      <article class="slide" data-section="qa">
+        <div class="kicker">Delivery Loop</div>
+        <h2>每次修正都要回到部署與 ticket 狀態，否則只是本地改好了。</h2>
+        <div class="flow">
+          <div class="card"><strong>Commit</strong><p>留下清楚變更與測試紀錄。</p></div>
+          <div class="card"><strong>Push</strong><p>觸發 API、後台或 app 發佈流程。</p></div>
+          <div class="card"><strong>Monitor</strong><p>確認 GitHub Action 與部署結果。</p></div>
+          <div class="card"><strong>Asana update</strong><p>移動狀態，comment 說明修正與驗證方式。</p></div>
+        </div>
+        <div class="terminal">
+          <span class="dim">$ close-ticket</span><br>
+          tests: passed<br>
+          deploy: completed<br>
+          status: ready for QA<br>
+          comment: fixed + verification notes
+        </div>
+        <aside class="note">這頁可以強調工程文化：狀態同步與驗證紀錄是多人協作，也是人機協作的接口。</aside>
+      </article>
+
+      <article class="slide" data-section="limits">
+        <div class="kicker">Main Limitation</div>
+        <h2>Agent 的品質高度依賴 context；context 不夠，後面都會歪掉。</h2>
+        <div class="risk-grid">
+          <div class="risk"><b>!</b><h3>最大風險</h3><p class="small">任務資訊不足時，agent 會用推測補洞；看似有做事，但方向可能一開始就錯。</p></div>
+          <div class="terminal">
+            <span class="dim">$ task context check</span><br>
+            asana: expected behavior missing<br>
+            video: hard to map tap path to code state<br>
+            reproduction: not deterministic<br>
+            <span class="warn">warning: agent fills gaps with assumptions</span><br>
+            <span class="bad">result: lower-quality fix or wrong target</span>
+          </div>
+        </div>
+        <aside class="note">這頁把限制拉回 context：不是 agent 單純笨，而是輸入資訊不完整時，它會合理化自己的假設。</aside>
+      </article>
+
+      <article class="slide" data-section="limits">
+        <div class="kicker">Context Failure Modes</div>
+        <h2>前期品質不穩，常常不是 code 能力問題，而是任務理解不足。</h2>
+        <div class="compare">
+          <div class="card"><strong>Asana ticket 太薄</strong><p>只有一句「這裡怪怪的」或缺少 expected / actual，agent 很難判斷要改產品邏輯還是 UI。</p></div>
+          <div class="card"><strong>錄影不好吃</strong><p>影片能看到現象，但不一定能抽出可重現步驟、資料狀態、裝置條件與觸發點。</p></div>
+          <div class="card"><strong>缺少定位資訊</strong><p>沒有頁面、帳號狀態、API payload、截圖時間點，agent 只能靠搜尋與猜測補 context。</p></div>
+        </div>
+        <div class="terminal">
+          <span class="dim">$ better-ticket-template</span><br>
+          expected / actual / steps / account state / screenshot / API payload / target build
+        </div>
+        <aside class="note">這頁可以分享前期踩坑：錄影對人類很好懂，但對 agent 不一定是高品質 context，除非轉成步驟與可觀測資料。</aside>
+      </article>
+
+      <article class="slide" data-section="limits">
+        <div class="kicker">Experiments</div>
+        <h2>試過兩種補強驗證的方法，各有代價。</h2>
+        <div class="tradeoff">
+          <div class="card">
+            <strong>Sub-agent 跑測試</strong>
+            <ul>
+              <li>速度快，可在同一輪開發平行執行</li>
+              <li>適合 local API test 與後台 E2E</li>
+              <li>但上下文仍接近，盲點可能相似</li>
+            </ul>
+          </div>
+          <div class="card">
+            <strong>另一個 agent pull 後驗收</strong>
+            <ul>
+              <li>品質較好，像真正 reviewer / QA</li>
+              <li>能從乾淨環境重跑測試</li>
+              <li>但時間成本很高，不適合每張小 ticket</li>
+            </ul>
+          </div>
+        </div>
+        <aside class="note">這頁講 tradeoff，不要把任何一種方法講成銀彈；實務上要按風險選。</aside>
+      </article>
+
+      <article class="slide" data-section="takeaways">
+        <div class="kicker">Takeaways</div>
+        <h2>AI agent 可以放大獨立開發者，但前提是工程流程先被設計好。</h2>
+        <div class="grid three" style="margin-top: 42px;">
+          <div class="card"><strong>1. 自動化是地基</strong><p>沒有自動部署與可重跑測試，agent 寫得再快也很難可靠交付。</p></div>
+          <div class="card"><strong>2. 任務要可驗收</strong><p>PRD 要拆成具體 Asana task，並帶有完成定義與測試路徑。</p></div>
+          <div class="card"><strong>3. 回饋要客觀</strong><p>截圖、E2E、curl、CI 狀態，比主觀 prompt 更能讓 agent 收斂。</p></div>
+        </div>
+        <div class="quote">人類從寫每一行 code，轉成設計約束、檢查結果、決定取捨。</div>
+        <aside class="note">收尾可以回到角色轉變：不是完全不需要工程師，而是工程師的槓桿變大。</aside>
+      </article>
+
+      <article class="slide" data-section="closing">
+        <div class="kicker">Closing</div>
+        <h1>下一步不是更多 prompt，而是更好的交付系統。</h1>
+        <p class="lead">把需求、測試、部署、QA、回報全部做成 agent 能操作的介面，才是讓一個人交付完整產品的關鍵。</p>
+        <div class="terminal">
+          <span class="dim">$ final lesson</span><br>
+          design the loop, then let agents run inside it
+        </div>
+        <aside class="note">最後一頁可以留給 Q&A，或補充實際案例與 demo。</aside>
+      </article>
+    </section>
+  </main>
+
+  <div class="controls" aria-hidden="true">
+    <button class="nav-button" id="prevBtn" type="button">‹</button>
+    <span id="pageText">01 / 20</span>
+    <div class="bar"><span id="progress"></span></div>
+    <button class="nav-button" id="nextBtn" type="button">›</button>
+    <span>N notes</span>
+    <span>F full</span>
+  </div>
+
+  <script>
+    const slides = Array.from(document.querySelectorAll(".slide"));
+    const progress = document.getElementById("progress");
+    const pageText = document.getElementById("pageText");
+    let index = 0;
+
+    function showSlide(nextIndex) {
+      index = Math.max(0, Math.min(slides.length - 1, nextIndex));
+      slides.forEach((slide, i) => slide.classList.toggle("active", i === index));
+      pageText.textContent = `${String(index + 1).padStart(2, "0")} / ${String(slides.length).padStart(2, "0")}`;
+      progress.style.width = `${((index + 1) / slides.length) * 100}%`;
+      window.location.hash = `slide-${index + 1}`;
+    }
+
+    function requestFullscreen() {
+      const stage = document.getElementById("stage");
+      if (!document.fullscreenElement && stage.requestFullscreen) {
+        stage.requestFullscreen();
+      } else if (document.exitFullscreen) {
+        document.exitFullscreen();
+      }
+    }
+
+    document.addEventListener("keydown", (event) => {
+      if (["ArrowRight", "PageDown", " "].includes(event.key)) {
+        event.preventDefault();
+        showSlide(index + 1);
+      }
+      if (["ArrowLeft", "PageUp", "Backspace"].includes(event.key)) {
+        event.preventDefault();
+        showSlide(index - 1);
+      }
+      if (event.key.toLowerCase() === "n") {
+        document.body.classList.toggle("show-notes");
+      }
+      if (event.key.toLowerCase() === "f") {
+        requestFullscreen();
+      }
+      if (event.key === "Home") showSlide(0);
+      if (event.key === "End") showSlide(slides.length - 1);
+    });
+
+    document.getElementById("prevBtn").addEventListener("click", () => showSlide(index - 1));
+    document.getElementById("nextBtn").addEventListener("click", () => showSlide(index + 1));
+
+    let touchStartX = null;
+    document.addEventListener("touchstart", (event) => {
+      touchStartX = event.changedTouches[0].clientX;
+    }, { passive: true });
+
+    document.addEventListener("touchend", (event) => {
+      if (touchStartX === null) return;
+      const delta = event.changedTouches[0].clientX - touchStartX;
+      if (Math.abs(delta) > 48) showSlide(index + (delta < 0 ? 1 : -1));
+      touchStartX = null;
+    }, { passive: true });
+
+    const initial = Number((window.location.hash.match(/slide-(\d+)/) || [])[1]);
+    showSlide(Number.isFinite(initial) && initial > 0 ? initial - 1 : 0);
+  </script>
+<style>
+  .back-link {
+    position: fixed; top: 14px; left: 18px; z-index: 9999;
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    font-size: 13px; color: #58f0a7; text-decoration: none;
+    padding: 4px 10px; border: 1px solid rgba(88,240,167,0.4);
+    background: rgba(7,9,13,0.6); border-radius: 2px;
+    backdrop-filter: blur(4px);
+  }
+  .back-link:hover { background: #58f0a7; color: #07090d; border-color: #58f0a7; }
+</style>
+<a href="/slides/" class="back-link">← back to /slides</a>
+</body>
+</html>

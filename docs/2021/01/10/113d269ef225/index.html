@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>用 Nest.js 開發 API 吧 (六) — TypeORM — Alan Syue&#39;s Blog</title>
+  <meta name="description" content="Software engineer in Taiwan. Notes on PHP, Laravel, and self-learning.">
+  <meta name="author" content="Alan Syue">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Alan Syue&#39;s Blog">
+  <meta property="og:title" content="用 Nest.js 開發 API 吧 (六) — TypeORM">
+  <meta property="og:description" content="Software engineer in Taiwan. Notes on PHP, Laravel, and self-learning.">
+  <meta property="og:url" content="https://alansyue.github.io/2021/01/10/113d269ef225/">
+  <link rel="canonical" href="https://alansyue.github.io/2021/01/10/113d269ef225/">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <script>
+    (function(){
+      try {
+        if (localStorage.getItem('preferredTheme') !== 'light') {
+          document.documentElement.classList.add('darkmode-pre');
+        }
+      } catch(e){}
+    })();
+  </script>
+  <style>
+    html.darkmode-pre { background: #0d0d0d; }
+    html.darkmode-pre body { background: #0d0d0d; color: #e0e0e0; }
+  </style>
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <main class="container">
+    <header class="site-header">
+  <div class="brand">
+    <a href="/" class="brand-link">~/alansyue</a><span class="cursor">_</span>
+  </div>
+  <nav class="site-nav">
+    
+      <a href="/" class="nav-item">[home]</a>
+    
+      <a href="/archives/" class="nav-item">[posts]</a>
+    
+      <a href="/slides/" class="nav-item">[slides]</a>
+    
+      <a href="/about/" class="nav-item">[about]</a>
+    
+    <button type="button" class="theme-toggle" onclick="toggleTheme()" data-theme-btn aria-label="toggle theme">☾</button>
+  </nav>
+  <hr class="rule">
+</header>
+
+    <div class="content">
+      <article class="post">
+  <header class="post-header">
+    <h1 class="post-title-main">用 Nest.js 開發 API 吧 (六) — TypeORM</h1>
+    <p class="post-meta-line">
+      <span>$ date</span>
+      <time datetime="2021-01-10T10:48:44.000Z">2021-01-10 18:48</time>
+      
+    </p>
+  </header>
+  <div class="post-body">
+    <blockquote>
+<p>本文最初發表於 <a target="_blank" rel="noopener" href="https://medium.com/@b123105/%E7%94%A8-nest-js-%E9%96%8B%E7%99%BC-api-%E5%90%A7-%E5%85%AD-typeorm-113d269ef225">Medium</a>，已搬運至個人 blog。</p>
+</blockquote>
+<p><em>上篇分享了用 Docker 啟用 Postgresql，這次要來分享怎麼在 Nest.js 中使用 Postgresql 資料庫。</em></p>
+<hr>
+<p><img src="/images/113d269ef225/1.png" alt="Nest.js 官方網站"></p>
+<p><em><a target="_blank" rel="noopener" href="https://nestjs.com/">Nest.js 官方網站</a></em></p>
+<p>上篇分享了用 Docker 啟用 Postgresql，這次要來分享怎麼在 Nest.js 中使用 Postgresql 資料庫。</p>
+<p>Nest.js 採用了 <a target="_blank" rel="noopener" href="https://typeorm.io/#/">TypeORM</a>，是一套用 TypeScript 編寫的 ORM 框架，支援 MySQL、Postgresql、SQLite …等。這次會先以如何在專案上連線到上篇設定好的 Postgresql 為主：</p>
+<h3 id="一、安裝套件"><a href="#一、安裝套件" class="headerlink" title="一、安裝套件"></a>一、安裝套件</h3><p>要在 Nest.js 使用 TypeORM，要先到專案底下輸入：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">yarn add @nestjs/typeorm typeorm</span><br></pre></td></tr></table></figure>
+
+<p>接著，因為這次選用 Postgresql，所以需要輸入：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">yarn add pg</span><br></pre></td></tr></table></figure>
+
+<p>如果要使用 TypeORM 的 cli 指令，可以輸入：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">yarn global add typeorm</span><br></pre></td></tr></table></figure>
+
+<h3 id="二、建立-ormconfig-json"><a href="#二、建立-ormconfig-json" class="headerlink" title="二、建立 ormconfig.json"></a>二、建立 ormconfig.json</h3><p>接下來要建立連線資訊，有兩個方式：</p>
+<ol>
+<li>在專案根目錄下新增檔案 <code>ormconfig.json</code></li>
+<li>如果有安裝 TypeORM cli，可以輸入</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">typeorm init --database postgres</span><br></pre></td></tr></table></figure>
+
+<p>創建完成後，將 <code>ormconfig.json</code> 填寫如下設定（可參考上篇<code>用 Nest.js 開發 API 吧 (五) - Postgresql</code>）：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;type&quot;: &quot;postgres&quot;,</span><br><span class="line">  &quot;host&quot;: &quot;localhost&quot;,</span><br><span class="line">  &quot;port&quot;: 5432,</span><br><span class="line">  &quot;username&quot;: &quot;postgres&quot;,</span><br><span class="line">  &quot;password&quot;: &quot;&#123;YOUR PASSWORD&#125;&quot;,</span><br><span class="line">  &quot;database&quot;: &quot;postgres&quot;,</span><br><span class="line">  &quot;synchronize&quot;: true,</span><br><span class="line">  &quot;logging&quot;: false,</span><br><span class="line">  &quot;entities&quot;: [&quot;dist/entity/**/*.entity&#123;.ts,.js&#125;&quot;],</span><br><span class="line">  &quot;migrations&quot;: [&quot;src/migration/**/*.&#123;.ts,.js&#125;&quot;],</span><br><span class="line">  &quot;subscribers&quot;: [&quot;src/subscriber/**/*.ts&quot;],</span><br><span class="line">  &quot;cli&quot;: &#123;</span><br><span class="line">    &quot;entitiesDir&quot;: &quot;src/entity&quot;,</span><br><span class="line">    &quot;migrationsDir&quot;: &quot;src/migration&quot;,</span><br><span class="line">    &quot;subscribersDir&quot;: &quot;src/subscriber&quot;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>其中值得分享的是以下這段設定：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&quot;entities&quot;: [&quot;dist/entity/**/*.entity&#123;.ts,.js&#125;&quot;]</span><br></pre></td></tr></table></figure>
+
+<p>如果是用 CLI 創建路徑會是 <code>src/entity/**/*.ts</code>，但實際執行會遇到無法解讀 .ts 檔案的問題，查詢了一下相關 issue 發現要去指向 build 出來的 <code>.ts</code> 或 <code>.js</code> 檔案。所以如果要使用 <code>migrations</code> 或 <code>subscribers</code>，也需要將路徑做調整。</p>
+<h3 id="三、創建-User-Entity"><a href="#三、創建-User-Entity" class="headerlink" title="三、創建 User Entity"></a>三、創建 User Entity</h3><p>首先，我們先在 <code>src</code> 下建立 <code>entity</code> 的資料夾，並新增檔案 <code>users.entity.ts</code>，接著可以參考以下程式碼：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">import &#123;Entity, PrimaryGeneratedColumn, Column&#125; from &quot;typeorm&quot;;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">@Entity(&#x27;users&#x27;)</span><br><span class="line">export class Users &#123;</span><br><span class="line">    @PrimaryGeneratedColumn()</span><br><span class="line">    id: number;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">@Column(&#123;</span><br><span class="line">    type: &#x27;varchar&#x27;,</span><br><span class="line">    length: 255,</span><br><span class="line">&#125;)</span><br><span class="line">email: string;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">@Column(&#123;</span><br><span class="line">    type: &#x27;varchar&#x27;,</span><br><span class="line">    length: 255,        </span><br><span class="line">&#125;)</span><br><span class="line">password: string;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">@Column(&#123;</span><br><span class="line">    type: &#x27;varchar&#x27;,</span><br><span class="line">    length: 255,</span><br><span class="line">    default: null      </span><br><span class="line">&#125;)</span><br><span class="line">token: string;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">@Column(&#123;</span><br><span class="line">    default: false,</span><br><span class="line">&#125;)</span><br><span class="line">is_verify: boolean;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">@Column(&#123;</span><br><span class="line">    type: &#x27;timestamp&#x27;,</span><br><span class="line">    default: () =&gt; &#x27;CURRENT_TIMESTAMP(6)&#x27;</span><br><span class="line">&#125;)</span><br><span class="line">created_at: Date;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">    @Column(&#123;</span><br><span class="line">        type: &#x27;timestamp&#x27;,</span><br><span class="line">        default: () =&gt; &#x27;CURRENT_TIMESTAMP(6)&#x27;,</span><br><span class="line">        onUpdate: &#x27;CURRENT_TIMESTAMP(6)&#x27;</span><br><span class="line">    &#125;)</span><br><span class="line">    updated_at: Date;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>接著我們到 <code>src/app.module.ts</code> 去引入 TypeOrmModule，如下所示：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">import &#123;TypeOrmModule&#125; from &#x27;@nestjs/typeorm&#x27;;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">@Module(&#123;</span><br><span class="line">  imports: [</span><br><span class="line">    TypeOrmModule.forRoot(),</span><br><span class="line">  ],</span><br></pre></td></tr></table></figure>
+
+<p>使用 <code>TypeOrmModule.forRoot()</code>，他就會去 ormconfig.json 去抓取相關設定。</p>
+<p>最後執行 <code>yarn start:dev</code>，並開啟 pgAdmin，就能看到 <code>users</code> table 被建立，只要是因為我們在 <code>ormconfig.json</code> 設定：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&quot;synchronize&quot;: true,</span><br></pre></td></tr></table></figure>
+
+<p>連線時會根據 entity 的設定自動同步，如果不想自動同步可以改為 <code>false</code>。</p>
+<h3 id="小結"><a href="#小結" class="headerlink" title="小結"></a>小結</h3><p>今天分享了 Nest.js 如何利用 TypeORM 連線 Postgresql，並利用 entity 創建一張 table，下一篇預計分享關於 entity 的詳細設定，如果文章有任何錯誤或建議，歡迎告知！</p>
+
+  </div>
+  <footer class="post-footer">
+    <a href="/archives/">← back to archives</a>
+  </footer>
+</article>
+
+    </div>
+    <footer class="site-footer">
+  <hr class="rule">
+  <div class="footer-inner">
+    <span>$ echo "&copy; 2021-2026 Alan Syue"</span>
+    <span class="footer-links">
+      
+        <a href="https://github.com/AlanSyue" target="_blank" rel="noopener">github</a>
+      
+        <a href="https://www.linkedin.com/in/alan-syue-284a83134/" target="_blank" rel="noopener">linkedin</a>
+      
+        <a href="https://twitter.com/alansyue" target="_blank" rel="noopener">twitter</a>
+      
+        <a href="mailto:b123105@gmail.com" target="_blank" rel="noopener">email</a>
+      
+    </span>
+  </div>
+</footer>
+
+  </main>
+  <script src="/js/theme.js"></script>
+</body>
+</html>

@@ -1,0 +1,27 @@
+<section class="archive">
+  <h1 class="post-title-main">$ ls -la posts/</h1>
+  <ul class="post-list">
+    <% page.posts.sort('-date').each(function(post){ %>
+      <li>
+        <span class="post-date"><%= date(post.date, 'YYYY-MM-DD') %></span>
+        <a href="<%- url_for(post.path) %>" class="post-title"><%= post.title %></a>
+      </li>
+    <% }) %>
+  </ul>
+
+  <% if (page.total > 1) { %>
+    <nav class="pager">
+      <% if (page.prev > 0) { %>
+        <a class="pager-link" href="<%- url_for(page.prev_link) %>">← prev</a>
+      <% } else { %>
+        <span class="pager-link disabled">← prev</span>
+      <% } %>
+      <span class="pager-status">page <%= page.current %> / <%= page.total %></span>
+      <% if (page.next > 0) { %>
+        <a class="pager-link" href="<%- url_for(page.next_link) %>">next →</a>
+      <% } else { %>
+        <span class="pager-link disabled">next →</span>
+      <% } %>
+    </nav>
+  <% } %>
+</section>

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>3 步驟獲取Google Play 中APP數據 - Python 爬蟲 — Alan Syue&#39;s Blog</title>
+  <meta name="description" content="Software engineer in Taiwan. Notes on PHP, Laravel, and self-learning.">
+  <meta name="author" content="Alan Syue">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Alan Syue&#39;s Blog">
+  <meta property="og:title" content="3 步驟獲取Google Play 中APP數據 - Python 爬蟲">
+  <meta property="og:description" content="Software engineer in Taiwan. Notes on PHP, Laravel, and self-learning.">
+  <meta property="og:url" content="https://alansyue.github.io/2019/02/07/7bc8533cd6e9/">
+  <link rel="canonical" href="https://alansyue.github.io/2019/02/07/7bc8533cd6e9/">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <script>
+    (function(){
+      try {
+        if (localStorage.getItem('preferredTheme') !== 'light') {
+          document.documentElement.classList.add('darkmode-pre');
+        }
+      } catch(e){}
+    })();
+  </script>
+  <style>
+    html.darkmode-pre { background: #0d0d0d; }
+    html.darkmode-pre body { background: #0d0d0d; color: #e0e0e0; }
+  </style>
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <main class="container">
+    <header class="site-header">
+  <div class="brand">
+    <a href="/" class="brand-link">~/alansyue</a><span class="cursor">_</span>
+  </div>
+  <nav class="site-nav">
+    
+      <a href="/" class="nav-item">[home]</a>
+    
+      <a href="/archives/" class="nav-item">[posts]</a>
+    
+      <a href="/slides/" class="nav-item">[slides]</a>
+    
+      <a href="/about/" class="nav-item">[about]</a>
+    
+    <button type="button" class="theme-toggle" onclick="toggleTheme()" data-theme-btn aria-label="toggle theme">☾</button>
+  </nav>
+  <hr class="rule">
+</header>
+
+    <div class="content">
+      <article class="post">
+  <header class="post-header">
+    <h1 class="post-title-main">3 步驟獲取Google Play 中APP數據 - Python 爬蟲</h1>
+    <p class="post-meta-line">
+      <span>$ date</span>
+      <time datetime="2019-02-07T02:34:02.000Z">2019-02-07 10:34</time>
+      
+    </p>
+  </header>
+  <div class="post-body">
+    <blockquote>
+<p>本文最初發表於 <a target="_blank" rel="noopener" href="https://medium.com/@b123105/3-%E6%AD%A5%E9%A9%9F%E7%8D%B2%E5%8F%96google-play-%E4%B8%ADapp%E6%95%B8%E6%93%9A-python-%E7%88%AC%E8%9F%B2-7bc8533cd6e9">Medium</a>，已搬運至個人 blog。</p>
+</blockquote>
+<p><em>利用 Python、Selenium 獲取 Google play store 上 APP 資訊</em></p>
+<hr>
+<h3 id="3-步驟獲取Google-Play-中APP數據-Python-爬蟲"><a href="#3-步驟獲取Google-Play-中APP數據-Python-爬蟲" class="headerlink" title="3 步驟獲取Google Play 中APP數據 - Python 爬蟲"></a>3 步驟獲取Google Play 中APP數據 - Python 爬蟲</h3><p><img src="/images/7bc8533cd6e9/1.png" alt="圖片來源： Wikimedia Commons"></p>
+<p><em>圖片來源： <a target="_blank" rel="noopener" href="https://commons.wikimedia.org/wiki/File:Get_it_on_Google_play.svg">Wikimedia Commons</a></em></p>
+<p><strong>本文重點結論：</strong></p>
+<blockquote>
+<p>1. 利用 Python、Selenium 獲取 Google play store 上 APP 資訊</p>
+</blockquote>
+<blockquote>
+<p>2. 可針對 APP 做用戶反饋調查 ( 目前想到的 )</p>
+</blockquote>
+<blockquote>
+<p>3. 附上程式碼：<a target="_blank" rel="noopener" href="https://github.com/AlanSyue/google-play-crawler">https://github.com/AlanSyue/google-play-crawler</a></p>
+</blockquote>
+<blockquote>
+<p>※ 專案 forked from <a target="_blank" rel="noopener" href="https://github.com/ranjeet867/google-play-crawler">ranjeet867&#x2F;google-play-crawler</a></p>
+</blockquote>
+<h3 id="專案緣起"><a href="#專案緣起" class="headerlink" title="專案緣起"></a><strong>專案緣起</strong></h3><p>前些日子在瀏覽 Google play store 上用戶的評論及回饋，有些功能建議或 UI &#x2F; UX 反饋，都覺得還不錯 ( 雖然沒有到太多 )。</p>
+<p>如果是自己 APP 的評論，Google Console 裡面也有提供不錯的評論通知，但如果是想研究其他相似的 APP 呢？</p>
+<p>於是我 Google 了一下，想說是不是有套件或是第三方工具使用，但老實說，沒有找到太多的資訊 ( 其實我也還沒想到這些資料可以做什麼厲害的分析 ，目前想到就像上述了解用戶反饋)。</p>
+<p>不過偶然間在 GitHub 發現 ranjeet867 大大用 Python 做了一個 Google play store 的 crawler。</p>
+<p>仔細去看了一下 data example，剛好有我需要的評論內容，不過剛好發現以下 3 點，所以就 fork 回來調整一下：</p>
+<ol>
+<li>撈取內容的 class name 並非當前名稱，是以示意名稱做標示，有鑑於會需要實際去確認並修改，乾脆就一起更新，如：</li>
+</ol>
+<p><em>原：expatistan_table &#x3D; soup_expatistan.find(“div”, class_&#x3D;”id-app-title”)</em></p>
+<p>後：<em>expatistan_table &#x3D; soup_expatistan.find(“h1”, class_&#x3D;”AHFaub”)</em></p>
+<p>2. 部分內容經實際觀察，查無此項目數據，故先拿掉，如：評論標題</p>
+<p>3. 因為讀取所有評論的頁面為瀑布式，不太確定對方處理方式，故調整為使用 Selenium 的 window.scrollTo 獲取更多評論</p>
+<h3 id="使用方式"><a href="#使用方式" class="headerlink" title="使用方式"></a><strong>使用方式</strong></h3><ol>
+<li>安裝下列套件：BeautifulSoup、Selenium</li>
+<li>在 urls 的 list 填入想爬取的 APP Google play store 網址</li>
+<li>開始執行</li>
+</ol>
+<p><img src="/images/7bc8533cd6e9/2.png" alt="( 成功執行畫面示意圖 )"></p>
+<p><em>( 成功執行畫面示意圖 )</em></p>
+<p>以上為此專案使用說明，若有任何問題或錯誤，歡迎指教及建議，謝謝！</p>
+
+  </div>
+  <footer class="post-footer">
+    <a href="/archives/">← back to archives</a>
+  </footer>
+</article>
+
+    </div>
+    <footer class="site-footer">
+  <hr class="rule">
+  <div class="footer-inner">
+    <span>$ echo "&copy; 2021-2026 Alan Syue"</span>
+    <span class="footer-links">
+      
+        <a href="https://github.com/AlanSyue" target="_blank" rel="noopener">github</a>
+      
+        <a href="https://www.linkedin.com/in/alan-syue-284a83134/" target="_blank" rel="noopener">linkedin</a>
+      
+        <a href="https://twitter.com/alansyue" target="_blank" rel="noopener">twitter</a>
+      
+        <a href="mailto:b123105@gmail.com" target="_blank" rel="noopener">email</a>
+      
+    </span>
+  </div>
+</footer>
+
+  </main>
+  <script src="/js/theme.js"></script>
+</body>
+</html>

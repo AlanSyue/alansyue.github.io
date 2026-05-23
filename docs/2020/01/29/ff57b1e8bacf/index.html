@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>提高程式碼品質 | 利用 Python Pre-commit 自動化檢測 — Alan Syue&#39;s Blog</title>
+  <meta name="description" content="Software engineer in Taiwan. Notes on PHP, Laravel, and self-learning.">
+  <meta name="author" content="Alan Syue">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Alan Syue&#39;s Blog">
+  <meta property="og:title" content="提高程式碼品質 | 利用 Python Pre-commit 自動化檢測">
+  <meta property="og:description" content="Software engineer in Taiwan. Notes on PHP, Laravel, and self-learning.">
+  <meta property="og:url" content="https://alansyue.github.io/2020/01/29/ff57b1e8bacf/">
+  <link rel="canonical" href="https://alansyue.github.io/2020/01/29/ff57b1e8bacf/">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <script>
+    (function(){
+      try {
+        if (localStorage.getItem('preferredTheme') !== 'light') {
+          document.documentElement.classList.add('darkmode-pre');
+        }
+      } catch(e){}
+    })();
+  </script>
+  <style>
+    html.darkmode-pre { background: #0d0d0d; }
+    html.darkmode-pre body { background: #0d0d0d; color: #e0e0e0; }
+  </style>
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <main class="container">
+    <header class="site-header">
+  <div class="brand">
+    <a href="/" class="brand-link">~/alansyue</a><span class="cursor">_</span>
+  </div>
+  <nav class="site-nav">
+    
+      <a href="/" class="nav-item">[home]</a>
+    
+      <a href="/archives/" class="nav-item">[posts]</a>
+    
+      <a href="/slides/" class="nav-item">[slides]</a>
+    
+      <a href="/about/" class="nav-item">[about]</a>
+    
+    <button type="button" class="theme-toggle" onclick="toggleTheme()" data-theme-btn aria-label="toggle theme">☾</button>
+  </nav>
+  <hr class="rule">
+</header>
+
+    <div class="content">
+      <article class="post">
+  <header class="post-header">
+    <h1 class="post-title-main">提高程式碼品質 | 利用 Python Pre-commit 自動化檢測</h1>
+    <p class="post-meta-line">
+      <span>$ date</span>
+      <time datetime="2020-01-29T12:22:31.000Z">2020-01-29 20:22</time>
+      
+    </p>
+  </header>
+  <div class="post-body">
+    <blockquote>
+<p>本文最初發表於 <a target="_blank" rel="noopener" href="https://medium.com/@b123105/%E6%8F%90%E9%AB%98%E7%A8%8B%E5%BC%8F%E7%A2%BC%E5%93%81%E8%B3%AA-%E5%88%A9%E7%94%A8-python-pre-commit-%E8%87%AA%E5%8B%95%E5%8C%96%E6%AA%A2%E6%B8%AC-ff57b1e8bacf">Medium</a>，已搬運至個人 blog。</p>
+</blockquote>
+<p><em>為了提高之後協作專案的程式碼品質，這兩天在研究如何在 commit 前先自動檢查一些 coding style 或 syntax error， 這次會分享運用 git hooks、python 的 pre-commit framework 來自動化檢查的執行步驟：</em></p>
+<hr>
+<p><img src="/images/ff57b1e8bacf/1.png"></p>
+<p>為了提高之後協作專案的程式碼品質，這兩天在研究如何在 commit 前先自動檢查一些 coding style 或 syntax error， 這次會分享運用 git hooks、python 的 pre-commit framework 來自動化檢查的執行步驟：</p>
+<h3 id="一、安裝-Pre-commit"><a href="#一、安裝-Pre-commit" class="headerlink" title="一、安裝 Pre-commit"></a>一、安裝 Pre-commit</h3><p>使用 pip 安裝： pip install pre-commit</p>
+<h3 id="二、撰寫-pre-commit-設定檔"><a href="#二、撰寫-pre-commit-設定檔" class="headerlink" title="二、撰寫 pre-commit 設定檔"></a>二、撰寫 pre-commit 設定檔</h3><p>可參考以下寫法，其中 hooks 的 id 可以從<a target="_blank" rel="noopener" href="https://github.com/pre-commit/pre-commit-hooks/blob/master/.pre-commit-hooks.yaml">此處</a>查找選用。</p>
+<p>我選擇的有：</p>
+<p>1. trailing-whitespace : 去除尾端的空白格</p>
+<p>2. check-json：檢查所有 json 檔案格式</p>
+<p>3. flake8 ：執行 flake8 檢查 coding style</p>
+<p>4. detect-private-key：檢查檔案中是否存在 private key</p>
+<h3 id="三、git-commit-後即可自動檢查"><a href="#三、git-commit-後即可自動檢查" class="headerlink" title="三、git commit 後即可自動檢查"></a>三、git commit 後即可自動檢查</h3><p>設置完成後，每當執行 commit 指令，就會自動檢查所選的項目，下圖可看到通過就會呈現 Passed d，沒通過就會出現 Failed 及錯誤訊息。</p>
+<p><img src="/images/ff57b1e8bacf/2.png"></p>
+<h3 id="總結"><a href="#總結" class="headerlink" title="總結"></a>總結</h3><p>透過簡單設置 pre-commit，希望在之後的協作開發專案上，能夠增加程式碼的質量，並且幫助 Code review 時不必再額外花時間檢查這些基本問題，更專注在邏輯上。</p>
+<h3 id="參考資料"><a href="#參考資料" class="headerlink" title="參考資料"></a>參考資料</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://myapollo.com.tw/zh-tw/pre-commit-the-best-friend-before-commit/">用 pre-commit 提升程式碼品質</a></li>
+<li><a target="_blank" rel="noopener" href="https://pre-commit.com/">pre-commit</a></li>
+<li><a target="_blank" rel="noopener" href="https://medium.com/@yulongtsai/treehouse-write-better-python-c895882a25e1">[筆記] TreeHouse — Write Better Python</a></li>
+</ul>
+
+  </div>
+  <footer class="post-footer">
+    <a href="/archives/">← back to archives</a>
+  </footer>
+</article>
+
+    </div>
+    <footer class="site-footer">
+  <hr class="rule">
+  <div class="footer-inner">
+    <span>$ echo "&copy; 2021-2026 Alan Syue"</span>
+    <span class="footer-links">
+      
+        <a href="https://github.com/AlanSyue" target="_blank" rel="noopener">github</a>
+      
+        <a href="https://www.linkedin.com/in/alan-syue-284a83134/" target="_blank" rel="noopener">linkedin</a>
+      
+        <a href="https://twitter.com/alansyue" target="_blank" rel="noopener">twitter</a>
+      
+        <a href="mailto:b123105@gmail.com" target="_blank" rel="noopener">email</a>
+      
+    </span>
+  </div>
+</footer>
+
+  </main>
+  <script src="/js/theme.js"></script>
+</body>
+</html>

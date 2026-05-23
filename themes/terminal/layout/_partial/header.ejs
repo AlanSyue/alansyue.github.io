@@ -1,0 +1,12 @@
+<header class="site-header">
+  <div class="brand">
+    <a href="<%- url_for('/') %>" class="brand-link">~/alansyue</a><span class="cursor">_</span>
+  </div>
+  <nav class="site-nav">
+    <% for (let label in theme.menu) { %>
+      <a href="<%- url_for(theme.menu[label]) %>" class="nav-item">[<%= label %>]</a>
+    <% } %>
+    <button type="button" class="theme-toggle" onclick="toggleTheme()" data-theme-btn aria-label="toggle theme">☾</button>
+  </nav>
+  <hr class="rule">
+</header>

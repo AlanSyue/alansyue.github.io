@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>用 Nest.js 開發 API 吧 (七) — Entity — Alan Syue&#39;s Blog</title>
+  <meta name="description" content="Software engineer in Taiwan. Notes on PHP, Laravel, and self-learning.">
+  <meta name="author" content="Alan Syue">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Alan Syue&#39;s Blog">
+  <meta property="og:title" content="用 Nest.js 開發 API 吧 (七) — Entity">
+  <meta property="og:description" content="Software engineer in Taiwan. Notes on PHP, Laravel, and self-learning.">
+  <meta property="og:url" content="https://alansyue.github.io/2021/01/16/4512b308ab89/">
+  <link rel="canonical" href="https://alansyue.github.io/2021/01/16/4512b308ab89/">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <script>
+    (function(){
+      try {
+        if (localStorage.getItem('preferredTheme') !== 'light') {
+          document.documentElement.classList.add('darkmode-pre');
+        }
+      } catch(e){}
+    })();
+  </script>
+  <style>
+    html.darkmode-pre { background: #0d0d0d; }
+    html.darkmode-pre body { background: #0d0d0d; color: #e0e0e0; }
+  </style>
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <main class="container">
+    <header class="site-header">
+  <div class="brand">
+    <a href="/" class="brand-link">~/alansyue</a><span class="cursor">_</span>
+  </div>
+  <nav class="site-nav">
+    
+      <a href="/" class="nav-item">[home]</a>
+    
+      <a href="/archives/" class="nav-item">[posts]</a>
+    
+      <a href="/slides/" class="nav-item">[slides]</a>
+    
+      <a href="/about/" class="nav-item">[about]</a>
+    
+    <button type="button" class="theme-toggle" onclick="toggleTheme()" data-theme-btn aria-label="toggle theme">☾</button>
+  </nav>
+  <hr class="rule">
+</header>
+
+    <div class="content">
+      <article class="post">
+  <header class="post-header">
+    <h1 class="post-title-main">用 Nest.js 開發 API 吧 (七) — Entity</h1>
+    <p class="post-meta-line">
+      <span>$ date</span>
+      <time datetime="2021-01-16T08:23:17.000Z">2021-01-16 16:23</time>
+      
+    </p>
+  </header>
+  <div class="post-body">
+    <blockquote>
+<p>本文最初發表於 <a target="_blank" rel="noopener" href="https://medium.com/@b123105/%E7%94%A8-nest-js-%E9%96%8B%E7%99%BC-api-%E5%90%A7-%E4%B8%83-entity-4512b308ab89">Medium</a>，已搬運至個人 blog。</p>
+</blockquote>
+<p><em>上回有分享到用 TypeORM 連線到 Postgresql，因為 TypeORM 支援 Repository Design Pattern，每張 table 都會對應到一個 interface。</em></p>
+<hr>
+<p><img src="/images/4512b308ab89/1.png" alt="Nest.js 官方網站"></p>
+<p><em><a target="_blank" rel="noopener" href="https://nestjs.com/">Nest.js 官方網站</a></em></p>
+<p>上回有分享到用 TypeORM 連線到 Postgresql，因為 TypeORM 支援 <code>Repository Design Pattern</code>，每張 table 都會對應到一個 interface。</p>
+<p>而在使用 TypeORM 連線資料庫，基本上會有三個步驟：</p>
+<h3 id="一、建立-Entity-檔案"><a href="#一、建立-Entity-檔案" class="headerlink" title="一、建立 Entity 檔案"></a>一、建立 Entity 檔案</h3><p>首先第一步是為要新建的資料庫 table，新增一個 Entity 的檔案，像是上篇，我要建立跟使用者相關的 table，就建了 <code>users.entity.ts</code> 的檔案。檔案裡面會是所需資料的 interface。</p>
+<p>我們需要先引入 typeorm：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">import &#123;Entity, PrimaryGeneratedColumn, Column&#125; from &quot;typeorm&quot;;</span><br></pre></td></tr></table></figure>
+
+<p>定義 Entity 及 interface:</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">@Entity(&#x27;users&#x27;)</span><br><span class="line">export class Users &#123;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>接下來要定義欄位型態、資料型態，以下介紹五個目前我有使用到的:</p>
+<ol>
+<li>主鍵(primary key)</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">@PrimaryGeneratedColumn()  id: number;</span><br></pre></td></tr></table></figure>
+
+<p>2. varchart 欄位</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">@Column(&#123; </span><br><span class="line">  type: &#x27;varchar&#x27;,</span><br><span class="line">  length: 255,  </span><br><span class="line">&#125;)</span><br><span class="line">email: string;</span><br></pre></td></tr></table></figure>
+
+<p>3. boolean</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">@Column(&#123;</span><br><span class="line">  default: false,</span><br><span class="line">&#125;)</span><br><span class="line">is_verify: boolean;</span><br></pre></td></tr></table></figure>
+
+<p>4. timestamp (create, update)</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">@Column(&#123; </span><br><span class="line">  type: &#x27;timestamp&#x27;,</span><br><span class="line">  default: () =&gt; &#x27;CURRENT_TIMESTAMP(6)&#x27;</span><br><span class="line">&#125;)  </span><br><span class="line">created_at: Date;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">@Column(&#123;</span><br><span class="line">  type: &#x27;timestamp&#x27;,</span><br><span class="line">  default: () =&gt; &#x27;CURRENT_TIMESTAMP(6)&#x27;,</span><br><span class="line">  onUpdate: &#x27;CURRENT_TIMESTAMP(6)&#x27;</span><br><span class="line">&#125;)</span><br><span class="line">updated_at: Date;</span><br></pre></td></tr></table></figure>
+
+<p>5. enum</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">import &#123;Entity, PrimaryGeneratedColumn, Column&#125; from &quot;typeorm&quot;;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">export enum gender &#123;</span><br><span class="line">    male = &quot;male&quot;,</span><br><span class="line">    female = &quot;female&quot;,</span><br><span class="line">    other = &quot;other&quot;    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">@Entity(&#x27;profiles&#x27;)</span><br><span class="line">export class Profiles &#123;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">@PrimaryGeneratedColumn()</span><br><span class="line">id: number;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">    @Column(&#123;</span><br><span class="line">        type: &quot;enum&quot;,</span><br><span class="line">        enum: education,</span><br><span class="line">        default: education.bachelor</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="二、在-Module-註冊-Entity"><a href="#二、在-Module-註冊-Entity" class="headerlink" title="二、在 Module 註冊 Entity"></a>二、在 Module 註冊 Entity</h3><p>上篇提到在 <code>src/app.module.ts</code> 去引入 <code>TypeOrmModule</code>，並使用 <code>TypeOrmModule.forRoot()</code> 去抓取 ormconfig.json 設定，由於 ormconfig.json 中會去讀取所有 Entity 資料夾，就會同時註冊所有 Entity。</p>
+<p>另外也可以在 Module 中單獨註冊某個 Entity，舉例來說，我可以在 <code>auth.module.ts</code> 單獨註冊 <code>users.entity</code>，如以下範例：</p>
+<p>路徑: <code>src/module/auth.module.ts</code></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">import &#123; Users &#125; from &#x27;../entity/users.entity&#x27;;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">@Module(&#123;</span><br><span class="line">    imports: [</span><br><span class="line">        TypeOrmModule.forFeature([Users])</span><br><span class="line">    ],</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+
+<h3 id="三、在-Service-使用-Repository"><a href="#三、在-Service-使用-Repository" class="headerlink" title="三、在 Service 使用 Repository"></a>三、在 Service 使用 Repository</h3><p>接著就是在 Service 去使用 Repository，我們用上篇的 <code>users.entity.ts</code> 當例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">import &#123;Entity, PrimaryGeneratedColumn, Column&#125; from &quot;typeorm&quot;;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">@Entity(&#x27;users&#x27;)</span><br><span class="line">export class Users &#123;</span><br><span class="line">    @PrimaryGeneratedColumn()</span><br><span class="line">    id: number;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">@Column(&#123;</span><br><span class="line">    type: &#x27;varchar&#x27;,</span><br><span class="line">    length: 255,</span><br><span class="line">&#125;)</span><br><span class="line">email: string;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">@Column(&#123;</span><br><span class="line">    type: &#x27;varchar&#x27;,</span><br><span class="line">    length: 255,        </span><br><span class="line">&#125;)</span><br><span class="line">password: string;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">@Column(&#123;</span><br><span class="line">    type: &#x27;varchar&#x27;,</span><br><span class="line">    length: 255,</span><br><span class="line">    default: null      </span><br><span class="line">&#125;)</span><br><span class="line">token: string;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">@Column(&#123;</span><br><span class="line">    default: false,</span><br><span class="line">&#125;)</span><br><span class="line">is_verify: boolean;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">@Column(&#123;</span><br><span class="line">    type: &#x27;timestamp&#x27;,</span><br><span class="line">    default: () =&gt; &#x27;CURRENT_TIMESTAMP(6)&#x27;</span><br><span class="line">&#125;)</span><br><span class="line">created_at: Date;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">    @Column(&#123;</span><br><span class="line">        type: &#x27;timestamp&#x27;,</span><br><span class="line">        default: () =&gt; &#x27;CURRENT_TIMESTAMP(6)&#x27;,</span><br><span class="line">        onUpdate: &#x27;CURRENT_TIMESTAMP(6)&#x27;</span><br><span class="line">    &#125;)</span><br><span class="line">    updated_at: Date;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>以下範例程式碼會在 <code>users.service.ts</code> 去注入 <code>usersRepository</code>，並從中去取得 email 欄位相等於 <code>XXX@alansyue.com</code> 的資料:</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">import &#123; Injectable &#125; from &#x27;@nestjs/common&#x27;;</span><br><span class="line">import &#123; InjectRepository &#125; from &#x27;@nestjs/typeorm&#x27;;</span><br><span class="line">import &#123; Repository &#125; from &#x27;typeorm&#x27;;</span><br><span class="line">import &#123; Users &#125; from &#x27;../entity/users.entity&#x27;;</span><br><span class="line">import &#123; UserDTO &#125; from &#x27;../DTO/users/user.dto&#x27;;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">@Injectable()</span><br><span class="line">export class UserService &#123;</span><br><span class="line">  constructor(</span><br><span class="line">    // 注入 Users Entity</span><br><span class="line">    @InjectRepository(Users)</span><br><span class="line">    private readonly usersRepository: Repository&lt;Users&gt;,</span><br><span class="line">  ) &#123;&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">  async getUserByEmail(email: string): Promise&lt;UserDTO&gt; &#123;</span><br><span class="line">    // 取出一筆 email 為 XXX@alansyue.com 的資料</span><br><span class="line">    return await this.usersRepository.findOne(&#123;</span><br><span class="line">      where: &#123;</span><br><span class="line">        email: &quot;XXX@alansyue.com&quot;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="小結"><a href="#小結" class="headerlink" title="小結"></a>小結</h3><p>今天將上次較少著墨 Entity 的細節再補上，這次有提到在 Service 使用 Repository，會在下篇做 CRUD 時再多做說明，如果文章有任何錯誤或建議，歡迎告知！</p>
+
+  </div>
+  <footer class="post-footer">
+    <a href="/archives/">← back to archives</a>
+  </footer>
+</article>
+
+    </div>
+    <footer class="site-footer">
+  <hr class="rule">
+  <div class="footer-inner">
+    <span>$ echo "&copy; 2021-2026 Alan Syue"</span>
+    <span class="footer-links">
+      
+        <a href="https://github.com/AlanSyue" target="_blank" rel="noopener">github</a>
+      
+        <a href="https://www.linkedin.com/in/alan-syue-284a83134/" target="_blank" rel="noopener">linkedin</a>
+      
+        <a href="https://twitter.com/alansyue" target="_blank" rel="noopener">twitter</a>
+      
+        <a href="mailto:b123105@gmail.com" target="_blank" rel="noopener">email</a>
+      
+    </span>
+  </div>
+</footer>
+
+  </main>
+  <script src="/js/theme.js"></script>
+</body>
+</html>

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>How to checkout GitHub pull requests locally — Alan Syue&#39;s Blog</title>
+  <meta name="description" content="Software engineer in Taiwan. Notes on PHP, Laravel, and self-learning.">
+  <meta name="author" content="Alan Syue">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Alan Syue&#39;s Blog">
+  <meta property="og:title" content="How to checkout GitHub pull requests locally">
+  <meta property="og:description" content="Software engineer in Taiwan. Notes on PHP, Laravel, and self-learning.">
+  <meta property="og:url" content="https://alansyue.github.io/2020/05/23/e6fe2dbcded6/">
+  <link rel="canonical" href="https://alansyue.github.io/2020/05/23/e6fe2dbcded6/">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <script>
+    (function(){
+      try {
+        if (localStorage.getItem('preferredTheme') !== 'light') {
+          document.documentElement.classList.add('darkmode-pre');
+        }
+      } catch(e){}
+    })();
+  </script>
+  <style>
+    html.darkmode-pre { background: #0d0d0d; }
+    html.darkmode-pre body { background: #0d0d0d; color: #e0e0e0; }
+  </style>
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <main class="container">
+    <header class="site-header">
+  <div class="brand">
+    <a href="/" class="brand-link">~/alansyue</a><span class="cursor">_</span>
+  </div>
+  <nav class="site-nav">
+    
+      <a href="/" class="nav-item">[home]</a>
+    
+      <a href="/archives/" class="nav-item">[posts]</a>
+    
+      <a href="/slides/" class="nav-item">[slides]</a>
+    
+      <a href="/about/" class="nav-item">[about]</a>
+    
+    <button type="button" class="theme-toggle" onclick="toggleTheme()" data-theme-btn aria-label="toggle theme">☾</button>
+  </nav>
+  <hr class="rule">
+</header>
+
+    <div class="content">
+      <article class="post">
+  <header class="post-header">
+    <h1 class="post-title-main">How to checkout GitHub pull requests locally</h1>
+    <p class="post-meta-line">
+      <span>$ date</span>
+      <time datetime="2020-05-23T04:04:19.000Z">2020-05-23 12:04</time>
+      
+    </p>
+  </header>
+  <div class="post-body">
+    <blockquote>
+<p>本文最初發表於 <a target="_blank" rel="noopener" href="https://medium.com/@b123105/how-to-checkout-github-pull-requests-locally-e6fe2dbcded6">Medium</a>，已搬運至個人 blog。</p>
+</blockquote>
+<p><em>從事軟體開發時，如果使用 Git 做版本控制，一定會有收到 Pull Requests (以下簡稱 PR)，然後做 code review 的狀況。</em></p>
+<hr>
+<h3 id="How-to-checkout-GitHub-pull-requests-locally"><a href="#How-to-checkout-GitHub-pull-requests-locally" class="headerlink" title="How to checkout GitHub pull requests locally"></a>How to checkout GitHub pull requests locally</h3><p>從事軟體開發時，如果使用 Git 做版本控制，一定會有收到 Pull Requests (以下簡稱 PR)，然後做 code review 的狀況。</p>
+<p>以 GitHub 為例，可以在 repo 的 <code>Pull Requests</code> 找到 PR</p>
+<p><img src="/images/e6fe2dbcded6/1.png"></p>
+<h3 id="Code-Review-的方式"><a href="#Code-Review-的方式" class="headerlink" title="Code Review 的方式"></a>Code Review 的方式</h3><p>當我們要查看 PR 程式碼做了哪些更動，第一個方法是可以點進 <code>Files changed</code> ，就可以查看哪些檔案做了更動。</p>
+<p><img src="/images/e6fe2dbcded6/2.png"></p>
+<p>如果更動的程式碼較多，或是想實際測試看看改動的內容，要如何 pull PR 的 code 下來呢？這邊提供兩個我所知道的方法做參考：</p>
+<h3 id="1-使用-git-fetch"><a href="#1-使用-git-fetch" class="headerlink" title="1. 使用 git fetch"></a>1. 使用 <code>git fetch</code></h3><p>打開 Terminal，輸入以下指令：</p>
+<p><code>git fetch origin refs/pull/&#123;PRID&#125;/head:&#123;BRANCHNAME&#125;</code></p>
+<p>其中的 PRID 可以參照上圖，PR title 後面的 <code>#1</code> 就是這個 PR 的 id</p>
+<p><code>BRANCHNAME</code> 則是你要在 local 建立的分支名稱</p>
+<p><img src="/images/e6fe2dbcded6/3.png"></p>
+<h3 id="2-使用-GitHub-CLI"><a href="#2-使用-GitHub-CLI" class="headerlink" title="2. 使用 GitHub CLI"></a>2. 使用 GitHub CLI</h3><p><a target="_blank" rel="noopener" href="https://github.com/cli/cli">GitHub CLI</a> 目前是 Beta 版本，可以透過 command line 的方式對 repo，issue，PR 進行檢視及操作。以下分享安裝 GitHub CLI 及如何 pull PR code 的操作方式：</p>
+<p>首先透過 Homebrew 安裝</p>
+<p><code>brew install github/gh/gh</code></p>
+<p>安裝成功後可以先輸入 <code>gh help</code> 確認是否有安裝成功</p>
+<p><img src="/images/e6fe2dbcded6/4.png"></p>
+<p>確認成功後輸入 <code>gh pr checkout &#123;PRID&#125;</code> ，第一次使用會需要取得授權</p>
+<p><img src="/images/e6fe2dbcded6/5.png"></p>
+<p>點擊 <code>Authorize github</code> 同意授權</p>
+<p><img src="/images/e6fe2dbcded6/6.png"></p>
+<p>輸入密碼後就授權成功</p>
+<p><img src="/images/e6fe2dbcded6/7.png"></p>
+<p>回到 Terminal 就可以看到他幫你切到一個新的分支，並且 pull PR code 下來囉。</p>
+<p><img src="/images/e6fe2dbcded6/8.png"></p>
+<h3 id="參考資料"><a href="#參考資料" class="headerlink" title="參考資料"></a>參考資料</h3><ol>
+<li><a target="_blank" rel="noopener" href="https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/checking-out-pull-requests-locally">Checking out pull requests locally</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/cli/cli">GitHub CLI</a></li>
+</ol>
+
+  </div>
+  <footer class="post-footer">
+    <a href="/archives/">← back to archives</a>
+  </footer>
+</article>
+
+    </div>
+    <footer class="site-footer">
+  <hr class="rule">
+  <div class="footer-inner">
+    <span>$ echo "&copy; 2021-2026 Alan Syue"</span>
+    <span class="footer-links">
+      
+        <a href="https://github.com/AlanSyue" target="_blank" rel="noopener">github</a>
+      
+        <a href="https://www.linkedin.com/in/alan-syue-284a83134/" target="_blank" rel="noopener">linkedin</a>
+      
+        <a href="https://twitter.com/alansyue" target="_blank" rel="noopener">twitter</a>
+      
+        <a href="mailto:b123105@gmail.com" target="_blank" rel="noopener">email</a>
+      
+    </span>
+  </div>
+</footer>
+
+  </main>
+  <script src="/js/theme.js"></script>
+</body>
+</html>

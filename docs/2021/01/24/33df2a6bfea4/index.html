@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>用 Nest.js 開發 API 吧 (九) — 總結 — Alan Syue&#39;s Blog</title>
+  <meta name="description" content="Software engineer in Taiwan. Notes on PHP, Laravel, and self-learning.">
+  <meta name="author" content="Alan Syue">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Alan Syue&#39;s Blog">
+  <meta property="og:title" content="用 Nest.js 開發 API 吧 (九) — 總結">
+  <meta property="og:description" content="Software engineer in Taiwan. Notes on PHP, Laravel, and self-learning.">
+  <meta property="og:url" content="https://alansyue.github.io/2021/01/24/33df2a6bfea4/">
+  <link rel="canonical" href="https://alansyue.github.io/2021/01/24/33df2a6bfea4/">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <script>
+    (function(){
+      try {
+        if (localStorage.getItem('preferredTheme') !== 'light') {
+          document.documentElement.classList.add('darkmode-pre');
+        }
+      } catch(e){}
+    })();
+  </script>
+  <style>
+    html.darkmode-pre { background: #0d0d0d; }
+    html.darkmode-pre body { background: #0d0d0d; color: #e0e0e0; }
+  </style>
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <main class="container">
+    <header class="site-header">
+  <div class="brand">
+    <a href="/" class="brand-link">~/alansyue</a><span class="cursor">_</span>
+  </div>
+  <nav class="site-nav">
+    
+      <a href="/" class="nav-item">[home]</a>
+    
+      <a href="/archives/" class="nav-item">[posts]</a>
+    
+      <a href="/slides/" class="nav-item">[slides]</a>
+    
+      <a href="/about/" class="nav-item">[about]</a>
+    
+    <button type="button" class="theme-toggle" onclick="toggleTheme()" data-theme-btn aria-label="toggle theme">☾</button>
+  </nav>
+  <hr class="rule">
+</header>
+
+    <div class="content">
+      <article class="post">
+  <header class="post-header">
+    <h1 class="post-title-main">用 Nest.js 開發 API 吧 (九) — 總結</h1>
+    <p class="post-meta-line">
+      <span>$ date</span>
+      <time datetime="2021-01-24T01:34:00.000Z">2021-01-24 09:34</time>
+      
+    </p>
+  </header>
+  <div class="post-body">
+    <blockquote>
+<p>本文最初發表於 <a target="_blank" rel="noopener" href="https://medium.com/@b123105/%E7%94%A8-nest-js-%E9%96%8B%E7%99%BC-api-%E5%90%A7-%E4%B9%9D-%E7%B8%BD%E7%B5%90-33df2a6bfea4">Medium</a>，已搬運至個人 blog。</p>
+</blockquote>
+<p><em>記得去年參加 CoderBridge 舉辦的開發者寫作松，只零星寫了一些工作開發的東西，鮮少嘗試比較有連貫性的系列文，這次是個蠻新鮮的挑戰及體驗。</em></p>
+<hr>
+<p><img src="/images/33df2a6bfea4/1.png" alt="Nest.js 官方網站"></p>
+<p><em><a target="_blank" rel="noopener" href="https://nestjs.com/">Nest.js 官方網站</a></em></p>
+<p>記得去年參加 CoderBridge 舉辦的開發者寫作松，只零星寫了一些工作開發的東西，鮮少嘗試比較有連貫性的系列文，這次是個蠻新鮮的挑戰及體驗。</p>
+<p>這系列的起源主要是去年開始開發<a target="_blank" rel="noopener" href="https://www.itseed.tw/">資訊種子</a>的新官網，資訊種子的朋友建議可以試試 Nest.js，才開始邊研究邊實作。</p>
+<p>起初對 TypeScript 不熟，中間遇到了一些坑，但 Nest.js 的社群資源也還蠻豐富的 (還去官方 Discord 用破英文發問)。後來想說把開發學習及遇到的問題記錄下來，說不定之後負責維護的人也可以從中找到相似問題，甚至是能剛好幫助到學習 Nest.js 的人。</p>
+<p>接下來為這個系列做的小總結吧！</p>
+<h3 id="Nest-js-優點"><a href="#Nest-js-優點" class="headerlink" title="Nest.js 優點"></a>Nest.js 優點</h3><ol>
+<li>基於 <code>Express</code>，但也可以選用配置 <code>Fastify</code></li>
+<li>完美支援 <code>TypeScript</code>，強型別以及預先檢查減少開發上的預期外錯誤 (這各有擁護者，但我開發上覺得體驗不錯)</li>
+<li>嚴謹的分層，彈性高、鬆散耦合、高度可測試及維護</li>
+<li>官方文件完善，社群豐富</li>
+</ol>
+<h3 id="Nest-js-架構"><a href="#Nest-js-架構" class="headerlink" title="Nest.js 架構"></a>Nest.js 架構</h3><ol>
+<li>Controller<br>控制器，從 Module 被呼叫，並擁有<code>基本路由設定</code>，主要負責接收 client 端的 requests 以及 response。</li>
+<li>Module<br>類似於 Angular 的 NgModule，讓我們把類型或功能相似的程式封裝成一個一個不同的模組。</li>
+<li>Service<br>service 主要處理商業邏輯的操作，透過注入依賴的方式讓 Controller 和其他 Service 可以使用。</li>
+</ol>
+<h3 id="Postgresql-TypeORM"><a href="#Postgresql-TypeORM" class="headerlink" title="Postgresql &amp;&amp; TypeORM"></a>Postgresql &amp;&amp; TypeORM</h3><p>主要分享：</p>
+<ol>
+<li>如何用 Docker 建立 Postgresql 及 pgAdmin</li>
+<li>TypeORM 連線以及建立 Entity</li>
+</ol>
+<h3 id="CRUD"><a href="#CRUD" class="headerlink" title="CRUD"></a>CRUD</h3><p>透過 Nest.js 啟動 Web service，並能呼叫 API 實作資料庫 CRUD，流程如下:</p>
+<ol>
+<li>先在 Module 註冊會使用到的 <code>Controller</code>、<code>Service</code>、<code>TypeORM</code>。</li>
+<li>在 <code>Service</code> 引入 <code>Repository</code>，並寫好 CRUD method。</li>
+<li>在 <code>Controller</code> 設定好 route，並呼叫 <code>Service</code> 的 method。</li>
+</ol>
+<p>謝謝有看這個系列的讀者，之後如果研究 Nest.js 有新的心得，再來寫成文章分享！</p>
+
+  </div>
+  <footer class="post-footer">
+    <a href="/archives/">← back to archives</a>
+  </footer>
+</article>
+
+    </div>
+    <footer class="site-footer">
+  <hr class="rule">
+  <div class="footer-inner">
+    <span>$ echo "&copy; 2021-2026 Alan Syue"</span>
+    <span class="footer-links">
+      
+        <a href="https://github.com/AlanSyue" target="_blank" rel="noopener">github</a>
+      
+        <a href="https://www.linkedin.com/in/alan-syue-284a83134/" target="_blank" rel="noopener">linkedin</a>
+      
+        <a href="https://twitter.com/alansyue" target="_blank" rel="noopener">twitter</a>
+      
+        <a href="mailto:b123105@gmail.com" target="_blank" rel="noopener">email</a>
+      
+    </span>
+  </div>
+</footer>
+
+  </main>
+  <script src="/js/theme.js"></script>
+</body>
+</html>

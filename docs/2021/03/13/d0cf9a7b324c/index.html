@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>用 GitHub Action 自動部署程式碼到 Linode — Alan Syue&#39;s Blog</title>
+  <meta name="description" content="Software engineer in Taiwan. Notes on PHP, Laravel, and self-learning.">
+  <meta name="author" content="Alan Syue">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Alan Syue&#39;s Blog">
+  <meta property="og:title" content="用 GitHub Action 自動部署程式碼到 Linode">
+  <meta property="og:description" content="Software engineer in Taiwan. Notes on PHP, Laravel, and self-learning.">
+  <meta property="og:url" content="https://alansyue.github.io/2021/03/13/d0cf9a7b324c/">
+  <link rel="canonical" href="https://alansyue.github.io/2021/03/13/d0cf9a7b324c/">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <script>
+    (function(){
+      try {
+        if (localStorage.getItem('preferredTheme') !== 'light') {
+          document.documentElement.classList.add('darkmode-pre');
+        }
+      } catch(e){}
+    })();
+  </script>
+  <style>
+    html.darkmode-pre { background: #0d0d0d; }
+    html.darkmode-pre body { background: #0d0d0d; color: #e0e0e0; }
+  </style>
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <main class="container">
+    <header class="site-header">
+  <div class="brand">
+    <a href="/" class="brand-link">~/alansyue</a><span class="cursor">_</span>
+  </div>
+  <nav class="site-nav">
+    
+      <a href="/" class="nav-item">[home]</a>
+    
+      <a href="/archives/" class="nav-item">[posts]</a>
+    
+      <a href="/slides/" class="nav-item">[slides]</a>
+    
+      <a href="/about/" class="nav-item">[about]</a>
+    
+    <button type="button" class="theme-toggle" onclick="toggleTheme()" data-theme-btn aria-label="toggle theme">☾</button>
+  </nav>
+  <hr class="rule">
+</header>
+
+    <div class="content">
+      <article class="post">
+  <header class="post-header">
+    <h1 class="post-title-main">用 GitHub Action 自動部署程式碼到 Linode</h1>
+    <p class="post-meta-line">
+      <span>$ date</span>
+      <time datetime="2021-03-13T06:54:19.000Z">2021-03-13 14:54</time>
+      
+    </p>
+  </header>
+  <div class="post-body">
+    <blockquote>
+<p>本文最初發表於 <a target="_blank" rel="noopener" href="https://medium.com/@b123105/%E7%94%A8-github-action-%E8%87%AA%E5%8B%95%E9%83%A8%E7%BD%B2%E7%A8%8B%E5%BC%8F%E7%A2%BC%E5%88%B0-linode-d0cf9a7b324c">Medium</a>，已搬運至個人 blog。</p>
+</blockquote>
+<p><em>之前看了兩篇關於 GitHub Action 的文章：</em></p>
+<hr>
+<h3 id="用-GitHub-Action-自動部署程式碼到-Linode"><a href="#用-GitHub-Action-自動部署程式碼到-Linode" class="headerlink" title="用 GitHub Action 自動部署程式碼到 Linode"></a>用 GitHub Action 自動部署程式碼到 Linode</h3><p><img src="/images/d0cf9a7b324c/1.png"></p>
+<p>之前看了兩篇關於 GitHub Action 的文章：</p>
+<ol>
+<li><a target="_blank" rel="noopener" href="https://medium.com/u/fac5c5351760">莫力全 Kyle Mo</a> <a target="_blank" rel="noopener" href="https://medium.com/starbugs/%E5%AF%A6%E4%BD%9C%E9%96%8B%E6%BA%90%E5%B0%8F%E5%B7%A5%E5%85%B7-%E8%88%87-github-actions-%E7%9A%84%E7%AC%AC%E4%B8%80%E6%AC%A1%E7%9B%B8%E9%81%87-3dd2d70eeb">實作開源小工具，與 Github Actions 的第一次相遇！</a></li>
+<li>Max行銷誌 <a target="_blank" rel="noopener" href="https://www.maxlist.xyz/2021/02/27/github-action-gcp-storage/">GitHub Action 上傳 GitHub repo 至 GCP Storage</a></li>
+</ol>
+<p>也想來玩玩看 GitHub Action，這時想到最近在幫忙<a target="_blank" rel="noopener" href="https://www.itseed.tw/">資訊種子</a>官網開發，開發完新功能，發 PR 並 merge 後，需要自行到 Linode 虛擬機上 pull 程式碼。於是決定用 GitHub Action 來自動化此流程。以下分享操作的流程：</p>
+<h3 id="一、建立-GitHub-Action-yml-檔"><a href="#一、建立-GitHub-Action-yml-檔" class="headerlink" title="一、建立 GitHub Action yml 檔"></a>一、建立 GitHub Action yml 檔</h3><p>首先在專案底下新建 <code>.github/workflows/deploy.yml</code></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">name: project deploy</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">on:</span><br><span class="line">  push:</span><br><span class="line">    branches: [ master ]</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">jobs:</span><br><span class="line">  build:</span><br><span class="line">    runs-on: ubuntu-latest</span><br><span class="line">    steps:</span><br><span class="line">      - uses: actions/checkout@v2</span><br><span class="line">      - name: deploy to vm</span><br><span class="line">        uses: appleboy/ssh-action@master</span><br><span class="line">        with:</span><br><span class="line">          host: $&#123;&#123; secrets.LINODE_HOST &#125;&#125;</span><br><span class="line">          username: $&#123;&#123; secrets.LINODE_USERNAME &#125;&#125;</span><br><span class="line">          key: $&#123;&#123; secrets.LINODE_SSHKEY &#125;&#125;</span><br><span class="line">          script: |</span><br><span class="line">            cd &#123;PATH&#125;</span><br><span class="line">            git pull</span><br></pre></td></tr></table></figure>
+
+<p>這個 yml 檔案主要分成幾個部分</p>
+<ol>
+<li>此段是指當 push 到 master 這個 branch 時會觸發</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">on: push:  branches: [ master ]</span><br></pre></td></tr></table></figure>
+
+<p>2. jobs 底下是指觸發後會做的任務，此段是指 run 一個 ubuntu 的環境</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">jobs: build:  runs-on: ubuntu-latest</span><br></pre></td></tr></table></figure>
+
+<p>3. step 為 jobs 底下執行步驟，此段使用 <code>ssh-action</code> 連線到虛擬機，並執行 <code>script</code> 去 pull 程式碼</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">steps:</span><br><span class="line">   - uses: actions/checkout@v2</span><br><span class="line">   - name: deploy to vm</span><br><span class="line">     uses: appleboy/ssh-action@master</span><br><span class="line">     with:</span><br><span class="line">       host: $&#123;&#123; secrets.LINODE_HOST &#125;&#125;</span><br><span class="line">       username: $&#123;&#123; secrets.LINODE_USERNAME &#125;&#125;</span><br><span class="line">       key: $&#123;&#123; secrets.LINODE_SSHKEY &#125;&#125;</span><br><span class="line">       script: |</span><br><span class="line">         cd &#123;PATH&#125;</span><br><span class="line">         git pull</span><br></pre></td></tr></table></figure>
+
+<h3 id="二、在-GitHub-repo-設定-secret"><a href="#二、在-GitHub-repo-設定-secret" class="headerlink" title="二、在 GitHub repo 設定 secret"></a>二、在 GitHub repo 設定 secret</h3><p>步驟一的 yml 檔上，在 <code>host</code>, <code>username</code>, <code>key</code>，是拿 GitHub repo 的 secret。所以我們要到 GitHub 上設定，步驟是：<br>上方的 <code>Settings</code> &gt; 左方的 <code>Secrets</code> &gt; <code>New repository secret</code></p>
+<p>然後加上<br><code>LINODE_HOST</code> &#x3D;&gt; Lindoe 虛擬機的 host 位置<br><code>LINODE_USERNAME</code> &#x3D;&gt; 登入虛擬機的 username</p>
+<p><code>LINODE_SSHKEY</code> 則可以進到虛擬機，然後</p>
+<ol>
+<li>產生金鑰</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ssh-keygen</span><br></pre></td></tr></table></figure>
+
+<p>2. 進到 <code>.ssh</code></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">cd ~/.ssh</span><br></pre></td></tr></table></figure>
+
+<p>3. 將 public key 加入 authorized keys</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">cat ~/.ssh/id_rsa.pub &gt;&gt; ~/.ssh/authorized_keys</span><br></pre></td></tr></table></figure>
+
+<p>4. 複製 private key，並貼到 <code>LINODE_SSHKEY</code></p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">cat ~/.ssh/id_rsa</span><br></pre></td></tr></table></figure>
+
+<h3 id="三、GitHub-設定-SSH-keys"><a href="#三、GitHub-設定-SSH-keys" class="headerlink" title="三、GitHub 設定 SSH keys"></a>三、GitHub 設定 SSH keys</h3><p>如果 repo 是公開的話，就不需要進行此步驟。但如果是私有專案，沒設定就會無法成功 pull 程式碼。</p>
+<p>首先一樣到虛擬機，複製 public key</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">cat ~/.ssh/id_rsa.pub</span><br></pre></td></tr></table></figure>
+
+<p>之後到 GitHub</p>
+<ol>
+<li>點選個人 <code>profile &gt; Settings</code></li>
+</ol>
+<p><img src="/images/d0cf9a7b324c/2.png"></p>
+<p>2. 點選左方 <code>SSH and GPG keys</code></p>
+<p><img src="/images/d0cf9a7b324c/3.png"></p>
+<p>3. 點選 <code>New SSH key</code></p>
+<p>4. title 設定可辨識的文字，key 則貼上 public key</p>
+<p>5. 接下來到 clone 程式碼的地方，選擇 SSH，並將 url 複製起來</p>
+<p><img src="/images/d0cf9a7b324c/4.png"></p>
+<p>接下來到虛擬機：</p>
+<ol>
+<li>如果還未 clone 程式碼，可以直接 clone</li>
+<li>如果已經有 clone 程式碼，則可以用以下指令調整</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">git remote set-url origin &#123;SSH url&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="最終步驟"><a href="#最終步驟" class="headerlink" title="最終步驟"></a>最終步驟</h3><p>都設定完成後，接下來只要 push 程式碼到 master，就可以到上方的 <code>Actions</code>，查看 GitHub Action 是否有成功執行囉。</p>
+<p><img src="/images/d0cf9a7b324c/5.png"></p>
+<h3 id="小結"><a href="#小結" class="headerlink" title="小結"></a>小結</h3><p>之前在做一些小專案，比較常部署到 Heroku，裡面就處理好自動部署，這次玩 GitHub Action 覺得很有趣，嘗試自動部署上去也覺得很興奮。之後有機會也想動手玩玩看 Drone、Jenkins。如果內容有誤，歡迎建議或指正。</p>
+
+  </div>
+  <footer class="post-footer">
+    <a href="/archives/">← back to archives</a>
+  </footer>
+</article>
+
+    </div>
+    <footer class="site-footer">
+  <hr class="rule">
+  <div class="footer-inner">
+    <span>$ echo "&copy; 2021-2026 Alan Syue"</span>
+    <span class="footer-links">
+      
+        <a href="https://github.com/AlanSyue" target="_blank" rel="noopener">github</a>
+      
+        <a href="https://www.linkedin.com/in/alan-syue-284a83134/" target="_blank" rel="noopener">linkedin</a>
+      
+        <a href="https://twitter.com/alansyue" target="_blank" rel="noopener">twitter</a>
+      
+        <a href="mailto:b123105@gmail.com" target="_blank" rel="noopener">email</a>
+      
+    </span>
+  </div>
+</footer>
+
+  </main>
+  <script src="/js/theme.js"></script>
+</body>
+</html>

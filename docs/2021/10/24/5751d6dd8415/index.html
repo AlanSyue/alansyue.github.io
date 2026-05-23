@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>資訊種子官網進化史 — Alan Syue&#39;s Blog</title>
+  <meta name="description" content="Software engineer in Taiwan. Notes on PHP, Laravel, and self-learning.">
+  <meta name="author" content="Alan Syue">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Alan Syue&#39;s Blog">
+  <meta property="og:title" content="資訊種子官網進化史">
+  <meta property="og:description" content="Software engineer in Taiwan. Notes on PHP, Laravel, and self-learning.">
+  <meta property="og:url" content="https://alansyue.github.io/2021/10/24/5751d6dd8415/">
+  <link rel="canonical" href="https://alansyue.github.io/2021/10/24/5751d6dd8415/">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <script>
+    (function(){
+      try {
+        if (localStorage.getItem('preferredTheme') !== 'light') {
+          document.documentElement.classList.add('darkmode-pre');
+        }
+      } catch(e){}
+    })();
+  </script>
+  <style>
+    html.darkmode-pre { background: #0d0d0d; }
+    html.darkmode-pre body { background: #0d0d0d; color: #e0e0e0; }
+  </style>
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <main class="container">
+    <header class="site-header">
+  <div class="brand">
+    <a href="/" class="brand-link">~/alansyue</a><span class="cursor">_</span>
+  </div>
+  <nav class="site-nav">
+    
+      <a href="/" class="nav-item">[home]</a>
+    
+      <a href="/archives/" class="nav-item">[posts]</a>
+    
+      <a href="/slides/" class="nav-item">[slides]</a>
+    
+      <a href="/about/" class="nav-item">[about]</a>
+    
+    <button type="button" class="theme-toggle" onclick="toggleTheme()" data-theme-btn aria-label="toggle theme">☾</button>
+  </nav>
+  <hr class="rule">
+</header>
+
+    <div class="content">
+      <article class="post">
+  <header class="post-header">
+    <h1 class="post-title-main">資訊種子官網進化史</h1>
+    <p class="post-meta-line">
+      <span>$ date</span>
+      <time datetime="2021-10-24T12:03:34.000Z">2021-10-24 20:03</time>
+      
+    </p>
+  </header>
+  <div class="post-body">
+    <blockquote>
+<p>本文最初發表於 <a target="_blank" rel="noopener" href="https://medium.com/@b123105/%E8%B3%87%E8%A8%8A%E7%A8%AE%E5%AD%90%E5%AE%98%E7%B6%B2%E9%80%B2%E5%8C%96%E5%8F%B2-5751d6dd8415">Medium</a>，已搬運至個人 blog。</p>
+</blockquote>
+<p><em>目前線上的資訊種子(以下簡稱資種)官網已經從 12 屆招生服務至 19 屆招生活動(已經有 8 年之久了！)，歷年來都是由資種學員們協助開發及維護，相信是許多屆資種人共同開發的一段回憶。</em></p>
+<hr>
+<p><img src="/images/5751d6dd8415/1.png" alt="https://www.itseed.tw/"></p>
+<p><em><a target="_blank" rel="noopener" href="https://www.itseed.tw/">https://www.itseed.tw/</a></em></p>
+<p>目前線上的資訊種子(以下簡稱資種)官網已經從 12 屆招生服務至 19 屆招生活動(已經有 8 年之久了！)，歷年來都是由資種學員們協助開發及維護，相信是許多屆資種人共同開發的一段回憶。</p>
+<p>一直以來官網的開發一直鮮少被提及，近兩年來因為回來擔任職涯體驗的 mentor，剛好一同合作的學員都有參與到官網的開發，因此也有提供些技術上的協助(學員時期我參加活動組，沒有參與到開發)，過程中體驗到資種官網一直持續進化，因此想跟大家分享資種官網的成長史。</p>
+<h3 id="資種官網是怎麼誕生的呢？"><a href="#資種官網是怎麼誕生的呢？" class="headerlink" title="資種官網是怎麼誕生的呢？"></a>資種官網是怎麼誕生的呢？</h3><p>為了追根溯源，透過資種校友會會長協助，有機會訪談到 11 屆的學長，是目前官網的初始開發成員之一。學長表示當初會想要自建官網，主要是想擺脫更早之前用 Drupal 架的網站束縛，能在前端的呈現上有更高度的自由。當時他與 11 屆的資種夥伴組成 1 個設計師、2 個前端、2 個後端的團隊，在一個月的時限下，邊做邊學的做出第一版資種官網。</p>
+<p>學長也分享這次的開發經驗嘗試了各種錯誤，像是：</p>
+<ol>
+<li>前端開發沒考慮 RWD 導致手機版大破版</li>
+<li>對資安不熟悉，被大學同學透過 SQL injection 玩壞資料庫</li>
+</ol>
+<p>而學長也從這些錯誤中學習到許多網站開發的知識。</p>
+<h3 id="一開始的資種官網有哪些功能呢？"><a href="#一開始的資種官網有哪些功能呢？" class="headerlink" title="一開始的資種官網有哪些功能呢？"></a>一開始的資種官網有哪些功能呢？</h3><p>一開始的官網主要是由靜態宣傳內容跟報名系統組成，而後學長結業後，秉持著對前端技術的興趣，以及當年技術尚不足的遺憾，又回來協助資種官網的開發，有感於當初更新內容時都要上主機更新程式碼，因此他導入了內容管理後台(CMS)的功能，可以透過後台來實現前台頁面的內容新增、修改、刪除、建立草稿、發布文章內容。</p>
+<p>而第二次的資種開發，12 屆的學員也一同參與官網宣傳內容的前端開發，而後的官網主要都是由當屆學員來做維護。對於學員來說算是一個開發小型專案的機會。</p>
+<h3 id="後續官網又陸續開發了哪些功能呢？"><a href="#後續官網又陸續開發了哪些功能呢？" class="headerlink" title="後續官網又陸續開發了哪些功能呢？"></a>後續官網又陸續開發了哪些功能呢？</h3><p>基本上前兩次的官網開發大抵上奠定了目前官網的主要功能架構，但資種是一個一直求進步的組織，後續每屆的招生專案，除了調整新的宣傳內容外，也會持續優化官網。</p>
+<p>以下是官網後續新開發的功能，或許有些功能報名者感覺不出差異，但都有幫助招生專案開發：</p>
+<ul>
+<li>RWD，讓行動裝置也能有更好的瀏覽體驗</li>
+<li>Google 登入功能，給予報名者有不同的登入選擇方式</li>
+<li>書審資料線上填寫，報名者可以在頁面上直接填寫書審資料</li>
+<li>串接 SendGrid 第三方發信平台 API，減少通知信件掉入垃圾郵件機率</li>
+<li>報名者資料自動彙整功能，幫助面試官更容易瀏覽報名者的申請資料</li>
+<li>GitHub Action 自動化部屬，幫助官網開發者不用再手動進行部署流程</li>
+</ul>
+<p><img src="/images/5751d6dd8415/2.png" alt="GitHub Action 自動化部屬"></p>
+<p><em>GitHub Action 自動化部屬</em></p>
+<ul>
+<li>專案 Docker 化統一開發環境，讓官網開發者可以更專注在程式開發上</li>
+</ul>
+<p><img src="/images/5751d6dd8415/3.png" alt="README.md 上關於如何用 docker 架設環境"></p>
+<p><em>README.md 上關於如何用 docker 架設環境</em></p>
+<h3 id="官網後續待優化的方向"><a href="#官網後續待優化的方向" class="headerlink" title="官網後續待優化的方向"></a>官網後續待優化的方向</h3><p>上面說了許多資種官網升級的地方，以下用我的角度來看，還有些待優化的方向：</p>
+<ul>
+<li>網頁載入速度太慢，放到 <a target="_blank" rel="noopener" href="https://developers.google.com/speed/pagespeed/insights/?hl=zh-TW&url=https://www.itseed.tw/">PageSpeed</a> 上跑分數僅有 31 分，一開始加載太多不必要的東西了</li>
+</ul>
+<p><img src="/images/5751d6dd8415/4.png" alt="PageSpeed 分數"></p>
+<p><em>PageSpeed 分數</em></p>
+<ul>
+<li>SEO 差，許多頁面的 title、description 都是拿相同模板，以下是兩個不同頁面，可以看原始碼的 meta 資訊都是相同的</li>
+</ul>
+<p><img src="/images/5751d6dd8415/5.png" alt="view-source:https://www.itseed.tw/"></p>
+<p><em>view-source:<a target="_blank" rel="noopener" href="https://www.itseed.tw/">https://www.itseed.tw/</a></em></p>
+<p><img src="/images/5751d6dd8415/6.png" alt="view-source:https://www.itseed.tw/aboutITSeed"></p>
+<p><em>view-source:<a target="_blank" rel="noopener" href="https://www.itseed.tw/aboutITSeed">https://www.itseed.tw/aboutITSeed</a></em></p>
+<ul>
+<li>服務耦合高，以此次 19 屆招生專案為例，因報名者上傳的資料超乎以往的多，升級的處理上就必須這個服務停機才能進行；另外目前 Hotfix 或其他功能開發也會有瞬間的 down time</li>
+<li>目前 Code Base 充滿大量 Legacy Code，造成除錯及開發的不易。畢竟是歷經了好幾屆的開發，卻鮮少針對程式碼重構，這點個人覺得需仰賴資種校友的協助</li>
+</ul>
+<p>以上是我認為目前資種官網可以再陸續修正的問題。</p>
+<h3 id="總結"><a href="#總結" class="headerlink" title="總結"></a>總結</h3><p>我認為資種官網對於學生來說是一個蠻不錯的開發經驗，在有限的時程上與不同校系的夥伴協作，並且是真的能上線讓使用者操作的服務。</p>
+<p>另外，資種是個能大量嘗試跟犯錯的地方，官網的誕生以及後續功能的開發也是歷屆學員自行發起的，並非專案規劃範疇，我認為還有許多有趣的事情待大家發想及實作，不僅能讓官網變得更好，更希望能讓學員帶走這份寶貴的經驗，或許在未來的某天能派上用場。</p>
+
+  </div>
+  <footer class="post-footer">
+    <a href="/archives/">← back to archives</a>
+  </footer>
+</article>
+
+    </div>
+    <footer class="site-footer">
+  <hr class="rule">
+  <div class="footer-inner">
+    <span>$ echo "&copy; 2021-2026 Alan Syue"</span>
+    <span class="footer-links">
+      
+        <a href="https://github.com/AlanSyue" target="_blank" rel="noopener">github</a>
+      
+        <a href="https://www.linkedin.com/in/alan-syue-284a83134/" target="_blank" rel="noopener">linkedin</a>
+      
+        <a href="https://twitter.com/alansyue" target="_blank" rel="noopener">twitter</a>
+      
+        <a href="mailto:b123105@gmail.com" target="_blank" rel="noopener">email</a>
+      
+    </span>
+  </div>
+</footer>
+
+  </main>
+  <script src="/js/theme.js"></script>
+</body>
+</html>

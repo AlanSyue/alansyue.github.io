@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>JSDC 2021 開發者年會參與心得分享 — Alan Syue&#39;s Blog</title>
+  <meta name="description" content="Software engineer in Taiwan. Notes on PHP, Laravel, and self-learning.">
+  <meta name="author" content="Alan Syue">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Alan Syue&#39;s Blog">
+  <meta property="og:title" content="JSDC 2021 開發者年會參與心得分享">
+  <meta property="og:description" content="Software engineer in Taiwan. Notes on PHP, Laravel, and self-learning.">
+  <meta property="og:url" content="https://alansyue.github.io/2021/10/31/24278a9b5c37/">
+  <link rel="canonical" href="https://alansyue.github.io/2021/10/31/24278a9b5c37/">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <script>
+    (function(){
+      try {
+        if (localStorage.getItem('preferredTheme') !== 'light') {
+          document.documentElement.classList.add('darkmode-pre');
+        }
+      } catch(e){}
+    })();
+  </script>
+  <style>
+    html.darkmode-pre { background: #0d0d0d; }
+    html.darkmode-pre body { background: #0d0d0d; color: #e0e0e0; }
+  </style>
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <main class="container">
+    <header class="site-header">
+  <div class="brand">
+    <a href="/" class="brand-link">~/alansyue</a><span class="cursor">_</span>
+  </div>
+  <nav class="site-nav">
+    
+      <a href="/" class="nav-item">[home]</a>
+    
+      <a href="/archives/" class="nav-item">[posts]</a>
+    
+      <a href="/slides/" class="nav-item">[slides]</a>
+    
+      <a href="/about/" class="nav-item">[about]</a>
+    
+    <button type="button" class="theme-toggle" onclick="toggleTheme()" data-theme-btn aria-label="toggle theme">☾</button>
+  </nav>
+  <hr class="rule">
+</header>
+
+    <div class="content">
+      <article class="post">
+  <header class="post-header">
+    <h1 class="post-title-main">JSDC 2021 開發者年會參與心得分享</h1>
+    <p class="post-meta-line">
+      <span>$ date</span>
+      <time datetime="2021-10-31T04:02:26.000Z">2021-10-31 12:02</time>
+      
+    </p>
+  </header>
+  <div class="post-body">
+    <blockquote>
+<p>本文最初發表於 <a target="_blank" rel="noopener" href="https://medium.com/@b123105/jsdc-2021-%E9%96%8B%E7%99%BC%E8%80%85%E5%B9%B4%E6%9C%83%E5%8F%83%E8%88%87%E5%BF%83%E5%BE%97%E5%88%86%E4%BA%AB-24278a9b5c37">Medium</a>，已搬運至個人 blog。</p>
+</blockquote>
+<p><em>JavaScript 開發者年會 (JavaScript Developer Conference，簡稱 JSDC)</em></p>
+<hr>
+<p><img src="/images/24278a9b5c37/1.png" alt="圖片來源：https://2021.jsdc.tw/"></p>
+<p><em>圖片來源：<a target="_blank" rel="noopener" href="https://2021.jsdc.tw/">https://2021.jsdc.tw/</a></em></p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://2021.jsdc.tw/"><em>JavaScript 開發者年會</em></a> <em>(JavaScript Developer Conference，簡稱 JSDC)</em></p>
+</blockquote>
+<h3 id="感謝贊助"><a href="#感謝贊助" class="headerlink" title="感謝贊助"></a>感謝贊助</h3><p>今年很感謝能收到 <a target="_blank" rel="noopener" href="https://medium.com/u/35ea0ecfcd9b">ALPHA Camp</a> 門票全額贊助，收到當天其實蠻驚訝的，畢竟我並非 ALPHA Camp 的校友，沒想到能獲得這個機會，真心感謝。</p>
+<p><img src="/images/24278a9b5c37/2.png" alt="超級感謝 ALPHA Camp"></p>
+<p><em>超級感謝 ALPHA Camp</em></p>
+<p>還蠻推薦訂閱 <a target="_blank" rel="noopener" href="https://tw.alphacamp.co/javascript-web-development-topics">ALPHA Camp</a> 的電子報，不定期會有關於工程師職涯和學習的文章及直播。另外身邊也有從 ALPHA Camp 畢業並成功轉職工程師的朋友，當年如果有參加類似計畫，自學路上說不定不用走那麼多冤枉路 (?)</p>
+<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>去年也有參與 JSDC， 議程中有許多不錯的題目，當天群組的討論也相當熱絡，有興趣可以參考<a target="_blank" rel="noopener" href="https://b123105.medium.com/jsdc-2020-%E9%96%8B%E7%99%BC%E8%80%85%E5%B9%B4%E6%9C%83%E5%8F%83%E8%88%87%E5%BF%83%E5%BE%97%E5%88%86%E4%BA%AB-c4dbd9c7a6b0">此篇文章</a>。</p>
+<p>今年也採取全線上模式，議程中有許多不錯的主題，尤其特別想聽 <a target="_blank" rel="noopener" href="https://medium.com/u/fac5c5351760">莫力全 Kyle Mo</a> 的分享，關注他的文章很久，趁這個機會聽本人分享！</p>
+<p>今年的議程包含以下主題：</p>
+<ul>
+<li>跨平台整合</li>
+<li>區塊鏈應用</li>
+<li>技術社群參與</li>
+<li>前端開發與框架</li>
+<li>語言特性與後端技術</li>
+<li>資深職涯發展</li>
+</ul>
+<p>在每個主題各個講者分享完後會邀請講者進行多人座談會，相當有趣。接下來會分享自己印象深刻主題的心得：</p>
+<h3 id="The-Future-of-React-18-and-Beyond"><a href="#The-Future-of-React-18-and-Beyond" class="headerlink" title="The Future of React: 18 and Beyond"></a>The Future of React: 18 and Beyond</h3><p>年會的第一場分享，由 <a target="_blank" rel="noopener" href="https://www.facebook.com/chentsulin">C. T. Lin</a> 主講。雖然我很久沒有寫 React 了，但聽到 React 的一些新功能還是覺得相當厲害。這次分享有提到關於 Suspense、Server Components。之前有跟朋友聊到 Server Components，可以讓 Components 在 Server 上把查詢處理完，講師也有提到 Server Components 的優缺點：</p>
+<p>優點</p>
+<ul>
+<li>減少 bundle size</li>
+<li>接觸 File system，防止越權存取</li>
+<li>更早載入的自動 Code Splitting</li>
+</ul>
+<p>缺點</p>
+<ul>
+<li>非同步得依循 React 的做法</li>
+</ul>
+<p>對 Server Components 有興趣的朋友也可以參考講師的<a target="_blank" rel="noopener" href="https://chentsulin.medium.com/react-%E6%96%B0%E6%A6%82%E5%BF%B5-server-components-d632f9a18463">此篇文章</a>。</p>
+<h3 id="JS-在生成式、演算藝術與NFT的應用"><a href="#JS-在生成式、演算藝術與NFT的應用" class="headerlink" title="JS 在生成式、演算藝術與NFT的應用"></a>JS 在生成式、演算藝術與NFT的應用</h3><p>這個分享相當酷！雖然我對區塊鏈沒有很了解，不過看到<a target="_blank" rel="noopener" href="https://www.facebook.com/cheyuwu345/">吳哲宇</a>講師用 p5.js 示範怎麼動畫渲染，以及看到許多生成式藝術作品，對我來說真的是非常新奇的領域。後來我也去 <a target="_blank" rel="noopener" href="http://opensea.io/">opensea.io</a> 玩了一下，做了我<a target="_blank" rel="noopener" href="https://opensea.io/assets/0x495f947276749ce646f68ac8c248420045cb7b5e/72074760291238674575816866113153852881319638995702986940984920368001132265473">第一個 NFT</a> (算嗎)</p>
+<h3 id="窮途末路的-SPA，堅持-CSR-到放棄"><a href="#窮途末路的-SPA，堅持-CSR-到放棄" class="headerlink" title="窮途末路的 SPA，堅持 CSR 到放棄"></a>窮途末路的 SPA，堅持 CSR 到放棄</h3><p>之前透過朋友 <a target="_blank" rel="noopener" href="https://www.maxlist.xyz/">Max</a> 的推薦認識了 Web 實驗室，今天聽到 <a target="_blank" rel="noopener" href="https://www.facebook.com/weblab.tw/">KK 徐愷</a>講師分享公司團隊嘗試像是 Reversed Proxy、Pre-build、Pre-render，到最後放棄 CSR 的過程，蠻詳細的分享為什麼嘗試這種方式、以及因為什麼考量又試了其他方法。聽完其實也讓我了解到不同的 SSR 方式。</p>
+<h3 id="從前端邁向全端-—-前端開發者不該錯過的-Serverless-技術"><a href="#從前端邁向全端-—-前端開發者不該錯過的-Serverless-技術" class="headerlink" title="從前端邁向全端 — 前端開發者不該錯過的 Serverless 技術"></a>從前端邁向全端 — 前端開發者不該錯過的 Serverless 技術</h3><p>這個分享就是一開始提到的 <a target="_blank" rel="noopener" href="https://oldmo860617.medium.com/">莫力全 Kyle Mo</a> 講師所分享，講師從 Ajax 的興起帶來前後端的分離，到後來各種前端框架的崛起、跨平台的開發，講述了前端開發的模式演化。</p>
+<p>接下來提到因為 <a target="_blank" rel="noopener" href="https://ithelp.ithome.com.tw/articles/10244948">Server-Side Rendering</a>(SSR)，<a target="_blank" rel="noopener" href="https://medium.com/starbugs/%E5%89%8D%E7%AB%AF%E9%96%8B%E7%99%BC%E8%80%85%E8%A9%B2%E8%B2%A0%E8%B2%AC%E5%AF%AB-api-endpoints-%E5%97%8E-the-backend-for-frontend-pattern-bff-in-microservices-world-1368362c141c">Backend For Frontend</a>(BFF)，前端有可能會需要再多了解一些後端的知識。但其實 Server Side 的知識要深入了解，確實也會有相當大的阻礙。因此講師覺得未來可能會以 <a target="_blank" rel="noopener" href="https://ithelp.ithome.com.tw/articles/10213431">Serverless</a> 的方式來解決，讓前端開發者可以專注在上層的開發，Serverless 來處理底層的內容。</p>
+<p>聽完覺得雖然利用 Serverless 會被綁在雲服務商，但如果能解決上述提到的 Server 機制問題，讓開發者專注實現商業邏輯，感覺是一個蠻不錯的方式。</p>
+<h3 id="Memory-Leak-與你的距離"><a href="#Memory-Leak-與你的距離" class="headerlink" title="Memory Leak 與你的距離"></a>Memory Leak 與你的距離</h3><p>這個分享是由 <a target="_blank" rel="noopener" href="https://vocus.cc/user/@kuan">Kuan</a> 講師所分享，內容相當充實。一開始講師先說明 Memory Structure、Stack 及 Heap 機制，以及 V8 JavaScript engine 的 Garbage Collection 機制。</p>
+<p>接下來講師示範了如何透過 <code>node --inspect</code> 加上 DevTools 觀測 Memory，以及使用了 <a target="_blank" rel="noopener" href="https://k6.io/">K6</a> 做壓力測試，帶我們了解當時他們遇到 Memory Leak 問題時的除錯流程，十分精彩。</p>
+<p>有興趣的朋友可以參考講師的<a target="_blank" rel="noopener" href="https://vocus.cc/article/61176c17fd89780001942f1c">此篇文章</a>。</p>
+<h3 id="總結"><a href="#總結" class="headerlink" title="總結"></a>總結</h3><p>雖然目前工作上沒有使用 JavaScript，但有許多 Side Projects 用 Node.js 做開發，自己也算滿喜歡 JavaScript。今年參加 JSDC 聽到了許多精彩的內容，很感謝講者及主辦單位用心的準備，如果聽完分享覺得對其他內容很有興趣，也可以查看<a target="_blank" rel="noopener" href="https://hackmd.io/@JSDC-tw/2021conference/https%3A%2F%2Fhackmd.io%2F%40JSDC-tw%2F2021conference">共筆</a>內容。</p>
+<p>最後還是得再感謝 ALPHA Camp 讓我今年能再參加 JSDC！</p>
+
+  </div>
+  <footer class="post-footer">
+    <a href="/archives/">← back to archives</a>
+  </footer>
+</article>
+
+    </div>
+    <footer class="site-footer">
+  <hr class="rule">
+  <div class="footer-inner">
+    <span>$ echo "&copy; 2021-2026 Alan Syue"</span>
+    <span class="footer-links">
+      
+        <a href="https://github.com/AlanSyue" target="_blank" rel="noopener">github</a>
+      
+        <a href="https://www.linkedin.com/in/alan-syue-284a83134/" target="_blank" rel="noopener">linkedin</a>
+      
+        <a href="https://twitter.com/alansyue" target="_blank" rel="noopener">twitter</a>
+      
+        <a href="mailto:b123105@gmail.com" target="_blank" rel="noopener">email</a>
+      
+    </span>
+  </div>
+</footer>
+
+  </main>
+  <script src="/js/theme.js"></script>
+</body>
+</html>

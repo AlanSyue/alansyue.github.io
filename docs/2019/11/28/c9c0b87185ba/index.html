@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PHP 也有 Day #50：處理前人的遺產 — 聊 legacy code | 活動心得記錄 — Alan Syue&#39;s Blog</title>
+  <meta name="description" content="Software engineer in Taiwan. Notes on PHP, Laravel, and self-learning.">
+  <meta name="author" content="Alan Syue">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Alan Syue&#39;s Blog">
+  <meta property="og:title" content="PHP 也有 Day #50：處理前人的遺產 — 聊 legacy code | 活動心得記錄">
+  <meta property="og:description" content="Software engineer in Taiwan. Notes on PHP, Laravel, and self-learning.">
+  <meta property="og:url" content="https://alansyue.github.io/2019/11/28/c9c0b87185ba/">
+  <link rel="canonical" href="https://alansyue.github.io/2019/11/28/c9c0b87185ba/">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <script>
+    (function(){
+      try {
+        if (localStorage.getItem('preferredTheme') !== 'light') {
+          document.documentElement.classList.add('darkmode-pre');
+        }
+      } catch(e){}
+    })();
+  </script>
+  <style>
+    html.darkmode-pre { background: #0d0d0d; }
+    html.darkmode-pre body { background: #0d0d0d; color: #e0e0e0; }
+  </style>
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <main class="container">
+    <header class="site-header">
+  <div class="brand">
+    <a href="/" class="brand-link">~/alansyue</a><span class="cursor">_</span>
+  </div>
+  <nav class="site-nav">
+    
+      <a href="/" class="nav-item">[home]</a>
+    
+      <a href="/archives/" class="nav-item">[posts]</a>
+    
+      <a href="/slides/" class="nav-item">[slides]</a>
+    
+      <a href="/about/" class="nav-item">[about]</a>
+    
+    <button type="button" class="theme-toggle" onclick="toggleTheme()" data-theme-btn aria-label="toggle theme">☾</button>
+  </nav>
+  <hr class="rule">
+</header>
+
+    <div class="content">
+      <article class="post">
+  <header class="post-header">
+    <h1 class="post-title-main">PHP 也有 Day #50：處理前人的遺產 — 聊 legacy code | 活動心得記錄</h1>
+    <p class="post-meta-line">
+      <span>$ date</span>
+      <time datetime="2019-11-28T15:04:14.000Z">2019-11-28 23:04</time>
+      
+    </p>
+  </header>
+  <div class="post-body">
+    <blockquote>
+<p>本文最初發表於 <a target="_blank" rel="noopener" href="https://medium.com/@b123105/php-%E4%B9%9F%E6%9C%89-day-50-%E8%99%95%E7%90%86%E5%89%8D%E4%BA%BA%E7%9A%84%E9%81%BA%E7%94%A2-%E8%81%8A-legacy-code-%E6%B4%BB%E5%8B%95%E5%BF%83%E5%BE%97%E8%A8%98%E9%8C%84-c9c0b87185ba">Medium</a>，已搬運至個人 blog。</p>
+</blockquote>
+<p><em>原文出處：<a target="_blank" rel="noopener" href="https://reurl.cc/Nane59">https://reurl.cc/Nane59</a></em></p>
+<hr>
+<h3 id="PHP-也有-Day-50：處理前人的遺產-—-聊-legacy-code-活動心得記錄"><a href="#PHP-也有-Day-50：處理前人的遺產-—-聊-legacy-code-活動心得記錄" class="headerlink" title="PHP 也有 Day #50：處理前人的遺產 — 聊 legacy code | 活動心得記錄"></a>PHP 也有 Day #50：處理前人的遺產 — 聊 legacy code | 活動心得記錄</h3><p>原文出處：<a target="_blank" rel="noopener" href="https://reurl.cc/Nane59">https://reurl.cc/Nane59</a></p>
+<p>第一次參加 PHP 也有 Day 的活動，這次報名的主題是談談 legacy code。活動地點在三創，邀請的講者是 Recca Chao。</p>
+<p>這次談論的議程有三大點：</p>
+<ol>
+<li>定義什麼是 legacy code</li>
+<li>重構和重寫的選擇，如何提議重構及評估時程</li>
+<li>如何避免自己產生新的 legacy code</li>
+</ol>
+<h3 id="什麼是-legacy-code"><a href="#什麼是-legacy-code" class="headerlink" title="什麼是 legacy code"></a>什麼是 legacy code</h3><p>一個專案中有符合以下 4 點，可以被定義為 legacy code</p>
+<ol>
+<li>年代久遠</li>
+<li>結構龐大</li>
+<li>歷經多次迭代</li>
+<li><strong>沒有文件</strong></li>
+</ol>
+<p>其中沒有文件算是我覺得蠻有感的問題，剛接觸專案時碰到之前處理的工程師已經不在，又沒有文件可以參考時，就只能慢慢 trace code，也造成重構上的不易，容易改 A 錯 B。</p>
+<h3 id="如何評估重構和重寫"><a href="#如何評估重構和重寫" class="headerlink" title="如何評估重構和重寫"></a>如何評估重構和重寫</h3><p>講者建議除非遇到像是專案要整個換成新的語言，或者換成相異度很大的框架時，再來考慮重寫。原因是重寫會遇到像是市場的風險（被競爭者淘汰）、開啟專案的時間及人力成本等。有時技術上可行，但卻會在商業上失敗。</p>
+<p>如果是重構的話，講者建議在重構前要先</p>
+<ol>
+<li>寫測試：可以先功能測試，再拆成單元測試</li>
+<li>補文件：避免寫完後，後續接手也無法快速了解（包含自己）</li>
+</ol>
+<p>重構的話可以逐步改進，在保持實作新需求後，再漸漸修改 legacy code。</p>
+<h3 id="如何避免產生新-legacy-code"><a href="#如何避免產生新-legacy-code" class="headerlink" title="如何避免產生新 legacy code"></a>如何避免產生新 legacy code</h3><p>講者有提到，既然開始重構了，也要避免自己又產生出新的「 遺產 」，可以依照下列四個方向努力：</p>
+<ol>
+<li>時常與同事討論文件內容</li>
+<li>和同事做 code review，有機會讓更多人對程式碼有印象</li>
+<li>建立方便修改的小專案</li>
+<li>花時間維護文件 ( legacy code 的要素之一就是沒有文件 ）</li>
+</ol>
+<h3 id="總結"><a href="#總結" class="headerlink" title="總結"></a>總結</h3><p>今天課程上講者提到很多觀念，我自己也沒有完整落實，另外我覺得此次內容脈絡很有條理、方法也很具體。很感謝講者的分享，下次也會想再參加 PHP 也有 Day 的活動。</p>
+
+  </div>
+  <footer class="post-footer">
+    <a href="/archives/">← back to archives</a>
+  </footer>
+</article>
+
+    </div>
+    <footer class="site-footer">
+  <hr class="rule">
+  <div class="footer-inner">
+    <span>$ echo "&copy; 2021-2026 Alan Syue"</span>
+    <span class="footer-links">
+      
+        <a href="https://github.com/AlanSyue" target="_blank" rel="noopener">github</a>
+      
+        <a href="https://www.linkedin.com/in/alan-syue-284a83134/" target="_blank" rel="noopener">linkedin</a>
+      
+        <a href="https://twitter.com/alansyue" target="_blank" rel="noopener">twitter</a>
+      
+        <a href="mailto:b123105@gmail.com" target="_blank" rel="noopener">email</a>
+      
+    </span>
+  </div>
+</footer>
+
+  </main>
+  <script src="/js/theme.js"></script>
+</body>
+</html>
