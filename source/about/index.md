@@ -3,11 +3,6 @@ title: About
 layout: page
 ---
 
-```
-$ cat /etc/passwd | grep alan
-alan:x:1000:1000:Alan Syue,,,:/home/alan:/bin/zsh
-```
-
 Hi, I'm **Alan Syue**, a software engineer in Taiwan. I love programming and learning.
 
 I think sharing can change the world, so I want to do my best to share new knowledge with everyone.
