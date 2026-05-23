@@ -50,25 +50,37 @@ layout: page
 
 ## $ ls side-projects/
 
-- **KRUSH Dance App** · May 2025 – Present
-  iOS + Android dance learning app — building the app + internal admin tools, leveraging AI to accelerate development. Tech: Golang, Kotlin.
-  → [App Store](https://apps.apple.com/tw/app/krush-%E8%B7%A8%E5%AD%B8%E8%88%9E%E8%B9%88/id6748054041) · [Google Play](https://play.google.com/store/apps/details?id=com.krush.krush_app&pcampaignid=web_share)
+### KRUSH Dance App · May 2025 – Present
 
-- **Fenny Studio E-commerce** · Feb 2025 – Present
-  Designed & maintained an e-commerce architecture with custom integrations and automation workflows. Optimized site performance, deployment flow, and operational efficiency using AI-assisted dev tools. Tech: WooCommerce, WordPress.
-  → [flowers.fenny-studio.com](https://flowers.fenny-studio.com/)
+iOS + Android dance learning app — building the app + internal admin tools, leveraging AI to accelerate development.
 
-- **ITSeed** · 2016–2017
-  Led a 4-person remote team to revamp a nonprofit training-program platform — design, back-end, front-end, Docker + CI/CD. Used Kanban + Asana for spec alignment. Grew members by 10%.
-  → [itseed.tw](https://itseed.tw/) · [GitHub](https://github.com/ITSeed-Official)
+- **Tech** — Golang, Kotlin
+- **Links** — [App Store](https://apps.apple.com/tw/app/krush-%E8%B7%A8%E5%AD%B8%E8%88%9E%E8%B9%88/id6748054041) · [Google Play](https://play.google.com/store/apps/details?id=com.krush.krush_app&pcampaignid=web_share)
 
-- **FunTraveler**
-  Trip-scheduling app with collaborative itinerary editing.
-  → [GitHub](https://github.com/AlanSyue/travel-scheduler-backend)
+### Fenny Studio E-commerce · Feb 2025 – Present
 
-- **Saboteur**
-  Online multiplayer board game backend.
-  → [GitHub](https://github.com/AlanSyue/saboteur_backend)
+Designed & maintained an e-commerce architecture with custom integrations and automation workflows. Optimized site performance, deployment flow, and operational efficiency using AI-assisted dev tools.
+
+- **Tech** — WooCommerce, WordPress
+- **Links** — [flowers.fenny-studio.com](https://flowers.fenny-studio.com/)
+
+### ITSeed · 2016–2017
+
+Led a 4-person remote team to revamp a nonprofit training-program platform — design, back-end, front-end, Docker + CI/CD. Used Kanban + Asana for spec alignment. Grew members by 10%.
+
+- **Links** — [itseed.tw](https://itseed.tw/) · [GitHub](https://github.com/ITSeed-Official)
+
+### FunTraveler
+
+Trip-scheduling app with collaborative itinerary editing.
+
+- **Links** — [GitHub](https://github.com/AlanSyue/travel-scheduler-backend)
+
+### Saboteur
+
+Online multiplayer board game backend.
+
+- **Links** — [GitHub](https://github.com/AlanSyue/saboteur_backend)
 
 ## $ ls open-source/
 
@@ -83,7 +95,8 @@ layout: page
 - **Frameworks** — Ruby on Rails, Laravel, NestJS, Express, React
 - **Database** — MySQL, PostgreSQL, MongoDB, Redis
 - **Cloud / Infra** — AWS, GCP, Docker, Kubernetes, GitHub Actions, GitLab CI
-- **Testing** — RSpec, PHPUnit, Jest
+- **Testing** — Go testing / testify, RSpec, PHPUnit, Jest
+- **AI Agents** — Claude Code, Codex, Cursor
 - **Practice** — RESTful API, TDD, Scrum
 
 ## $ cat education.txt
