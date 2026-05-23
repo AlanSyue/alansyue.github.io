@@ -371,3 +371,10 @@ hr.rule {
   .site-nav { gap: 8px; }
   .theme-toggle { margin-left: 0; }
 }
+
+/* Resume page accents */
+.page-resume .post-body h2,
+.page-resume .post-body h3,
+.page-resume .post-body strong {
+  color: var(--accent);
+}
