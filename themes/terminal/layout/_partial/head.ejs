@@ -10,6 +10,7 @@
   <meta property="og:description" content="<%= page.excerpt || config.description %>">
   <meta property="og:url" content="<%= config.url %><%= url_for(page.path) %>">
   <link rel="canonical" href="<%= config.url %><%= url_for(page.path) %>">
+  <link rel="icon" type="image/svg+xml" href="<%- url_for('/favicon.svg') %>">
   <link rel="stylesheet" href="<%- url_for('/css/style.css') %>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
