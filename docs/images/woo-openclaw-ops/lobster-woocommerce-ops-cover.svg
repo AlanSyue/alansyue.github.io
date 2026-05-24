@@ -1,0 +1,181 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">Chibi lobster hugging a WooCommerce ecommerce box</title>
+  <desc id="desc">A cute lobster character hugs a purple ecommerce box surrounded by order, API, skill, script, and OpenClaw operation cards.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#fbf7ff"/>
+      <stop offset="0.42" stop-color="#f5f7ff"/>
+      <stop offset="1" stop-color="#eefaf7"/>
+    </linearGradient>
+    <linearGradient id="box" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#a66bff"/>
+      <stop offset="0.55" stop-color="#7f54d9"/>
+      <stop offset="1" stop-color="#5d3db4"/>
+    </linearGradient>
+    <linearGradient id="boxSide" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#7145c6"/>
+      <stop offset="1" stop-color="#4c2b93"/>
+    </linearGradient>
+    <linearGradient id="lobster" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ff816f"/>
+      <stop offset="0.55" stop-color="#ec4f55"/>
+      <stop offset="1" stop-color="#d73c4e"/>
+    </linearGradient>
+    <linearGradient id="lobsterDark" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#d94650"/>
+      <stop offset="1" stop-color="#a8233f"/>
+    </linearGradient>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="22" stdDeviation="24" flood-color="#4e3b74" flood-opacity="0.18"/>
+    </filter>
+    <filter id="smallShadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="10" stdDeviation="12" flood-color="#4e3b74" flood-opacity="0.15"/>
+    </filter>
+    <style>
+      .label { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; font-weight: 760; fill: #3b3351; }
+      .small { font-size: 31px; letter-spacing: 0; }
+      .micro { font-size: 24px; letter-spacing: 0; }
+      .white { fill: #fff; }
+      .muted { fill: #776f8f; }
+      .line { stroke: #9c8bcc; stroke-width: 4; stroke-linecap: round; stroke-dasharray: 2 13; opacity: 0.7; }
+    </style>
+  </defs>
+
+  <rect width="1600" height="900" fill="url(#bg)"/>
+
+  <g opacity="0.45">
+    <circle cx="152" cy="150" r="72" fill="#e9dfff"/>
+    <circle cx="1414" cy="140" r="98" fill="#dff6ef"/>
+    <circle cx="1345" cy="760" r="132" fill="#efe5ff"/>
+    <circle cx="239" cy="721" r="116" fill="#e2f5fb"/>
+  </g>
+
+  <g opacity="0.55" fill="none" stroke="#b9a9db" stroke-width="3">
+    <path d="M119 284c58-37 114-36 168 0"/>
+    <path d="M1315 279c47-29 93-29 138 0"/>
+    <path d="M1206 660c80 42 155 41 224-2"/>
+    <path d="M365 145c74 32 144 31 210-5"/>
+  </g>
+
+  <g transform="translate(130 86)">
+    <rect x="0" y="0" width="520" height="138" rx="31" fill="#fff" opacity="0.92" filter="url(#smallShadow)"/>
+    <rect x="34" y="31" width="56" height="56" rx="16" fill="#f1ebff"/>
+    <path d="M50 58h28M64 44v28" stroke="#7f54d9" stroke-width="8" stroke-linecap="round"/>
+    <text x="114" y="55" class="label small">From admin panels</text>
+    <text x="114" y="99" class="label small muted">to natural language ops</text>
+  </g>
+
+  <g class="line">
+    <path d="M521 403C438 316 364 276 276 244"/>
+    <path d="M1041 372c74-94 168-143 283-148"/>
+    <path d="M1072 566c92 29 168 82 229 161"/>
+    <path d="M491 560c-102 24-177 83-226 176"/>
+  </g>
+
+  <g filter="url(#smallShadow)">
+    <g transform="translate(190 274)">
+      <rect width="206" height="80" rx="25" fill="#ffffff"/>
+      <circle cx="44" cy="40" r="18" fill="#7f54d9"/>
+      <path d="M38 40h12m-6-6v12" stroke="#fff" stroke-width="5" stroke-linecap="round"/>
+      <text x="78" y="50" class="label micro">Orders</text>
+    </g>
+    <g transform="translate(1234 192)">
+      <rect width="166" height="80" rx="25" fill="#ffffff"/>
+      <circle cx="44" cy="40" r="18" fill="#26a69a"/>
+      <path d="M34 40h20m-7-9 10 9-10 9" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+      <text x="78" y="50" class="label micro">API</text>
+    </g>
+    <g transform="translate(1224 696)">
+      <rect width="190" height="80" rx="25" fill="#ffffff"/>
+      <circle cx="44" cy="40" r="18" fill="#ffb02e"/>
+      <path d="M36 48l9-20 10 20" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+      <text x="78" y="50" class="label micro">Script</text>
+    </g>
+    <g transform="translate(181 702)">
+      <rect width="184" height="80" rx="25" fill="#ffffff"/>
+      <circle cx="44" cy="40" r="18" fill="#ec4f55"/>
+      <path d="M36 40c10-17 24-17 16 0 8 17-6 17-16 0z" fill="#fff"/>
+      <text x="78" y="50" class="label micro">Skill</text>
+    </g>
+    <g transform="translate(1082 104)">
+      <rect width="232" height="80" rx="25" fill="#ffffff"/>
+      <circle cx="44" cy="40" r="18" fill="#3b3351"/>
+      <path d="M35 43c11 9 27 4 30-11M35 43c8 12 25 14 36 3" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round"/>
+      <text x="78" y="50" class="label micro">OpenClaw</text>
+    </g>
+  </g>
+
+  <g transform="translate(483 214)" filter="url(#shadow)">
+    <g transform="translate(314 0)">
+      <ellipse cx="83" cy="44" rx="36" ry="26" fill="url(#lobsterDark)" transform="rotate(-19 83 44)"/>
+      <circle cx="108" cy="30" r="15" fill="#fff"/>
+      <circle cx="113" cy="30" r="7" fill="#312943"/>
+      <path d="M57 60c-26 29-35 62-27 99" fill="none" stroke="url(#lobsterDark)" stroke-width="20" stroke-linecap="round"/>
+      <path d="M30 154c-45-4-68-25-70-61 38 1 64 21 70 61z" fill="url(#lobster)" stroke="#b82d45" stroke-width="5"/>
+      <path d="M32 154c-34 11-63 5-85-18" fill="none" stroke="#b82d45" stroke-width="8" stroke-linecap="round"/>
+    </g>
+
+    <g transform="translate(0 62)">
+      <ellipse cx="385" cy="360" rx="252" ry="90" fill="#2f2452" opacity="0.11"/>
+
+      <path d="M374 94c87 0 158 73 158 164v45c0 123-72 197-158 197s-158-74-158-197v-45c0-91 71-164 158-164z" fill="url(#lobster)" stroke="#b82d45" stroke-width="7"/>
+      <path d="M282 220c33 20 69 30 109 30 39 0 76-10 109-30" fill="none" stroke="#ffaaa0" stroke-width="8" stroke-linecap="round" opacity="0.7"/>
+      <path d="M282 296c33 20 69 30 109 30 39 0 76-10 109-30" fill="none" stroke="#c6364a" stroke-width="7" stroke-linecap="round" opacity="0.45"/>
+      <path d="M296 371c27 19 58 29 95 29 36 0 67-10 94-29" fill="none" stroke="#c6364a" stroke-width="7" stroke-linecap="round" opacity="0.45"/>
+
+      <circle cx="324" cy="146" r="44" fill="#ff8977"/>
+      <circle cx="445" cy="146" r="44" fill="#ff8977"/>
+      <circle cx="324" cy="141" r="18" fill="#fff"/>
+      <circle cx="445" cy="141" r="18" fill="#fff"/>
+      <circle cx="329" cy="144" r="8" fill="#2c263f"/>
+      <circle cx="440" cy="144" r="8" fill="#2c263f"/>
+      <path d="M358 182c18 17 38 17 56 0" fill="none" stroke="#7f1e36" stroke-width="7" stroke-linecap="round"/>
+      <path d="M347 105c-16-53-44-85-84-96" fill="none" stroke="#b82d45" stroke-width="9" stroke-linecap="round"/>
+      <path d="M424 105c16-53 44-85 84-96" fill="none" stroke="#b82d45" stroke-width="9" stroke-linecap="round"/>
+      <circle cx="260" cy="8" r="13" fill="#ff816f" stroke="#b82d45" stroke-width="5"/>
+      <circle cx="512" cy="8" r="13" fill="#ff816f" stroke="#b82d45" stroke-width="5"/>
+
+      <path d="M232 268c-61-3-108-36-138-100" fill="none" stroke="url(#lobsterDark)" stroke-width="35" stroke-linecap="round"/>
+      <path d="M101 166c-63-9-98-47-101-114 58 0 98 38 101 114z" fill="url(#lobster)" stroke="#b82d45" stroke-width="7"/>
+      <path d="M96 164c-45 24-91 24-138-2" fill="none" stroke="#b82d45" stroke-width="11" stroke-linecap="round"/>
+
+      <path d="M535 266c60-6 105-42 132-108" fill="none" stroke="url(#lobsterDark)" stroke-width="35" stroke-linecap="round"/>
+      <path d="M657 154c62-13 94-53 93-120-58 4-96 44-93 120z" fill="url(#lobster)" stroke="#b82d45" stroke-width="7"/>
+      <path d="M661 152c47 21 93 18 137-11" fill="none" stroke="#b82d45" stroke-width="11" stroke-linecap="round"/>
+    </g>
+  </g>
+
+  <g transform="translate(566 416)" filter="url(#shadow)">
+    <path d="M99 32h405c38 0 69 31 69 69v220c0 38-31 69-69 69H99c-38 0-69-31-69-69V101c0-38 31-69 69-69z" fill="url(#box)"/>
+    <path d="M99 32h405c38 0 69 31 69 69v45H30v-45c0-38 31-69 69-69z" fill="#b887ff" opacity="0.52"/>
+    <path d="M541 117l81 40v198c0 28-19 52-47 58l-75 16c26-16 41-45 41-80V117z" fill="url(#boxSide)" opacity="0.92"/>
+    <path d="M89 142h368" stroke="#d7c8ff" stroke-width="7" stroke-linecap="round" opacity="0.8"/>
+    <rect x="96" y="182" width="143" height="96" rx="22" fill="#ffffff" opacity="0.96"/>
+    <rect x="276" y="182" width="190" height="34" rx="17" fill="#efe8ff"/>
+    <rect x="276" y="241" width="148" height="27" rx="14" fill="#efe8ff"/>
+    <rect x="99" y="316" width="367" height="28" rx="14" fill="#d9c9ff" opacity="0.75"/>
+    <path d="M132 214h69l-11 39h-45l-13-39zm-9-21h18l8 21m16 50h1m46 0h1" fill="none" stroke="#7f54d9" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="100" y="113" class="label white" font-size="46" font-weight="820" letter-spacing="0">WooCommerce</text>
+  </g>
+
+  <g filter="url(#smallShadow)">
+    <path d="M649 592c-62 33-78 100-23 147" fill="none" stroke="url(#lobsterDark)" stroke-width="34" stroke-linecap="round"/>
+    <path d="M626 734c-38 9-66-8-82-50 43-2 71 14 82 50z" fill="url(#lobster)" stroke="#b82d45" stroke-width="6"/>
+    <path d="M625 735c-28 20-60 21-96 2" fill="none" stroke="#b82d45" stroke-width="9" stroke-linecap="round"/>
+    <circle cx="654" cy="589" r="13" fill="#ffaaa0" opacity="0.7"/>
+
+    <path d="M1105 592c62 33 78 100 23 147" fill="none" stroke="url(#lobsterDark)" stroke-width="34" stroke-linecap="round"/>
+    <path d="M1128 734c38 9 66-8 82-50-43-2-71 14-82 50z" fill="url(#lobster)" stroke="#b82d45" stroke-width="6"/>
+    <path d="M1129 735c28 20 60 21 96 2" fill="none" stroke="#b82d45" stroke-width="9" stroke-linecap="round"/>
+    <circle cx="1100" cy="589" r="13" fill="#ffaaa0" opacity="0.7"/>
+  </g>
+
+  <g opacity="0.72">
+    <circle cx="705" cy="777" r="6" fill="#7f54d9"/>
+    <circle cx="1160" cy="509" r="8" fill="#26a69a"/>
+    <circle cx="475" cy="428" r="7" fill="#ffb02e"/>
+    <circle cx="1008" cy="276" r="6" fill="#ec4f55"/>
+    <path d="M1200 396h48M1224 372v48" stroke="#c8b9ec" stroke-width="7" stroke-linecap="round"/>
+    <path d="M436 628h48M460 604v48" stroke="#c8b9ec" stroke-width="7" stroke-linecap="round"/>
+  </g>
+</svg>

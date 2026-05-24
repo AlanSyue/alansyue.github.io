@@ -208,6 +208,7 @@ hr.rule {
   font-size: 26px;
   margin: 0 0 6px;
   font-weight: 700;
+  overflow-wrap: anywhere;
 }
 .post-meta-line {
   color: var(--muted);
@@ -225,21 +226,54 @@ hr.rule {
 .post-body h1,
 .post-body h2,
 .post-body h3 {
-  margin-top: 32px;
-  margin-bottom: 10px;
+  margin-top: 38px;
+  margin-bottom: 14px;
   font-weight: 700;
 }
 .post-body h1 { font-size: 24px; }
-.post-body h2 { font-size: 21px; }
+.post-body h2,
+.post-body h3 {
+  color: var(--accent);
+}
+.post-body h2 {
+  font-size: 21px;
+  padding-bottom: 6px;
+  border-bottom: 1px dashed var(--rule);
+}
 .post-body h3 { font-size: 19px; }
 .post-body p { margin: 12px 0; }
+.post-body {
+  overflow-wrap: anywhere;
+}
 .post-body ul, .post-body ol { padding-left: 22px; }
 .post-body li { margin: 4px 0; }
 .post-body img {
+  display: block;
   max-width: 100%;
   height: auto;
   border: 1px dashed var(--rule);
   padding: 4px;
+  box-sizing: border-box;
+}
+.post-body .mermaid {
+  margin: 22px 0;
+  padding: 14px;
+  background: var(--code-bg);
+  border: 1px dashed var(--rule);
+  overflow-x: auto;
+}
+.post-body .mermaid svg {
+  min-width: 760px;
+}
+.post-body .mermaid .nodeLabel,
+.post-body .mermaid .edgeLabel {
+  font-size: 18px;
+}
+.post-body .mermaid .node rect,
+.post-body .mermaid .node polygon,
+.post-body .mermaid .node path,
+.post-body .mermaid .node circle {
+  stroke-width: 2px;
 }
 .post-body table {
   width: 100%;
@@ -273,17 +307,32 @@ hr.rule {
   background: var(--code-bg);
 }
 
+.post-body figure.highlight {
+  margin: 16px 0;
+  max-width: 100%;
+}
+.post-body figure.highlight table,
+.post-body figure.highlight tbody,
+.post-body figure.highlight tr,
+.post-body figure.highlight td {
+  display: block;
+  width: 100%;
+}
+.post-body figure.highlight .code {
+  max-width: 100%;
+}
 .post-body pre {
   background: #1a1a1a;
   color: #e0e0e0;
   padding: 14px 16px;
-  overflow-x: auto;
+  overflow-x: hidden;
   border-left: 3px solid var(--accent);
   position: relative;
   max-width: 100%;
   box-sizing: border-box;
-  white-space: pre;
-  word-wrap: normal;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 .post-body pre::before {
   content: '$ ';
@@ -295,13 +344,17 @@ hr.rule {
   font-size: 11px;
 }
 .post-body code {
-  background: var(--code-bg);
-  padding: 1px 5px;
+  background: color-mix(in srgb, var(--accent) 16%, transparent);
+  color: var(--accent);
+  border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+  padding: 1px 6px;
   font-size: 0.92em;
-  border-radius: 2px;
+  border-radius: 3px;
 }
 .post-body pre code {
   background: transparent;
+  color: inherit;
+  border: 0;
   padding: 0;
   font-size: 0.9em;
 }
@@ -370,6 +423,9 @@ hr.rule {
   .hero-title { font-size: 26px; }
   .site-nav { gap: 8px; }
   .theme-toggle { margin-left: 0; }
+  .post-title-main { font-size: 23px; }
+  .post-body h2 { font-size: 20px; }
+  .post-body h3 { font-size: 18px; }
 }
 
 /* Resume page accents */

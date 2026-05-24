@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>I Stopped Managing WooCommerce Orders Through the Admin UI — Alan Syue&#39;s Blog</title>
+  <meta name="description" content="Software engineer in Taiwan. Notes on back-end engineering, Golang, Ruby on Rails, and AI-augmented workflows.">
+  <meta name="author" content="Alan Syue">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Alan Syue&#39;s Blog">
+  <meta property="og:title" content="I Stopped Managing WooCommerce Orders Through the Admin UI">
+  <meta property="og:description" content="Software engineer in Taiwan. Notes on back-end engineering, Golang, Ruby on Rails, and AI-augmented workflows.">
+  <meta property="og:url" content="https://alansyue.github.io/2026/05/24/stopped-managing-woocommerce-orders-admin-ui/">
+  <link rel="canonical" href="https://alansyue.github.io/2026/05/24/stopped-managing-woocommerce-orders-admin-ui/">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <script>
+    (function(){
+      try {
+        if (localStorage.getItem('preferredTheme') !== 'light') {
+          document.documentElement.classList.add('darkmode-pre');
+        }
+      } catch(e){}
+    })();
+  </script>
+  <style>
+    html.darkmode-pre { background: #0d0d0d; }
+    html.darkmode-pre body { background: #0d0d0d; color: #e0e0e0; }
+  </style>
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <main class="container">
+    <header class="site-header">
+  <div class="brand">
+    <a href="/" class="brand-link">~/alansyue</a><span class="cursor">_</span>
+  </div>
+  <nav class="site-nav">
+    
+      <a href="/" class="nav-item">[home]</a>
+    
+      <a href="/archives/" class="nav-item">[posts]</a>
+    
+      <a href="/slides/" class="nav-item">[slides]</a>
+    
+      <a href="/resume/" class="nav-item">[resume]</a>
+    
+      <a href="/about/" class="nav-item">[about]</a>
+    
+    <button type="button" class="theme-toggle" onclick="toggleTheme()" data-theme-btn aria-label="toggle theme">☾</button>
+  </nav>
+  <hr class="rule">
+</header>
+
+    <div class="content">
+      <article class="post">
+  <header class="post-header">
+    <h1 class="post-title-main">I Stopped Managing WooCommerce Orders Through the Admin UI</h1>
+    <p class="post-meta-line">
+      <span>$ date</span>
+      <time datetime="2026-05-24T12:53:10.000Z">2026-05-24 20:53</time>
+      
+        <span class="post-tags">
+          <span class="tag">#WooCommerce</span><span class="tag">#OpenClaw</span><span class="tag">#API</span><span class="tag">#Operations</span>
+        </span>
+      
+    </p>
+  </header>
+  <div class="post-body">
+    <p><img src="/images/woo-openclaw-ops/lobster-woocommerce-ops-cover.png" alt="A chibi lobster hugging a WooCommerce ecommerce box"></p>
+<p>Using the <code>WooCommerce API</code>, custom scripts, and <code>OpenClaw</code> to run daily store operations through natural language.</p>
+<p>Choosing <code>WooCommerce</code> at the beginning was a pragmatic decision.</p>
+<p>When the website was still in the validation stage, we did not need a fully custom ecommerce system. What we needed was a way to quickly connect products, cart, payments, shipping, and order management so that the whole transaction flow could actually run. <code>WooCommerce</code>, built on top of <code>WordPress</code>, already provides mature product and order capabilities, and its plugin ecosystem can support payment, logistics, and many other ecommerce scenarios. For early-stage validation, it was a fast way to get the business flow running.</p>
+<p>But once the website started operating with real orders, we gradually ran into another problem: <code>WooCommerce</code> is great for quickly building ecommerce capabilities, but its admin interface is not necessarily ideal for daily operations staff to use all day.</p>
+<h2 id="The-Admin-Interface-Is-Complete-but-Not-Always-Aligned-With-Operational-Workflows"><a href="#The-Admin-Interface-Is-Complete-but-Not-Always-Aligned-With-Operational-Workflows" class="headerlink" title="The Admin Interface Is Complete, but Not Always Aligned With Operational Workflows"></a>The Admin Interface Is Complete, but Not Always Aligned With Operational Workflows</h2><p>The <code>WooCommerce admin</code> interface provides many features. Looking up orders, checking payment status, reviewing shipping information, and updating orders can all be done there.</p>
+<p>But in day-to-day operations, the questions people ask are often not that standardized.</p>
+<p>For example:</p>
+<ul>
+<li>Find orders that use a specific ECPay convenience store pickup method</li>
+<li>Find orders with a specific payment method</li>
+<li>Use a logistics tracking number to identify the corresponding order</li>
+<li>Check which customers recently purchased a specific product</li>
+<li>List orders requested for delivery tomorrow</li>
+<li>Prepare today’s shipping list</li>
+<li>Find paid orders that have not yet been processed for shipping</li>
+</ul>
+<p>Most of these answers already exist somewhere inside WooCommerce, but they are not always easy to retrieve directly through the admin interface.</p>
+<p>This becomes especially noticeable when payment and logistics are handled through plugins. A lot of information may be stored in <code>order meta</code> or in fields managed by those plugins. For engineers, the data can be traced. But daily operations staff should not need to know which <code>meta key</code> stores a logistics number, nor should they have to click through multiple admin pages just to find one order.</p>
+<p>The original workflow often looked like this:</p>
+<div class="mermaid">
+flowchart TD
+    A[Operations staff] --> B[Log in to WooCommerce admin]
+    B --> C[Open the order list]
+    C --> D[Search or filter orders]
+    D --> E{Found the target order?}
+    E -->|No| F[Adjust keywords or filters]
+    F --> D
+    E -->|Yes| G[Open order details]
+    G --> H[Check payment information]
+    G --> I[Check logistics information]
+    G --> J[Inspect order meta or plugin fields]
+    H --> K[Manually summarize the result]
+    I --> K
+    J --> K
+    K --> L[Reply to customer or arrange shipping]
+</div>
+
+<h2 id="The-Plugin-Ecosystem-Is-Powerful-but-We-Were-Not-Familiar-Enough-With-It"><a href="#The-Plugin-Ecosystem-Is-Powerful-but-We-Were-Not-Familiar-Enough-With-It" class="headerlink" title="The Plugin Ecosystem Is Powerful, but We Were Not Familiar Enough With It"></a>The Plugin Ecosystem Is Powerful, but We Were Not Familiar Enough With It</h2><p><code>WooCommerce</code> has a strong plugin ecosystem. That was one of the reasons we chose it in the first place.</p>
+<p>But having many plugins also means there is a cost to choosing the right ones. At the time, we were not familiar enough with the <code>WooCommerce plugin ecosystem</code>. When we encountered very specific operational needs, we did not always know which plugin could solve them, or whether an existing plugin would fit our workflow exactly.</p>
+<p>For example, we integrated an <code>ECPay</code> payment and logistics plugin. The plugin already handled many important parts of the transaction flow, such as payments, logistics, convenience store pickup, shipping numbers, and shipping label printing. These features were valuable and saved us a lot of development effort.</p>
+<p>But daily operations often require more detailed queries and summaries.</p>
+<p>An operations person may not simply want to “view an order.” They may want to ask:</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">Which order does this logistics number belong to?</span><br></pre></td></tr></table></figure>
+
+<p>Or:</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">List the orders that need to be shipped tomorrow and use convenience store pickup.</span><br></pre></td></tr></table></figure>
+
+<p>Or:</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">Show me recent orders for product 4182.</span><br></pre></td></tr></table></figure>
+
+<p>These questions are very close to the language used in daily work, but they are not always directly supported by the WooCommerce admin interface. Even if some plugins support part of the display or workflow, they may not match exactly how we need to search, combine, and summarize information.</p>
+<p>So we started asking ourselves: if the data is already in WooCommerce, can we stop forcing operations staff to understand admin fields and plugin data structures?</p>
+<h2 id="Treating-WooCommerce-as-the-Core-Data-System-Not-the-Only-Interface"><a href="#Treating-WooCommerce-as-the-Core-Data-System-Not-the-Only-Interface" class="headerlink" title="Treating WooCommerce as the Core Data System, Not the Only Interface"></a>Treating WooCommerce as the Core Data System, Not the Only Interface</h2><p>Eventually, we changed how we thought about <code>WooCommerce</code>. Instead of treating the <code>WooCommerce admin</code> as the only operational entry point, we started treating <code>WooCommerce</code> as the core transaction and data system.</p>
+<p><code>WooCommerce</code> still owns the products, orders, payments, and logistics data. But the daily queries and operational workflows we frequently use are handled by custom <code>skills</code> and <code>scripts</code> that access the data through the <code>WooCommerce API</code>.</p>
+<p>The new workflow looks like this:</p>
+<div class="mermaid">
+flowchart TD
+    A[Operations staff] --> B[Ask in natural language]
+    B --> C[OpenClaw]
+    C --> D[Custom skill]
+    D --> E[Script identifies task and parameters]
+    E --> F[Call WooCommerce API]
+    F --> G[Retrieve order data]
+    F --> H[Retrieve product data]
+    F --> I[Retrieve payment and logistics meta data]
+    G --> J[Format results for operations staff]
+    H --> J
+    I --> J
+    J --> K[Return query result or dry-run result]
+    K --> L{Does it modify data?}
+    L -->|No| M[Complete the query]
+    L -->|Yes| N[Execute only after human confirmation]
+</div>
+
+<p>With this setup, operations staff do not need to know which <code>WooCommerce</code> field stores the data, or how the payment and logistics plugin structures its internal information. They only need to describe what they want to look up in natural language.</p>
+<p>For example:</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">Find out which order this logistics number belongs to.</span><br></pre></td></tr></table></figure>
+
+<p>Behind the scenes, the system checks <code>WooCommerce</code> order data and related <code>meta data</code>, finds the matching order, and returns a structured result.</p>
+<p>Or:</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">List the orders requested for delivery tomorrow.</span><br></pre></td></tr></table></figure>
+
+<p>The system uses the fields and rules we defined, then returns a list that operations staff can act on directly.</p>
+<h2 id="Natural-Language-Is-Only-the-Entry-Point-The-Real-Value-Is-Tool-Encapsulation"><a href="#Natural-Language-Is-Only-the-Entry-Point-The-Real-Value-Is-Tool-Encapsulation" class="headerlink" title="Natural Language Is Only the Entry Point. The Real Value Is Tool Encapsulation"></a>Natural Language Is Only the Entry Point. The Real Value Is Tool Encapsulation</h2><p>The most important point here is that natural language itself is not magic.</p>
+<p>What makes this workflow reliable is that we broke daily operational tasks into clear, repeatable, and controlled tools.</p>
+<p>Take <code>find an order by logistics number</code> as an example. For operations staff, this is just one sentence. But for the system, it involves several steps:</p>
+<ol>
+<li>Receive the logistics number</li>
+<li>Call the <code>WooCommerce API</code> to retrieve order data</li>
+<li>Scan the relevant <code>order meta</code></li>
+<li>Match against <code>ECPay</code> logistics data</li>
+<li>Identify the corresponding order</li>
+<li>Return the order number, payment method, shipping method, order status, and other necessary details</li>
+</ol>
+<p>This design is much more reliable than letting an AI freely operate the admin interface.</p>
+<p>The AI does not need to guess how to click through <code>WooCommerce</code>. It does not need to interpret plugin screens on the fly. It simply receives the user’s intent and calls the <code>skills</code> and <code>scripts</code> that we have already defined.</p>
+<p>So the goal is not to “let AI maintain the store by itself.” The real goal is to turn repetitive admin lookups into tools that can be invoked through natural language.</p>
+<h2 id="How-the-Operational-Experience-Changed"><a href="#How-the-Operational-Experience-Changed" class="headerlink" title="How the Operational Experience Changed"></a>How the Operational Experience Changed</h2><p>After introducing this approach, the biggest change was not that the system suddenly felt “more AI.” The real change was that many small, repetitive operational tasks became much more direct.</p>
+<p>Previously, an operations person might have to:</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">Log in to the WooCommerce admin</span><br><span class="line">-&gt; Go to the order list</span><br><span class="line">-&gt; Try searching</span><br><span class="line">-&gt; Adjust filters</span><br><span class="line">-&gt; Open an order</span><br><span class="line">-&gt; Check payment information</span><br><span class="line">-&gt; Check logistics information</span><br><span class="line">-&gt; Go back to the list</span><br><span class="line">-&gt; Search for the next order</span><br></pre></td></tr></table></figure>
+
+<p>Now they can ask:</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">List today&#x27;s orders that need to be shipped, are already paid, and use convenience store pickup.</span><br></pre></td></tr></table></figure>
+
+<p>The system returns a clean list directly.</p>
+<p>The same pattern also works for quick lookups:</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">List the last three orders.</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/woo-openclaw-ops/telegram-orders-example.png" alt="A Telegram-style example of querying recent WooCommerce orders through natural language"></p>
+<p>In this case, the response includes order IDs, timestamps, status, amount, and payment method without opening the <code>WooCommerce admin</code>.</p>
+<p>This kind of improvement may not look flashy, but it matters a lot in daily operations. The exhausting part of operations is often not that any single task is difficult. It is the constant switching between small lookups, confirmations, comparisons, and manual summaries.</p>
+<p>When these tasks can be triggered through natural language and executed reliably through API-based tools, operations staff can focus more on judgment and exception handling instead of constantly searching through the admin interface.</p>
+<h2 id="A-Few-Principles-We-Followed"><a href="#A-Few-Principles-We-Followed" class="headerlink" title="A Few Principles We Followed"></a>A Few Principles We Followed</h2><p>When building this workflow, we kept a few boundaries in place.</p>
+<p>First, read-only queries can be executed directly.</p>
+<p>Looking up orders, products, logistics numbers, or shipping lists does not change system state, so these actions are relatively <code>low-risk</code> and suitable for direct natural language access.</p>
+<p>Second, write operations should go through <code>dry-run</code> first.</p>
+<p>Updating order status, regenerating logistics numbers, editing order notes, or processing orders in batches can affect real operations. For these actions, the system should first show what it is about to do and require human confirmation before executing.</p>
+<p>Third, prompts are not a security boundary.</p>
+<p>If an operation should not be allowed, it should be restricted at the <code>tool layer</code>. It is not enough to simply write “please do not do this” in a prompt. The reliable boundaries should be enforced through <code>API permissions</code>, script logic, and confirmation flows.</p>
+<p>Fourth, results should be returned in language that operations staff can act on.</p>
+<p>The API may return <code>order IDs</code>, <code>payment methods</code>, <code>shipping methods</code>, and <code>meta keys</code>. But what operations staff need to know is: can this order be shipped now, which logistics method is used, has it been paid, and does it require manual handling? The value of the tool is not just retrieving data, but transforming it into actionable information.</p>
+<h2 id="WooCommerce-Is-Still-the-Core-but-It-Does-Not-Have-to-Own-Every-Interface"><a href="#WooCommerce-Is-Still-the-Core-but-It-Does-Not-Have-to-Own-Every-Interface" class="headerlink" title="WooCommerce Is Still the Core, but It Does Not Have to Own Every Interface"></a>WooCommerce Is Still the Core, but It Does Not Have to Own Every Interface</h2><p>This experience changed how I think about <code>WooCommerce</code>.</p>
+<p><code>WooCommerce</code> is very useful for quickly building ecommerce transaction capabilities. It is also a solid core system for product, order, payment, and logistics data. But once a website enters daily operations, not every workflow needs to be tied to the <code>WooCommerce admin</code> interface.</p>
+<p>For us, a better model became:</p>
+<div class="mermaid">
+flowchart LR
+    A[WooCommerce<br/>transactions and data] --> B[WooCommerce API<br/>stable access]
+    B --> C[Scripts<br/>operational logic]
+    C --> D[Skills<br/>executable capabilities]
+    D --> E[OpenClaw<br/>natural language entry point]
+</div>
+
+<p>This lets us keep the advantages of <code>WooCommerce</code>, including its fast setup and plugin ecosystem, while adding an operational layer that better fits our daily work.</p>
+<h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><p>Building a fully custom ecommerce system from day one would have been costly, and it would not necessarily have matched our early validation needs. <code>WooCommerce</code> helped us get the transaction flow running quickly, and that was its biggest value.</p>
+<p>But as operations became more complex, the part that needed improvement was often not the product page or the shopping cart. It was the admin workflow behind the scenes.</p>
+<p>By using the <code>WooCommerce API</code> with custom <code>skills</code> and <code>scripts</code>, and by exposing those workflows through <code>OpenClaw</code> as a natural language interface, we were not trying to follow an AI trend. We were trying to make daily operations fit the way people actually work.</p>
+<p>Operations staff should not need to understand which plugin stores data in which field just to look up an order. The system should understand the question, then retrieve the answer in a stable, controlled, and traceable way.</p>
+<p>That is where I think <code>API-first operations</code> are most valuable: not replacing the original system, but adding a more practical operational interface on top of it.</p>
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'neutral',
+    themeVariables: {
+      fontSize: '20px'
+    },
+    flowchart: {
+      curve: 'basis',
+      htmlLabels: true,
+      nodeSpacing: 46,
+      rankSpacing: 58
+    }
+  });
+</script>
+
+  </div>
+  <footer class="post-footer">
+    <a href="/archives/">← back to archives</a>
+  </footer>
+</article>
+
+    </div>
+    <footer class="site-footer">
+  <hr class="rule">
+  <div class="footer-inner">
+    <span>$ echo "&copy; 2021-2026 Alan Syue"</span>
+    <span class="footer-links">
+      
+        <a href="https://github.com/AlanSyue" target="_blank" rel="noopener">github</a>
+      
+        <a href="https://www.linkedin.com/in/alan-syue-284a83134/" target="_blank" rel="noopener">linkedin</a>
+      
+        <a href="https://twitter.com/alansyue" target="_blank" rel="noopener">twitter</a>
+      
+        <a href="mailto:b123105@gmail.com" target="_blank" rel="noopener">email</a>
+      
+    </span>
+  </div>
+</footer>
+
+  </main>
+  <script src="/js/theme.js"></script>
+</body>
+</html>

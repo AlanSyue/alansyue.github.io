@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="980" viewBox="0 0 900 980" role="img" aria-labelledby="title desc">
+  <title id="title">Natural language WooCommerce order lookup in chat</title>
+  <desc id="desc">A redacted Telegram-style chat screenshot showing a natural language request and the last three WooCommerce orders returned by an operations bot.</desc>
+  <defs>
+    <linearGradient id="bubble" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#372742"/>
+      <stop offset="1" stop-color="#252638"/>
+    </linearGradient>
+    <linearGradient id="sent" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#9d4dff"/>
+      <stop offset="1" stop-color="#7f3fff"/>
+    </linearGradient>
+    <style>
+      .font { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+      .mono { font-family: "SF Mono", Menlo, Consolas, monospace; }
+      .white { fill: #f8f6ff; }
+      .muted { fill: #a7a1b8; }
+      .link { fill: #4da3ff; font-weight: 760; }
+      .small { font-size: 24px; }
+      .body { font-size: 42px; font-weight: 520; }
+      .label { font-size: 26px; font-weight: 760; }
+    </style>
+  </defs>
+
+  <rect width="900" height="980" rx="0" fill="#09090d"/>
+  <g opacity="0.28" fill="none" stroke="#353044" stroke-width="2">
+    <path d="M46 96c42-48 91-52 147-14"/>
+    <path d="M672 94c57 37 112 34 165-9"/>
+    <path d="M72 705c66 42 132 42 198 0"/>
+    <path d="M640 791c70-48 135-46 194 7"/>
+    <circle cx="772" cy="300" r="42"/>
+    <circle cx="120" cy="385" r="34"/>
+    <circle cx="781" cy="594" r="30"/>
+    <path d="M790 302l55-53M114 391l-47-36M753 589l61-17"/>
+  </g>
+
+  <g transform="translate(144 38)">
+    <rect width="720" height="94" rx="47" fill="url(#sent)"/>
+    <text x="34" y="60" class="font white" font-size="38">List the last three orders</text>
+    <text x="554" y="65" class="font" font-size="24" fill="#d9c7ff">6:49 PM</text>
+    <path d="M661 52l19 16 36-42" fill="none" stroke="#f8f6ff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" opacity="0.92"/>
+  </g>
+
+  <g transform="translate(42 152)">
+    <rect width="760" height="612" rx="34" fill="url(#bubble)"/>
+    <rect x="28" y="27" width="676" height="98" rx="8" fill="#55303b" opacity="0.72"/>
+    <rect x="28" y="27" width="5" height="98" rx="3" fill="#ff5b67"/>
+    <text x="51" y="63" class="font label" fill="#ff5b67">Syue Alan</text>
+    <text x="51" y="102" class="font white small">List the last three orders</text>
+
+    <text x="28" y="185" class="font white body">Here are the last three orders:</text>
+
+    <text x="28" y="300" class="font white body">1.</text>
+    <text x="86" y="300" class="font link body">#A8ractice</text>
+    <text x="352" y="300" class="font white body"> — 2026-05-24 13:51</text>
+    <text x="28" y="365" class="font white body">— processing — TWD 815 — LINE Pay</text>
+
+    <text x="28" y="475" class="font white body">2.</text>
+    <text x="86" y="475" class="font link body">#B7zephyr</text>
+    <text x="332" y="475" class="font white body"> — 2026-05-24 13:44</text>
+    <text x="28" y="540" class="font white body">— processing — TWD 840 — LINE Pay</text>
+
+    <text x="28" y="650" class="font white body">3.</text>
+    <text x="86" y="650" class="font link body">#C6mosaic</text>
+    <text x="332" y="650" class="font white body"> — 2026-05-24 13:14</text>
+    <text x="28" y="715" class="font white body">— processing — TWD 1,240 — LINE Pay</text>
+
+    <text x="640" y="588" class="font muted" font-size="26">6:49 PM</text>
+  </g>
+
+  <g transform="translate(62 810)">
+    <rect width="164" height="70" rx="35" fill="#4da3ff"/>
+    <path d="M37 35h28M37 25h28M37 45h28" stroke="#fff" stroke-width="5" stroke-linecap="round"/>
+    <text x="83" y="45" class="font white" font-size="26" font-weight="760">Menu</text>
+    <circle cx="286" cy="35" r="39" fill="#24242b"/>
+    <path d="M276 51l50-50c13-13 34 8 21 21l-55 55c-23 23-58-12-35-35l58-58" transform="scale(.55) translate(350 20)" fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round"/>
+    <rect x="335" y="0" width="366" height="70" rx="35" fill="#1c1c20"/>
+    <text x="365" y="45" class="font muted" font-size="29">Enter message</text>
+    <circle cx="745" cy="35" r="39" fill="#24242b"/>
+    <circle cx="830" cy="35" r="39" fill="#24242b"/>
+    <path d="M830 14v28M818 28c0 16 24 16 24 0V14c0-16-24-16-24 0v14zM807 32c0 26 46 26 46 0M830 58v10" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round"/>
+  </g>
+</svg>
