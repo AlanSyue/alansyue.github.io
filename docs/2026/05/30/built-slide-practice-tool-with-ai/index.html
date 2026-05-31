@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>In Three Hours, I Built a Complete Slide-Practice Tool with AI — Alan Syue&#39;s Blog</title>
+  <meta name="description" content="Software engineer in Taiwan. Notes on back-end engineering, Golang, Ruby on Rails, and AI-augmented workflows.">
+  <meta name="author" content="Alan Syue">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Alan Syue&#39;s Blog">
+  <meta property="og:title" content="In Three Hours, I Built a Complete Slide-Practice Tool with AI">
+  <meta property="og:description" content="Software engineer in Taiwan. Notes on back-end engineering, Golang, Ruby on Rails, and AI-augmented workflows.">
+  <meta property="og:url" content="https://alansyue.github.io/2026/05/30/built-slide-practice-tool-with-ai/">
+  <link rel="canonical" href="https://alansyue.github.io/2026/05/30/built-slide-practice-tool-with-ai/">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <script>
+    (function(){
+      try {
+        if (localStorage.getItem('preferredTheme') !== 'light') {
+          document.documentElement.classList.add('darkmode-pre');
+        }
+      } catch(e){}
+    })();
+  </script>
+  <style>
+    html.darkmode-pre { background: #0d0d0d; }
+    html.darkmode-pre body { background: #0d0d0d; color: #e0e0e0; }
+  </style>
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <main class="container">
+    <header class="site-header">
+  <div class="brand">
+    <a href="/" class="brand-link">~/alansyue</a><span class="cursor">_</span>
+  </div>
+  <nav class="site-nav">
+    
+      <a href="/" class="nav-item">[home]</a>
+    
+      <a href="/archives/" class="nav-item">[posts]</a>
+    
+      <a href="/slides/" class="nav-item">[slides]</a>
+    
+      <a href="/resume/" class="nav-item">[resume]</a>
+    
+      <a href="/about/" class="nav-item">[about]</a>
+    
+    <button type="button" class="theme-toggle" onclick="toggleTheme()" data-theme-btn aria-label="toggle theme">☾</button>
+  </nav>
+  <hr class="rule">
+</header>
+
+    <div class="content">
+      <article class="post">
+  <header class="post-header">
+    <h1 class="post-title-main">In Three Hours, I Built a Complete Slide-Practice Tool with AI</h1>
+    <p class="post-meta-line">
+      <span>$ date</span>
+      <time datetime="2026-05-30T02:40:00.000Z">2026-05-30 10:40</time>
+      
+        <span class="post-tags">
+          <span class="tag">#AI</span><span class="tag">#Whisper</span><span class="tag">#React</span><span class="tag">#Side Project</span><span class="tag">#Presentation</span>
+        </span>
+      
+    </p>
+  </header>
+  <div class="post-body">
+    <p><img src="/images/slide-narrator-ai/cover.png" alt="A person standing on stage practicing a talk against a screen showing an audio waveform, surrounded by a few AI robots acting like coaches helping to review"></p>
+<p>Before any real presentation, I run through my slides a few times on my own. The point isn’t just to get the flow smooth, it’s to catch where I said something wrong or where I explained something badly. But every time I finish a run-through, the biggest problem is the same: <strong>I can’t actually remember what I just said.</strong> Whatever I say while practicing is gone the moment it leaves my mouth, and by the time I want to go back and check whether a particular slide came out well, my head is already blank. I can’t even tell whether I got something wrong, let alone where.</p>
+<h2 id="The-Painful-Part-Was-Having-No-Way-to-Replay-What-I-Said"><a href="#The-Painful-Part-Was-Having-No-Way-to-Replay-What-I-Said" class="headerlink" title="The Painful Part Was Having No Way to Replay What I Said"></a>The Painful Part Was Having No Way to Replay What I Said</h2><p>My old approach was honestly pretty dumb: record the whole thing, then force myself to sit through it afterward. But I’d usually last only a couple of minutes before I started skipping around, and by the end I still couldn’t tell what I’d missed.</p>
+<p>The basic problem is that if I want to check where I went wrong or where I was unclear, I first need to know what I actually said. Memory alone doesn’t cut it. When I’m practicing, all my attention is on the slides and the flow, and there’s no spare capacity to memorize my own sentences one by one.</p>
+<p>The recording is the only thing that lets me go back at all, but a recording on its own isn’t really enough. For a twenty-minute talk, I’d have to listen from the start just to fish out the few sentences I care about. And when I hit a line where I think “that sounded off,” I then have to stop and reconstruct: which slide was I even on when I said that?</p>
+<p>Put differently, the recording is one continuous timeline, but my deck is split into discrete slides. There’s no mapping between the two, so I have to stitch it back together in my head. By the time I reach the later parts, I’ve usually forgotten what the earlier slide was about, and going back and forth to cross-reference is exhausting.</p>
+<p>What I actually wanted wasn’t “one big transcript.” It was this:</p>
+<blockquote>
+<p>For each slide, the exact words I actually said on that slide.</p>
+</blockquote>
+<p>If I could get that, I could check things slide by slide and never have to replay the whole recording from the top again.</p>
+<h2 id="What-I-Actually-Wanted"><a href="#What-I-Actually-Wanted" class="headerlink" title="What I Actually Wanted"></a>What I Actually Wanted</h2><p>The requirement is simple, and the rest of the implementation just follows from it. I wanted a structured transcript where every slide holds three blocks:</p>
+<ul>
+<li>[Slide content]: the text on that slide</li>
+<li>[Speaker notes]: the points I had written in the speaker notes for what I meant to say on this slide</li>
+<li>[Transcript]: what I actually said on this slide while practicing</li>
+</ul>
+<p>Only when these three fields sit on the same page can I really see where I drifted. AI can compare the gap between “what I intended to say (notes),” “what’s written on the slide,” and “what I actually said (transcript),” and tell me where I skipped something, where I got it wrong, and where I could be clearer.</p>
+<h2 id="Why-I-Built-It-Step-by-Step-With-AI-Instead-of-Grinding-It-Out-by-Hand"><a href="#Why-I-Built-It-Step-by-Step-With-AI-Instead-of-Grinding-It-Out-by-Hand" class="headerlink" title="Why I Built It Step by Step With AI Instead of Grinding It Out by Hand"></a>Why I Built It Step by Step With AI Instead of Grinding It Out by Hand</h2><p>Honestly, if I had to build this from scratch myself, I could do it, but it would eat several of my evenings. Just the Google Slides API auth flow, parsing out the nested <code>textElements</code> structure inside slides, dealing with the browser-compatibility quirks of <code>MediaRecorder</code>, and then wiring up the Whisper API, each one means more reading docs, hitting edge cases, and debugging.</p>
+<p>But to me this is just a “little tool for practicing my own talks.” I didn’t want to pour that much time into it. So instead of telling AI to build a complete app right out of the gate, I first drew out how the data flows, what each stage takes in and what it puts out, before touching anything. Once I had drawn clear boundaries around each stage, each piece turned into a sub-task with a well-defined scope that AI handles easily.</p>
+<h2 id="The-Overall-Architecture"><a href="#The-Overall-Architecture" class="headerlink" title="The Overall Architecture"></a>The Overall Architecture</h2><p>The data flow of the whole thing roughly looks like this:</p>
+<div class="mermaid">
+flowchart TD
+    A[Google OAuth login] --> B[Load Google Slides deck]
+    B --> C[Fetch each slide's content + speaker notes]
+    C --> D[Start recording MediaRecorder]
+    D --> E[Record a timestamp on every slide change]
+    E --> F{Done presenting?}
+    F -->|No| E
+    F -->|Yes| G[Send audio to OpenAI Whisper]
+    G --> H[Get word-level timestamps]
+    H --> I[alignTranscript maps each word to its slide]
+    I --> J[Export per-slide JSON / TXT]
+    J --> K[Paste the exported JSON into an AI chat for a per-slide check]
+</div>
+
+<p>Most of this is just plumbing. The one hard part is making the recording time line up with the slide numbers. I record two timelines at once, one for “when the user turns slides” and one for “the timestamp Whisper returns for each word,” and as long as those two line up, I can roughly slice each word back onto its slide.</p>
+<h2 id="Bringing-the-Whole-Deck-Into-the-Tool-Watch-and-Record-at-the-Same-Time"><a href="#Bringing-the-Whole-Deck-Into-the-Tool-Watch-and-Record-at-the-Same-Time" class="headerlink" title="Bringing the Whole Deck Into the Tool: Watch and Record at the Same Time"></a>Bringing the Whole Deck Into the Tool: Watch and Record at the Same Time</h2><p>This tool doesn’t just do recording, it pulls the entire Google Slides deck inside too. I start by pasting a Google Slides link, and the tool fetches the whole deck through the Google Slides API, grabbing each slide’s content and speaker notes in one shot, then pulling each page’s thumbnail for display.</p>
+<p>Once you’re in the recording screen, the interface is basically a stripped-down slide player: the current slide’s thumbnail in the middle, with “previous &#x2F; next” buttons, the current “page X of Y,” a recording timer, and pause&#x2F;stop controls next to it. So while I’m practicing, I don’t have to open Google Slides separately and keep switching back. I watch the slides, present, and record all inside the same tool, with a rhythm that’s almost identical to actually being on stage.</p>
+<p><img src="/images/slide-narrator-ai/recording-screen.png" alt="The tool&#39;s recording screen: the current slide shown in the middle, with previous/next buttons, a recording timer, and pause/stop controls"></p>
+<p>And this design isn’t just about convenience, the whole “per-slide alignment” later actually rests on it. Because “turning the slide” is done by clicking a button inside the tool, hitting previous&#x2F;next fires an <code>onSlideChange</code>, which is an event I can intercept precisely. That lets the “slide-turn timeline” and the “recording timer” share the same clock, so the two timelines are aligned from the start.</p>
+<p>The flip side: if I let users go off and turn slides inside Google Slides themselves, the tool would have no idea what second they flipped to which page, and the whole “use time ranges to slice the transcript back onto each slide” approach would have nothing to stand on. So “bringing the deck into the tool and turning slide changes into events I can record” turned out, in hindsight, to be the single most worthwhile decision in this whole thing.</p>
+<p>A few of the technical bits were more interesting than the rest.</p>
+<h2 id="1-Aligning-Slide-Turn-Timestamps-With-Word-Level-Timestamps"><a href="#1-Aligning-Slide-Turn-Timestamps-With-Word-Level-Timestamps" class="headerlink" title="1. Aligning Slide-Turn Timestamps With Word-Level Timestamps"></a>1. Aligning Slide-Turn Timestamps With Word-Level Timestamps</h2><p>Whether the whole tool works at all pretty much rides on this step.</p>
+<p>While recording, I log a timestamp every time I turn a slide. In code it’s an <code>onSlideChange</code> that pushes <code>&#123; slideIndex, timestamp &#125;</code> into an array, where <code>timestamp</code> is the “effective elapsed time” from the start of recording to now (in seconds):</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> onSlideChange = <span class="title function_">useCallback</span>(<span class="function">(<span class="params">newSlideIndex</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> elapsed = <span class="title function_">getEffectiveElapsed</span>()</span><br><span class="line">  slideTimestamps.<span class="property">current</span>.<span class="title function_">push</span>(&#123; <span class="attr">slideIndex</span>: newSlideIndex, <span class="attr">timestamp</span>: elapsed &#125;)</span><br><span class="line">&#125;, [getEffectiveElapsed])</span><br></pre></td></tr></table></figure>
+
+<p>After recording, the audio goes to Whisper (I’m using <code>whisper-1</code>), with <code>response_format: verbose_json</code> plus <code>timestamp_granularities[]=word</code>, so Whisper returns a <code>start</code> &#x2F; <code>end</code> time for every single word.</p>
+<p>With those two sets of data, alignment is just a “range check.” Each slide has a <code>startTime</code> (the slide-turn timestamp where this slide began) and an <code>endTime</code> (the slide-turn timestamp of the next slide, or the total duration for the last slide), and then you string together all the words whose <code>start</code> falls inside that range to get this slide’s transcript:</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> slideWords = words</span><br><span class="line">  .<span class="title function_">filter</span>(<span class="function">(<span class="params">w</span>) =&gt;</span> w.<span class="property">start</span> &gt;= slide.<span class="property">startTime</span> &amp;&amp; w.<span class="property">start</span> &lt; slide.<span class="property">endTime</span>)</span><br><span class="line">  .<span class="title function_">map</span>(<span class="function">(<span class="params">w</span>) =&gt;</span> w.<span class="property">word</span>)</span><br><span class="line">  .<span class="title function_">join</span>(<span class="string">&#x27;&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>My talk is in Mandarin, and Mandarin doesn’t put spaces between words, so I just <code>join(&#39;&#39;)</code> here. The alignment code itself is tiny, but the first time I finished it, the whole thing didn’t actually line up at all. The problem was the pause.</p>
+<h2 id="2-When-Pausing-Resuming-You-Have-to-Subtract-the-Paused-Time"><a href="#2-When-Pausing-Resuming-You-Have-to-Subtract-the-Paused-Time" class="headerlink" title="2. When Pausing&#x2F;Resuming, You Have to Subtract the Paused Time"></a>2. When Pausing&#x2F;Resuming, You Have to Subtract the Paused Time</h2><p>While practicing I hit pause a lot, to think for a second, take a sip of water, then keep going. The catch is: <code>MediaRecorder</code> doesn’t record audio during a pause, but the wall clock keeps ticking.</p>
+<p>If I naively computed elapsed seconds as “now minus start time,” then any pause in the middle would make the slide-turn timestamp overcount by however long the pause was, the whole timeline would drift later, and the alignment would be completely off.</p>
+<p>The fix is to keep a <code>totalPausedRef</code> that accumulates the total paused milliseconds, and subtract it when computing the effective elapsed time:</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> getEffectiveElapsed = <span class="title function_">useCallback</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">if</span> (!startTime.<span class="property">current</span>) <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">  <span class="keyword">const</span> now = <span class="title class_">Date</span>.<span class="title function_">now</span>()</span><br><span class="line">  <span class="keyword">const</span> paused = isPaused &amp;&amp; pauseStartRef.<span class="property">current</span></span><br><span class="line">    ? totalPausedRef.<span class="property">current</span> + (now - pauseStartRef.<span class="property">current</span>)</span><br><span class="line">    : totalPausedRef.<span class="property">current</span></span><br><span class="line">  <span class="keyword">return</span> (now - startTime.<span class="property">current</span> - paused) / <span class="number">1000</span></span><br><span class="line">&#125;, [isPaused])</span><br></pre></td></tr></table></figure>
+
+<p>When you hit resume, you add “how long this pause lasted” into <code>totalPausedRef</code>:</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> resumeRecording = <span class="title function_">useCallback</span>(<span class="function">() =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">if</span> (mediaRecorder.<span class="property">current</span> &amp;&amp; mediaRecorder.<span class="property">current</span>.<span class="property">state</span> === <span class="string">&#x27;paused&#x27;</span>) &#123;</span><br><span class="line">    totalPausedRef.<span class="property">current</span> += <span class="title class_">Date</span>.<span class="title function_">now</span>() - pauseStartRef.<span class="property">current</span></span><br><span class="line">    pauseStartRef.<span class="property">current</span> = <span class="literal">null</span></span><br><span class="line">    mediaRecorder.<span class="property">current</span>.<span class="title function_">resume</span>()</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;, [startTimer])</span><br></pre></td></tr></table></figure>
+
+<p>This way the “effective elapsed time” recorded by the slide-turn timestamp matches the actual playback time inside the audio file, and only then do the word timestamps from Whisper line up afterward.</p>
+<h2 id="3-Whisper’s-Per-File-Size-Limit-and-Chunked-WebM-Upload-Playing-It-Safe-at-24MB"><a href="#3-Whisper’s-Per-File-Size-Limit-and-Chunked-WebM-Upload-Playing-It-Safe-at-24MB" class="headerlink" title="3. Whisper’s Per-File Size Limit and Chunked WebM Upload (Playing It Safe at 24MB)"></a>3. Whisper’s Per-File Size Limit and Chunked WebM Upload (Playing It Safe at 24MB)</h2><p>Once the timeline was aligned, a longer talk surfaced another problem: the recording file is too big to send. OpenAI’s audio transcription API has a 25MB per-file limit; in my implementation I play it safe at 24MB, leaving a little buffer for multipart overhead. A recording blows past that easily, so I have to split it into chunks before uploading.</p>
+<p>There’s an easy gotcha here: the first chunk that <code>MediaRecorder</code> produces is the one carrying the WebM container header (the EBML init segment). If I naively slice the later chunks into a new segment and send it off, that audio file is missing its header, so it’s broken and can’t be decoded.</p>
+<p>So the key is: <strong>every newly split-off segment has to start with that header chunk prepended.</strong></p>
+<div class="mermaid">
+flowchart TD
+    A[raw chunks array] --> B[first chunk carries header<br/>EBML/init segment]
+    B --> C{adding chunk<br/>exceeds 24MB?}
+    C -->|No| D[keep adding to current segment]
+    D --> C
+    C -->|Yes| E[close current segment]
+    E --> F[start new segment<br/>with the header chunk]
+    F --> D
+    G[send each segment to Whisper] --> H[stitch word timestamps<br/>with an offset]
+</div>
+
+<p>In code it roughly looks like this: when adding the current chunk would exceed the limit, wrap up the current segment, then start a new segment with the header chunk:</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> headerChunk = rawChunks[<span class="number">0</span>]</span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line"><span class="keyword">if</span> (currentSegmentChunks.<span class="property">length</span> &gt; <span class="number">0</span> &amp;&amp; currentSize + chunkSize &gt; <span class="variable constant_">MAX_CHUNK_SIZE</span>) &#123;</span><br><span class="line">  segments.<span class="title function_">push</span>(<span class="keyword">new</span> <span class="title class_">Blob</span>(currentSegmentChunks, &#123; <span class="attr">type</span>: audioBlob.<span class="property">type</span> &#125;))</span><br><span class="line">  <span class="comment">// prepend the header chunk so the new segment is a valid container</span></span><br><span class="line">  currentSegmentChunks = [headerChunk]</span><br><span class="line">  currentSize = headerChunk.<span class="property">size</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>After transcribing the chunks, there’s one last step: each segment’s word timestamps are counted “from the start of that segment,” so you use an <code>offset</code> (the total duration of all preceding segments) to stitch them back onto one complete timeline:</p>
+<figure class="highlight js"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> offset = totalDuration</span><br><span class="line"><span class="keyword">const</span> offsetWords = (result.<span class="property">words</span> || []).<span class="title function_">map</span>(<span class="function">(<span class="params">w</span>) =&gt;</span> (&#123;</span><br><span class="line">  ...w,</span><br><span class="line">  <span class="attr">start</span>: w.<span class="property">start</span> + offset,</span><br><span class="line">  <span class="attr">end</span>: w.<span class="property">end</span> + offset,</span><br><span class="line">&#125;))</span><br><span class="line">mergedWords = mergedWords.<span class="title function_">concat</span>(offsetWords)</span><br><span class="line">totalDuration += result.<span class="property">duration</span> || <span class="number">0</span></span><br></pre></td></tr></table></figure>
+
+<p>One honest caveat: that first chunk isn’t a pure init segment — it also carries the first second or so of audio, so reusing it as-is is a pragmatic MVP shortcut that duplicates a little audio at each segment boundary. A cleaner version would extract only the header bytes. Still, within the range of my own presentation lengths, this ends up stitching together a word timeline that’s good enough.</p>
+<h2 id="What-It-Actually-Looks-Like-in-Use-the-Exported-JSON"><a href="#What-It-Actually-Looks-Like-in-Use-the-Exported-JSON" class="headerlink" title="What It Actually Looks Like in Use: the Exported JSON"></a>What It Actually Looks Like in Use: the Exported JSON</h2><p>Once alignment is done, you can export to JSON or TXT. I personally use <strong>JSON</strong> more often, because it’s friendlier to AI agents. The format is structured, every field has clear boundaries, and the agent doesn’t have to parse some plain-text format split by separator lines. It can just read each slide’s fields directly and work with them. The exported structure roughly looks like this: a top level with the talk’s title, the recording time, the total duration, and a <code>slides</code> array, where each slide is one object in the array:</p>
+<p><img src="/images/slide-narrator-ai/result-screen.png" alt="The result screen after transcription completes: each slide listed with its thumbnail, slide content, speaker notes, and transcript, with JSON or TXT download options at the top"></p>
+<p>Since the deck I was practicing with was in Mandarin, the sample below stays in Mandarin and keeps the same shape — it’s a representative example, not a real recording:</p>
+<figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;title&quot;: &quot;系統設計報告&quot;,</span><br><span class="line">  &quot;recordedAt&quot;: &quot;2026-05-30T02:40:00.000Z&quot;,</span><br><span class="line">  &quot;totalDuration&quot;: &quot;18:42&quot;,</span><br><span class="line">  &quot;slides&quot;: [</span><br><span class="line">    &#123;</span><br><span class="line">      &quot;slideIndex&quot;: 3,</span><br><span class="line">      &quot;startTime&quot;: &quot;02:15&quot;,</span><br><span class="line">      &quot;duration&quot;: &quot;01:48&quot;,</span><br><span class="line">      &quot;slideContent&quot;: &quot;系統架構\n前端 React，後端 Node.js\n資料庫使用 PostgreSQL&quot;,</span><br><span class="line">      &quot;speakerNotes&quot;: &quot;這頁要強調為什麼選 PostgreSQL，重點是交易一致性&quot;,</span><br><span class="line">      &quot;transcript&quot;: &quot;那這一頁是我們的系統架構前端的部分是用React後端是Node然後資料庫我們這邊是用Postgre呃因為它的查詢效能比較好&quot;</span><br><span class="line">    &#125;</span><br><span class="line">    // ... slides 4, 5, 6 follow with the same shape</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>To put it in terms a non-Mandarin reader can follow: on this slide my <code>speakerNotes</code> say the key point is “transaction consistency” (交易一致性), but in the <code>transcript</code> I actually said the reason for choosing PostgreSQL was that “its query performance is better” (查詢效能比較好). So the notes and what I said point at two different things, which is exactly the kind of mistake I want to catch.</p>
+<p>I take this JSON and hand it to AI with a prompt roughly like this:</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">Below is the JSON transcript of my slide practice. In the slides array,</span><br><span class="line">each slide is an object with three fields: slideContent (the text on the</span><br><span class="line">slide), speakerNotes (the notes I wrote ahead of time for what to say),</span><br><span class="line">and transcript (what I actually said). Go through it slide by slide and</span><br><span class="line">check:</span><br><span class="line">1. Whether what I actually said drifts from the key point the speaker</span><br><span class="line">   notes were meant to convey</span><br><span class="line">2. Whether I got anything wrong (for example, on the slide above I gave</span><br><span class="line">   the reason for choosing PostgreSQL as query performance, but the</span><br><span class="line">   notes say it&#x27;s transaction consistency)</span><br><span class="line">3. Which sentences are unclear or have too many spoken filler words</span><br></pre></td></tr></table></figure>
+
+<p>With an example like the one above, AI catches it easily: the <code>speakerNotes</code> say the key point is “transaction consistency,” but in the <code>transcript</code> I actually said “query performance is better,” and that’s a content mistake, because the keywords in the notes and in the transcript clearly contradict each other. That kind of side-by-side comparison is exactly what putting these three fields together is good for.</p>
+<h2 id="A-Three-Hour-MVP-and-a-Few-Repeatable-Takeaways"><a href="#A-Three-Hour-MVP-and-a-Few-Repeatable-Takeaways" class="headerlink" title="A Three-Hour MVP, and a Few Repeatable Takeaways"></a>A Three-Hour MVP, and a Few Repeatable Takeaways</h2><p>Going from nothing to a working MVP took about three hours, start to finish. If I’d had to build all of this by hand myself, digging through the nested structure of the Google Slides API, dealing with <code>MediaRecorder</code> compatibility, tripping over that WebM header gotcha, it would have taken several times as long. Working with AI to grow the data flow piece by piece let me put my energy into “what do I actually want” instead of “what do I fill in for this API parameter.”</p>
+<p>If you want to hack together a little tool like this with AI too, here are the few things I’d actually repeat next time.</p>
+<p><strong>1. Break the data flow into stages with clear “input -&gt; output” first, then put AI to work</strong></p>
+<p>Don’t just throw the whole thing at AI with “build me a slide-transcript tool.” The first thing I did was slice the flow up myself: load the deck (along with slide content and speaker notes) -&gt; present and record while logging slide-turn timestamps -&gt; send to Whisper for word timestamps -&gt; align using time ranges -&gt; export. Once each stage has a clean boundary, handing it to AI almost never goes sideways.</p>
+<p><strong>2. Think through the one critical idea yourself, leave the rest to AI</strong></p>
+<p>Whether this tool works at all hinges entirely on one idea: record two timelines at the same time, then align them. AI won’t think of that decision for you. If you hand it off without having thought it through yourself, you’ll usually get back something that “looks like it works but doesn’t actually line up.” My experience: I bring the ideas; AI brings the keystrokes.</p>
+<p><strong>3. The first version won’t be perfect, and the real subtleties only show up after you’ve run it and watched it break. That’s when AI is the best debugging partner</strong></p>
+<p>Subtracting paused time, and prepending the header when splitting WebM, are both potholes I only hit after actually running things and finding that “the slides didn’t line up” and “the audio file was broken and couldn’t be decoded.” AI won’t necessarily guard against these on the first pass, but once I describe the symptom clearly (e.g. “the split-out file can’t be decoded”), it quickly pins it down to the container header. So don’t expect it to nail everything in one go. Treat AI as a partner who debugs alongside you, round after round.</p>
+<p><strong>4. Be clear about “what problem am I solving at this stage,” so the little tool doesn’t grow into a monster that’s never finished</strong></p>
+<p>This is an MVP for my own use. What I’m solving is “does this idea even hold up,” not “is this system complete and secure enough.” A lot of the omissions (no backend, no account system) are deliberate trade-offs. For this version I kept it to just validating the idea; turning it into a product can wait. That separation is the only reason it actually got wrapped up.</p>
+<p>After finishing this tool, the thing that stuck with me is this: what slowed me down was almost never writing code, it was figuring out “what does this transcript actually need to look like for me to really use it.” If I hadn’t decided up front that “a slide turn is the time-cut point,” AI would probably have just helped me build a generic record-and-transcribe tool, no different from the pile of recordings on my computer that I’ve never once replayed. Next time I practice a talk I’ll just run it through this, and if it feels handy, I might add a small feature later to “line up the same slide across past practice runs side by side,” to see whether I’ve actually gotten any smoother.</p>
+<p>The full source of this little tool is on GitHub: <a target="_blank" rel="noopener" href="https://github.com/AlanSyue/practice-presentation-with-ai">https://github.com/AlanSyue/practice-presentation-with-ai</a>. If you’re curious, feel free to use it as a reference or fork it into your own version.</p>
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'neutral',
+    themeVariables: {
+      fontSize: '20px'
+    },
+    flowchart: {
+      curve: 'basis',
+      htmlLabels: true,
+      nodeSpacing: 46,
+      rankSpacing: 58
+    }
+  });
+</script>
+
+  </div>
+  <footer class="post-footer">
+    <a href="/archives/">← back to archives</a>
+  </footer>
+</article>
+
+    </div>
+    <footer class="site-footer">
+  <hr class="rule">
+  <div class="footer-inner">
+    <span>$ echo "&copy; 2021-2026 Alan Syue"</span>
+    <span class="footer-links">
+      
+        <a href="https://github.com/AlanSyue" target="_blank" rel="noopener">github</a>
+      
+        <a href="https://www.linkedin.com/in/alan-syue-284a83134/" target="_blank" rel="noopener">linkedin</a>
+      
+        <a href="https://twitter.com/alansyue" target="_blank" rel="noopener">twitter</a>
+      
+        <a href="mailto:b123105@gmail.com" target="_blank" rel="noopener">email</a>
+      
+    </span>
+  </div>
+</footer>
+
+  </main>
+  <script src="/js/theme.js"></script>
+</body>
+</html>
