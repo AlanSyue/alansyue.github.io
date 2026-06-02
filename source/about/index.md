@@ -17,4 +17,4 @@ If you like my posts, you can buy me a coffee via [ecpay](https://p.ecpay.com.tw
 - LinkedIn — <https://www.linkedin.com/in/alan-syue-284a83134/>
 - Twitter  — <https://twitter.com/alansyue>
 - Facebook — <https://www.facebook.com/profile.php?id=100000273183638>
-- Email    — <b123105@gmail.com>
+- Email    — <me@alansyue.cc>

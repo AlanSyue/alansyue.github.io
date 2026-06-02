@@ -8,7 +8,7 @@ layout: page
 - Software Engineer based in Taipei, Taiwan
 - 5+ years building back-end systems in e-commerce
 - Currently at SHOPLINE — Order domain · microservices · AI-augmented workflows
-- mail — <b123105@gmail.com>
+- mail — <me@alansyue.cc>
 - linkedin — [alan-syue](https://www.linkedin.com/in/alansyue/)
 - github — [AlanSyue](https://github.com/AlanSyue)
 - blog — [blog.alansyue.cc](https://blog.alansyue.cc/)
