@@ -6,6 +6,15 @@
   --code-bg: #ebe9df;
   --rule: #cfcec6;
   --selection: #00875f33;
+  --mermaid-bg: var(--code-bg);
+  --mermaid-edge: #4f5f57;
+  --mermaid-node-bg: #f8f7ef;
+  --mermaid-node-border: var(--accent);
+  --mermaid-label-bg: #ebe9df;
+  --mermaid-edge-label-bg: #dedcd0;
+  --mermaid-text: var(--fg);
+  --mermaid-chart-bar: #00875f99;
+  --mermaid-chart-line: #4f5f57;
 }
 
 body.darkmode {
@@ -16,6 +25,15 @@ body.darkmode {
   --code-bg: #1a1a1a;
   --rule: #2a2a2a;
   --selection: #00d78744;
+  --mermaid-bg: var(--code-bg);
+  --mermaid-edge: #a5b8b0;
+  --mermaid-node-bg: #242826;
+  --mermaid-node-border: #00d787;
+  --mermaid-label-bg: #242826;
+  --mermaid-edge-label-bg: #111;
+  --mermaid-text: var(--fg);
+  --mermaid-chart-bar: #00d78766;
+  --mermaid-chart-line: #a5b8b0;
 }
 
 * { box-sizing: border-box; }
@@ -258,21 +276,118 @@ hr.rule {
 .post-body .mermaid {
   margin: 22px 0;
   padding: 14px;
-  background: var(--code-bg);
+  background: var(--mermaid-bg);
   border: 1px dashed var(--rule);
+  color: var(--mermaid-text);
   overflow-x: auto;
 }
 .post-body .mermaid svg {
-  min-width: 760px;
+  width: max-content;
+  min-width: min(760px, 100%);
+  max-width: none;
 }
 .post-body .mermaid .nodeLabel,
 .post-body .mermaid .edgeLabel {
   font-size: 18px;
+  color: var(--mermaid-text) !important;
+  fill: var(--mermaid-text) !important;
+}
+.post-body .mermaid .label,
+.post-body .mermaid .label text,
+.post-body .mermaid .nodeLabel p,
+.post-body .mermaid .edgeLabel div,
+.post-body .mermaid .edgeLabel p,
+.post-body .mermaid .edgeLabel span {
+  color: var(--mermaid-text) !important;
+  fill: var(--mermaid-text) !important;
+}
+.post-body .mermaid .edgeLabel foreignObject > div,
+.post-body .mermaid .edgeLabel div,
+.post-body .mermaid .edgeLabel span,
+.post-body .mermaid .edgeLabel p {
+  background: var(--mermaid-edge-label-bg) !important;
+  background-color: var(--mermaid-edge-label-bg) !important;
+  border-radius: 4px;
+  box-shadow: 0 0 0 2px var(--mermaid-edge-label-bg);
+  color: var(--mermaid-text) !important;
+}
+.post-body .mermaid .edgePaths path,
+.post-body .mermaid .edgePath path,
+.post-body .mermaid path.flowchart-link {
+  stroke: var(--mermaid-edge) !important;
+  stroke-width: 2px;
+}
+.post-body .mermaid marker path,
+.post-body .mermaid .marker path,
+.post-body .mermaid .arrowMarkerPath {
+  fill: var(--mermaid-edge) !important;
+  stroke: var(--mermaid-edge) !important;
 }
 .post-body .mermaid .node rect,
 .post-body .mermaid .node polygon,
 .post-body .mermaid .node path,
 .post-body .mermaid .node circle {
+  fill: var(--mermaid-node-bg) !important;
+  stroke: var(--mermaid-node-border) !important;
+  stroke-width: 2px;
+}
+.post-body .mermaid .cluster rect,
+.post-body .mermaid .edgeLabel,
+.post-body .mermaid .edgeLabel rect,
+.post-body .mermaid .labelBkg {
+  background-color: var(--mermaid-edge-label-bg) !important;
+  fill: var(--mermaid-edge-label-bg) !important;
+}
+.post-body .mermaid .node .label-container,
+.post-body .mermaid .nodeLabel {
+  background-color: var(--mermaid-label-bg) !important;
+}
+.post-body .mermaid .main,
+.post-body .mermaid .background,
+.post-body .mermaid .plot {
+  background: var(--mermaid-bg) !important;
+  background-color: var(--mermaid-bg) !important;
+  fill: var(--mermaid-bg) !important;
+}
+.post-body .mermaid .chart-title,
+.post-body .mermaid .bottom-axis,
+.post-body .mermaid .left-axis,
+.post-body .mermaid .ticks,
+.post-body .mermaid .label,
+.post-body .mermaid .title,
+.post-body .mermaid .mermaid-tmp-group {
+  color: var(--mermaid-text) !important;
+  fill: var(--mermaid-text) !important;
+}
+.post-body .mermaid .chart-title text,
+.post-body .mermaid .bottom-axis text,
+.post-body .mermaid .left-axis text,
+.post-body .mermaid .ticks text,
+.post-body .mermaid .label text,
+.post-body .mermaid .title text,
+.post-body .mermaid .mermaid-tmp-group text {
+  fill: var(--mermaid-text) !important;
+}
+.post-body .mermaid .axis-line,
+.post-body .mermaid .axisl-line,
+.post-body .mermaid .bottom-axis line,
+.post-body .mermaid .left-axis line,
+.post-body .mermaid .bottom-axis path,
+.post-body .mermaid .left-axis path,
+.post-body .mermaid .ticks line {
+  stroke: var(--mermaid-edge) !important;
+}
+.post-body .mermaid .bar-plot-0,
+.post-body .mermaid .bar-plot-0 rect {
+  fill: var(--mermaid-chart-bar) !important;
+  stroke: var(--mermaid-node-border) !important;
+}
+.post-body .mermaid .line-plot-1,
+.post-body .mermaid .line-plot-1 path,
+.post-body .mermaid .line-plot-1 line,
+.post-body .mermaid .line-plot-1 polyline {
+  fill: none !important;
+  stroke: var(--mermaid-chart-line) !important;
   stroke-width: 2px;
 }
 .post-body table {
@@ -292,6 +407,9 @@ hr.rule {
   color: var(--accent);
   font-weight: 700;
   border-bottom: 1px solid var(--rule);
+}
+.post-body table code {
+  white-space: nowrap;
 }
 
 .deck-list li {
@@ -426,6 +544,13 @@ hr.rule {
   .post-title-main { font-size: 23px; }
   .post-body h2 { font-size: 20px; }
   .post-body h3 { font-size: 18px; }
+  .post-body .mermaid {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .post-body .mermaid svg {
+    min-width: 560px;
+  }
 }
 
 /* Resume page accents */
