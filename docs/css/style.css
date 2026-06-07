@@ -226,7 +226,9 @@ hr.rule {
   font-size: 26px;
   margin: 0 0 6px;
   font-weight: 700;
-  overflow-wrap: anywhere;
+  line-height: 1.28;
+  overflow-wrap: break-word;
+  word-break: normal;
 }
 .post-meta-line {
   color: var(--muted);
@@ -247,6 +249,8 @@ hr.rule {
   margin-top: 38px;
   margin-bottom: 14px;
   font-weight: 700;
+  overflow-wrap: break-word;
+  word-break: normal;
 }
 .post-body h1 { font-size: 24px; }
 .post-body h2,
@@ -261,7 +265,9 @@ hr.rule {
 .post-body h3 { font-size: 19px; }
 .post-body p { margin: 12px 0; }
 .post-body {
-  overflow-wrap: anywhere;
+  overflow-wrap: break-word;
+  word-break: normal;
+  hyphens: auto;
 }
 .post-body ul, .post-body ol { padding-left: 22px; }
 .post-body li { margin: 4px 0; }
@@ -541,9 +547,35 @@ hr.rule {
   .hero-title { font-size: 26px; }
   .site-nav { gap: 8px; }
   .theme-toggle { margin-left: 0; }
-  .post-title-main { font-size: 23px; }
+  .post-title-main {
+    font-size: 22px;
+    line-height: 1.24;
+    overflow-wrap: break-word;
+    word-break: normal;
+  }
+  .post-body h1,
+  .post-body h2,
+  .post-body h3 {
+    overflow-wrap: break-word;
+    word-break: normal;
+  }
   .post-body h2 { font-size: 20px; }
   .post-body h3 { font-size: 18px; }
+  .post-body table {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .post-body th,
+  .post-body td {
+    min-width: 120px;
+    overflow-wrap: normal;
+    word-break: normal;
+  }
+  .post-body td:nth-child(2) {
+    min-width: 180px;
+  }
   .post-body .mermaid {
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
