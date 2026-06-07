@@ -218,11 +218,17 @@ June is excluded because the sample was still too small.
 
 So what was I adjusting during those two months? Mostly these three things:
 
-| Early friction point | Symptom | What I changed later |
-|---|---|---|
-| Missing input-side tooling | The design lived in Figma, and the agent could not read it directly at first, so a person had to clip frames and translate them manually | I turned Figma-reading and similar input work into skills |
-| Weak ticket quality | Some tickets came without API specs, or requirements were explained by video, so the agent did not have enough context | At the time, all the agent could do was comment and ask the reporter for more input; that did not actually solve it, and later it became obvious this was the next bottleneck |
-| The agent's "context anxiety" | It would rush to wrap up before all tests were finished, report that it was done, and then the main flow would break as soon as a human verified it | The longstanding `CLAUDE.md` rule of keeping implementation in sub-agents was the real fix; I also added an extra gate at the end to force test completion, require self-checks, and attach screenshots / recordings the reporter could verify |
+**Missing input-side tooling**
+Symptom: the design lived in Figma, and the agent could not read it directly at first, so a person had to clip frames and translate them manually.
+What changed later: I turned Figma-reading and similar input work into skills.
+
+**Weak ticket quality**
+Symptom: some tickets came without API specs, or requirements were explained by video, so the agent did not have enough context.
+What changed later: at the time, all the agent could do was comment and ask the reporter for more input; that did not actually solve it, and later it became obvious this was the next bottleneck.
+
+**The agent's "context anxiety"**
+Symptom: it would rush to wrap up before all tests were finished, report that it was done, and then the main flow would break as soon as a human verified it.
+What changed later: the longstanding `CLAUDE.md` rule of keeping implementation in sub-agents was the real fix; I also added an extra gate at the end to force test completion, require self-checks, and attach screenshots / recordings the reporter could verify.
 
 To be fair, I would not claim that May's recovery came entirely from those three adjustments. The app launched on 2026-05-06, and the mix of incoming tickets also changed after that. Those two effects were layered together, and I can't cleanly separate their contributions. Whether QA loops can keep dropping, and whether first-pass acceptance can keep getting more stable, depends on how much further each of those three issues can be reduced.
 

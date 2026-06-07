@@ -332,30 +332,9 @@ xychart-beta
 <p>This chart is using a different statistical frame: it shows first-pass acceptance by month, so it should not be compared directly with the “share of completed tasks with 0 QA loops” from the earlier 193-task cohort. The denominators are different, which means 68.5% &#x2F; 71.0% and 59.5% &#x2F; 76.4% are measuring different things. Specifically, March was 60.0%, April was 59.5%, and May recovered to 76.4%. One more caveat: the sample sizes in January and February were smaller, so the trend is still worth looking at, but not over-reading. May had the largest sample, at n&#x3D;123.</p>
 <p>June is excluded because the sample was still too small.</p>
 <p>So what was I adjusting during those two months? Mostly these three things:</p>
-<table>
-<thead>
-<tr>
-<th>Early friction point</th>
-<th>Symptom</th>
-<th>What I changed later</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>Missing input-side tooling</td>
-<td>The design lived in Figma, and the agent could not read it directly at first, so a person had to clip frames and translate them manually</td>
-<td>I turned Figma-reading and similar input work into skills</td>
-</tr>
-<tr>
-<td>Weak ticket quality</td>
-<td>Some tickets came without API specs, or requirements were explained by video, so the agent did not have enough context</td>
-<td>At the time, all the agent could do was comment and ask the reporter for more input; that did not actually solve it, and later it became obvious this was the next bottleneck</td>
-</tr>
-<tr>
-<td>The agent’s “context anxiety”</td>
-<td>It would rush to wrap up before all tests were finished, report that it was done, and then the main flow would break as soon as a human verified it</td>
-<td>The longstanding <code>CLAUDE.md</code> rule of keeping implementation in sub-agents was the real fix; I also added an extra gate at the end to force test completion, require self-checks, and attach screenshots &#x2F; recordings the reporter could verify</td>
-</tr>
-</tbody></table>
+<p><strong>Missing input-side tooling</strong><br>Symptom: the design lived in Figma, and the agent could not read it directly at first, so a person had to clip frames and translate them manually.<br>What changed later: I turned Figma-reading and similar input work into skills.</p>
+<p><strong>Weak ticket quality</strong><br>Symptom: some tickets came without API specs, or requirements were explained by video, so the agent did not have enough context.<br>What changed later: at the time, all the agent could do was comment and ask the reporter for more input; that did not actually solve it, and later it became obvious this was the next bottleneck.</p>
+<p><strong>The agent’s “context anxiety”</strong><br>Symptom: it would rush to wrap up before all tests were finished, report that it was done, and then the main flow would break as soon as a human verified it.<br>What changed later: the longstanding <code>CLAUDE.md</code> rule of keeping implementation in sub-agents was the real fix; I also added an extra gate at the end to force test completion, require self-checks, and attach screenshots &#x2F; recordings the reporter could verify.</p>
 <p>To be fair, I would not claim that May’s recovery came entirely from those three adjustments. The app launched on 2026-05-06, and the mix of incoming tickets also changed after that. Those two effects were layered together, and I can’t cleanly separate their contributions. Whether QA loops can keep dropping, and whether first-pass acceptance can keep getting more stable, depends on how much further each of those three issues can be reduced.</p>
 <h2 id="Closing-Thoughts-The-Next-Step-Isn’t-Writing-Faster-It’s-Making-Automated-Verification-More-Trustworthy"><a href="#Closing-Thoughts-The-Next-Step-Isn’t-Writing-Faster-It’s-Making-Automated-Verification-More-Trustworthy" class="headerlink" title="Closing Thoughts: The Next Step Isn’t Writing Faster, It’s Making Automated Verification More Trustworthy"></a>Closing Thoughts: The Next Step Isn’t Writing Faster, It’s Making Automated Verification More Trustworthy</h2><p>The biggest takeaway for me after running this whole setup is that AI agents are no longer just helping me write code. They can connect the entire chain: picking up tickets, implementation, testing, deployment, and handoff for acceptance. Once that part gets faster, the real blocker is no longer just “development speed.” It becomes whether people can trust the result the agent hands back.</p>
 <p>That is exactly why I think e2e tests, screenshots, and recordings will matter more and more. If the agent only says, “I’m done,” then a person still has to verify everything from scratch. But if it can reliably run the tests and attach clear evidence for acceptance, the share of QA work that still needs human intervention has a real chance to drop. Put differently, improving human trust in AI agents’ automated verification will be the key to speeding up the entire software development lifecycle from here.</p>
