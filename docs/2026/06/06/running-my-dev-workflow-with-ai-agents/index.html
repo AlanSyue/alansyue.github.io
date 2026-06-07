@@ -93,13 +93,40 @@ flowchart TD
 <p>Once you look at it this way, it becomes obvious that implementation and testing are only part of the job. I was also manually maintaining ticket state, leaving comments, reassigning work, and attaching test records. None of those tasks are especially hard, but they break attention into tiny fragments.</p>
 <h2 id="Treating-The-Asana-Kanban-Board-As-The-Agent’s-State-Machine"><a href="#Treating-The-Asana-Kanban-Board-As-The-Agent’s-State-Machine" class="headerlink" title="Treating The Asana Kanban Board As The Agent’s State Machine"></a>Treating The Asana Kanban Board As The Agent’s State Machine</h2><p>After breaking the workflow apart, I realized I could treat the Kanban board itself as the state machine that drives the agent.</p>
 <p>The idea is to let each Kanban column define what the agent should do in that state, where the card should move next, and who it should be assigned to. Once that is explicit, the agent can just follow the state transitions forward.</p>
-<ul>
-<li><strong><code>todo</code></strong>: waiting for me to pick it up. Agent: find tickets assigned to me and start working.</li>
-<li><strong><code>develop</code></strong>: in implementation. Agent: read the ticket, split sub-tasks, write code, and run tests.</li>
-<li><strong><code>to be test</code></strong>: waiting for human verification. Agent: move it here after deployment and assign it back to the reporter.</li>
-<li><strong><code>complete</code></strong>: finished. Agent: reporter approves it and the task is closed.</li>
-<li><strong>Back to <code>todo</code></strong>: back in the dev queue. Agent: reporter finds an issue and sends it back through another round.</li>
-</ul>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>What it means</th>
+<th>What the agent does here</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>todo</code></td>
+<td>Waiting for me to pick it up</td>
+<td>Find tickets assigned to me and start working</td>
+</tr>
+<tr>
+<td><code>develop</code></td>
+<td>In implementation</td>
+<td>Read the ticket, split sub-tasks, write code, run tests</td>
+</tr>
+<tr>
+<td><code>to be test</code></td>
+<td>Waiting for human verification</td>
+<td>Move it here after deployment and assign it back to the reporter</td>
+</tr>
+<tr>
+<td><code>complete</code></td>
+<td>Finished</td>
+<td>Reporter approves it and the task is closed</td>
+</tr>
+<tr>
+<td>Back to <code>todo</code></td>
+<td>Back in the dev queue</td>
+<td>Reporter finds an issue and sends it back through another round</td>
+</tr>
+</tbody></table>
 <div class="mermaid">
 flowchart TD
     todo["todo<br/>agent takes over"] --> develop["develop<br/>implement / test"]
@@ -111,19 +138,53 @@ flowchart TD
 <p>That cuts down a lot of human intervention and makes the agent a real part of the workflow instead of a side tool.</p>
 <h2 id="Prerequisite-The-Agent-Has-To-Be-Able-To-Run-Dev-And-Tests-On-Its-Own"><a href="#Prerequisite-The-Agent-Has-To-Be-Able-To-Run-Dev-And-Tests-On-Its-Own" class="headerlink" title="Prerequisite: The Agent Has To Be Able To Run Dev And Tests On Its Own"></a>Prerequisite: The Agent Has To Be Able To Run Dev And Tests On Its Own</h2><p>There was another prerequisite for this workflow to work at all: the agent had to be able to fully take over development tasks. Otherwise the whole pipeline would just stall the moment it hit something the agent couldn’t do.</p>
 <p>I spent a fair bit of time getting these three things into place first:</p>
-<ul>
-<li><strong>Ability to start the API server locally and boot simulators from the CLI</strong>: this lets the agent run API tests and e2e tests on its own instead of waiting for me to click through them manually.</li>
-<li><strong>CI (GitHub Actions) automatic deployment</strong>: this lets a push land on staging &#x2F; TestFlight &#x2F; Play automatically, so the agent does not need to handle deployment details directly.</li>
-<li><strong>CLI access to staging logs and db</strong>: this lets the agent inspect logs and query the db by itself when debugging instead of opening back-office tools.</li>
-</ul>
+<table>
+<thead>
+<tr>
+<th>Capability the agent needs</th>
+<th>Why it matters</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Ability to start the API server locally and boot simulators from the CLI</td>
+<td>So the agent can run API tests &#x2F; e2e tests on its own instead of waiting for me to click through it manually</td>
+</tr>
+<tr>
+<td>CI (GitHub Actions) automatic deployment</td>
+<td>So a push automatically lands on staging &#x2F; TestFlight &#x2F; Play and the agent doesn’t need to handle deployment details directly</td>
+</tr>
+<tr>
+<td>CLI access to staging logs and db</td>
+<td>So the agent can inspect logs and query the db by itself when debugging instead of opening back-office tools</td>
+</tr>
+</tbody></table>
 <p>That process made something very clear to me: if you want an agent to actually run on its own, the development environment itself has to be cleaned up first.</p>
 <h2 id="Turning-Repetitive-Actions-Into-Reliable-Skills"><a href="#Turning-Repetitive-Actions-Into-Reliable-Skills" class="headerlink" title="Turning Repetitive Actions Into Reliable Skills"></a>Turning Repetitive Actions Into Reliable Skills</h2><p>I made the same point earlier in <a href="/2026/05/24/stopped-managing-woocommerce-orders-admin-ui/">I Stopped Managing WooCommerce Orders Through the Admin UI</a>, and this app project confirmed it again: <strong>natural language is just the entry point. What really makes the workflow reliable is packaging repetitive actions into skills, so the output is more predictable.</strong></p>
 <p>I turned the actions this workflow depends on into skills:</p>
-<ul>
-<li><strong>Asana</strong>: wraps ticket reading, section moves, comments, and reassignment. It replaces manually moving cards, leaving comments, and assigning work.</li>
-<li><strong>Figma</strong>: wraps pulling design data out of the file. It replaces manually reading specs off the design.</li>
-<li><strong>App simulator launcher</strong>: wraps starting iOS &#x2F; Android simulators from the CLI, building, and running the app. It replaces manually opening simulators and running e2e tests.</li>
-</ul>
+<table>
+<thead>
+<tr>
+<th>Skill</th>
+<th>What it wraps</th>
+<th>What manual work it replaces</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Asana</td>
+<td>Read tickets, move sections, comment, reassign</td>
+<td>Manually moving cards, leaving comments, assigning work</td>
+</tr>
+<tr>
+<td>Figma</td>
+<td>Pull design data out of the file</td>
+<td>Manually reading specs off the design</td>
+</tr>
+<tr>
+<td>App simulator launcher</td>
+<td>Start iOS &#x2F; Android simulators from the CLI, build, run the app</td>
+<td>Manually opening simulators and running e2e tests</td>
+</tr>
+</tbody></table>
 <p>Once those actions became skills, the biggest difference was that the agent no longer had to rediscover the workflow every time. It could just use the tools. That is far more reliable than asking it to improvise through a UI. You write the skill once, and every run follows the same behavior.</p>
 <h2 id="Using-Memory-To-Lock-In-Team-Rules-So-Every-Session-Doesn’t-Need-A-Reset"><a href="#Using-Memory-To-Lock-In-Team-Rules-So-Every-Session-Doesn’t-Need-A-Reset" class="headerlink" title="Using Memory To Lock In Team Rules So Every Session Doesn’t Need A Reset"></a>Using Memory To Lock In Team Rules So Every Session Doesn’t Need A Reset</h2><p>I also recorded the rules for the whole workflow in memory &#x2F; <code>CLAUDE.md</code>, so the agent could produce more stable results and would be less likely to need a human to step back in just because some context was missing.</p>
 <p>The rules I wrote down mostly fall into two categories:</p>
@@ -169,14 +230,45 @@ flowchart TD
 <p>At that point, the main session is mostly just doing orchestration and decision-making, like deciding whether the next step is reading the ticket, testing, or moving the card. The context-heavy work, such as reading the ticket, implementing, and running tests, gets pushed to sub-agents instead. That keeps every detail from piling into one context window and makes the whole loop more stable.</p>
 <h2 id="What-Happened-In-Practice-The-Workflow-Felt-Faster-And-The-Bottleneck-Surfaced-In-QA"><a href="#What-Happened-In-Practice-The-Workflow-Felt-Faster-And-The-Bottleneck-Surfaced-In-QA" class="headerlink" title="What Happened In Practice: The Workflow Felt Faster, And The Bottleneck Surfaced In QA"></a>What Happened In Practice: The Workflow Felt Faster, And The Bottleneck Surfaced In QA</h2><p>After running this for a while, the workflow felt much faster subjectively. The dwell-time data also showed that <code>develop</code> was no longer where tickets spent most of their time. For the bottleneck snapshot, I used April–June movement history. For the ticket-type and monthly acceptance analysis later, I used the January–June completed-ticket dataset.</p>
 <p>Once the development side got faster, the constraint naturally moved to human verification. Here’s a compressed snapshot of the bottleneck:</p>
-<ul>
-<li><strong><code>develop</code> dwell time</strong>: median <strong>1.2 hours</strong>; p75 <strong>3.9 hours</strong>. Most development tickets get handed off within a few hours.</li>
-<li><strong><code>to be test</code> dwell time</strong>: median <strong>28.4 hours</strong>; mean <strong>2.9 days</strong>; max <strong>29.4 days</strong>. A small number of long-waiting tickets stretch out the wait time.</li>
-<li><strong>May throughput</strong>: <strong>191</strong> tickets pushed forward; <strong>133</strong> accepted; about <strong>8.7 vs 6 tickets &#x2F; workday</strong>. Delivery is faster than acceptance, so work piles up on the QA side.</li>
-<li><strong>QA loops (task-based)</strong>: <strong>67 &#x2F; 207 tickets</strong> in the April–June movement dataset went back to <code>todo</code> at least once, about <strong>32%</strong>. Roughly one out of every three tickets needs follow-up changes.</li>
-<li><strong>QA loops (entry-based)</strong>: <strong>113 &#x2F; 275 entries</strong> into <code>to be test</code> in the same dataset ended up back in <code>todo</code>, about <strong>41%</strong>. Every handoff to QA has a real chance of creating another rework cycle.</li>
-<li><strong>Current blocked &#x2F; lead time</strong>: <strong>10</strong> blocked tickets, longest <strong>12.9 days</strong>; median lead time <strong>4.1 days</strong>, mean <strong>16.4 days</strong>. A small number of slow tickets pull the average upward.</li>
-</ul>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Number</th>
+<th>How to read it</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>develop</code> dwell time</td>
+<td>median <strong>1.2 hours</strong>; p75 <strong>3.9 hours</strong></td>
+<td>Most development tickets get handed off within a few hours</td>
+</tr>
+<tr>
+<td><code>to be test</code> dwell time</td>
+<td>median <strong>28.4 hours</strong>; mean <strong>2.9 days</strong>; max <strong>29.4 days</strong></td>
+<td>A small number of long-waiting tickets stretch out the wait time</td>
+</tr>
+<tr>
+<td>May throughput</td>
+<td><strong>191</strong> tickets pushed forward; <strong>133</strong> accepted; about <strong>8.7 vs 6 tickets &#x2F; workday</strong></td>
+<td>Delivery is faster than acceptance, so work piles up on the QA side</td>
+</tr>
+<tr>
+<td>QA loops (task-based)</td>
+<td><strong>67 &#x2F; 207 tickets</strong> in the April–June movement dataset went back to <code>todo</code> at least once, about <strong>32%</strong></td>
+<td>Roughly one out of every three tickets needs follow-up changes</td>
+</tr>
+<tr>
+<td>QA loops (entry-based)</td>
+<td><strong>113 &#x2F; 275 entries</strong> into <code>to be test</code> in the same dataset ended up back in <code>todo</code>, about <strong>41%</strong></td>
+<td>Every handoff to QA has a real chance of creating another rework cycle</td>
+</tr>
+<tr>
+<td>Current blocked &#x2F; lead time</td>
+<td><strong>10</strong> blocked tickets, longest <strong>12.9 days</strong>; median lead time <strong>4.1 days</strong>, mean <strong>16.4 days</strong></td>
+<td>A small number of slow tickets pull the average upward</td>
+</tr>
+</tbody></table>
 <p>If you switch to task-level analysis, the bottleneck becomes even clearer. The chart below looks only at the 193 completed tasks after 2026-04-01 that entered <code>to be test</code>; every <code>to be test → todo</code> counts as one QA loop. This is meant to show the long-tail distribution inside the completed-task cohort, so it should not be mixed with the monthly first-pass trend that comes later. The result: about 70% of tasks had no QA loop at all, but the remaining 30% consumed at least one extra round, and 10 of them bounced three times or more.</p>
 <div class="mermaid">
 xychart-beta
@@ -189,13 +281,41 @@ xychart-beta
 <p>Those 193 tasks generated 102 QA loops in total, averaging about 0.53 loops per task. In other words, the delay is mostly coming from a smaller set of high-friction tasks repeatedly falling into the QA feedback loop and stretching human verification time.</p>
 <p>Because the 3+ loop cases clustered in May, it would be easy to assume May was uniformly worse. It wasn’t. If you only look at the share of tasks in that 193-task completed cohort with <strong>0 QA loops</strong>, April was 68.5%, while May actually ticked up slightly to 71.0%. What really appeared was the long tail: in May, 10 tasks bounced three times or more, accounting for 7.2% of that month’s tasks. June’s sample is still too small for me to treat it as a real signal.</p>
 <p>Taken together, these numbers tell a fairly clear story: the bottleneck moved from implementation to acceptance. The QA loop numbers add another layer to that story too. Once the development handoff gets faster, you start seeing much more clearly which tickets still need better requirement context, acceptance criteria, or real usage scenarios spelled out.</p>
-<h3 id="Which-Tickets-Had-Lower-First-Pass-Acceptance-Rates"><a href="#Which-Tickets-Had-Lower-First-Pass-Acceptance-Rates" class="headerlink" title="Which Tickets Had Lower First-Pass Acceptance Rates"></a>Which Tickets Had Lower First-Pass Acceptance Rates</h3><p>I also broke down the Kanban movement history by ticket type, looking at the 227 completed tickets from January through June 2026 that entered <code>to be test</code>. The breakdown below shows the four main groups. Here, first-pass means the ticket reached acceptance without moving from <code>to be test</code> back to <code>todo</code> in its Asana activity history. The four groups add up to 226 tickets; 1 more ticket did not fit a stable category, so I left it out of this breakdown.</p>
-<ul>
-<li><strong>Feature</strong> — Count: <strong>40</strong>. First-pass acceptance rate: <strong>57.5%</strong>. Observation: new features are the most likely to need more context during acceptance.</li>
-<li><strong>Enhancement &#x2F; adjustment</strong> — Count: <strong>24</strong>. First-pass acceptance rate: <strong>54.2%</strong>. Observation: adjustment work often gets stuck on expectation gaps.</li>
-<li><strong>Bug &#x2F; issue</strong> — Count: <strong>80</strong>. First-pass acceptance rate: <strong>78.8%</strong>. Observation: problem boundaries are usually more explicit.</li>
-<li><strong>Other &#x2F; unclear</strong> — Count: <strong>82</strong>. First-pass acceptance rate: <strong>80.5%</strong>. Observation: mostly smaller tickets or titles that were not very standardized.</li>
-</ul>
+<h3 id="Which-Tickets-Had-Lower-First-Pass-Acceptance-Rates"><a href="#Which-Tickets-Had-Lower-First-Pass-Acceptance-Rates" class="headerlink" title="Which Tickets Had Lower First-Pass Acceptance Rates"></a>Which Tickets Had Lower First-Pass Acceptance Rates</h3><p>I also broke down the Kanban movement history by ticket type, looking at the 227 completed tickets from January through June 2026 that entered <code>to be test</code>. The table below shows the four main groups. Here, first-pass means the ticket reached acceptance without moving from <code>to be test</code> back to <code>todo</code> in its Asana activity history. The four groups add up to 226 tickets; 1 more ticket did not fit a stable category, so I left it out of the table.</p>
+<table>
+<thead>
+<tr>
+<th>Ticket type</th>
+<th align="right">Count</th>
+<th align="right">First-pass acceptance rate</th>
+<th>Observation</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Feature</td>
+<td align="right">40</td>
+<td align="right">57.5%</td>
+<td>New features are the most likely to need more context during acceptance</td>
+</tr>
+<tr>
+<td>Enhancement &#x2F; adjustment</td>
+<td align="right">24</td>
+<td align="right">54.2%</td>
+<td>Adjustment work often gets stuck on expectation gaps</td>
+</tr>
+<tr>
+<td>Bug &#x2F; issue</td>
+<td align="right">80</td>
+<td align="right">78.8%</td>
+<td>Problem boundaries are usually more explicit</td>
+</tr>
+<tr>
+<td>Other &#x2F; unclear</td>
+<td align="right">82</td>
+<td align="right">80.5%</td>
+<td>Mostly smaller tickets or titles that were not very standardized</td>
+</tr>
+</tbody></table>
 <p>This lines up closely with what it felt like in practice. Bug tickets are much more likely to pass in one shot. Feature and enhancement work, by contrast, had noticeably lower first-pass acceptance rates and were much more likely to need extra context during QA. A bug ticket usually comes with a concrete failure mode, reproduction steps, or at least a clearly observable error. Feature and adjustment tickets often require understanding product intent, design details, edge cases, and the reporter’s internal standard for what “correct” even means.</p>
 <p>So this looks much more like a problem of missing requirement context and incomplete acceptance criteria than a problem with the agent’s ability to write code. The agent can write code faster and run tests, but if the ticket doesn’t define what “accepted” actually means, the missing judgment still gets paid back during human QA.</p>
 <p>I would not read May’s long tail as “agent quality suddenly got worse in May,” because the app officially launched on 2026-05-06. A more plausible reading is that once the workflow sped up, it also ran straight into the launch moment, and real-world usage started feeding back into the QA loops more densely. Before launch, the extra rounds looked more like launch hardening. After launch, they looked more like the system forcing previously unstated context, domain rules, and acceptance criteria out into the open one by one. Even if you only keep the most conservative numbers, from May 6 through the end of the month there were still 41 returns to the dev queue across 28 tickets.</p>
