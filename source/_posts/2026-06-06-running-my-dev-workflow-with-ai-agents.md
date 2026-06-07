@@ -216,19 +216,11 @@ This chart is using a different statistical frame: it shows first-pass acceptanc
 
 June is excluded because the sample was still too small.
 
-So what was I adjusting during those two months? Mostly these three things:
+What I changed during that period came down to three things:
 
-**Missing input-side tooling**
-Symptom: the design lived in Figma, and the agent could not read it directly at first, so a person had to clip frames and translate them manually.
-What changed later: I turned Figma-reading and similar input work into skills.
-
-**Weak ticket quality**
-Symptom: some tickets came without API specs, or requirements were explained by video, so the agent did not have enough context.
-What changed later: at the time, all the agent could do was comment and ask the reporter for more input; that did not actually solve it, and later it became obvious this was the next bottleneck.
-
-**The agent's "context anxiety"**
-Symptom: it would rush to wrap up before all tests were finished, report that it was done, and then the main flow would break as soon as a human verified it.
-What changed later: the longstanding `CLAUDE.md` rule of keeping implementation in sub-agents was the real fix; I also added an extra gate at the end to force test completion, require self-checks, and attach screenshots / recordings the reporter could verify.
+- **Input tooling**: I turned Figma-reading and similar manual input work into skills.
+- **Ticket quality**: I started seeing missing specs and unclear acceptance criteria as the next bottleneck.
+- **Verification discipline**: I added a stronger final gate for tests, self-checks, screenshots, and recordings.
 
 To be fair, I would not claim that May's recovery came entirely from those three adjustments. The app launched on 2026-05-06, and the mix of incoming tickets also changed after that. Those two effects were layered together, and I can't cleanly separate their contributions. Whether QA loops can keep dropping, and whether first-pass acceptance can keep getting more stable, depends on how much further each of those three issues can be reduced.
 
