@@ -547,6 +547,11 @@ hr.rule {
   .hero-title { font-size: 26px; }
   .site-nav { gap: 8px; }
   .theme-toggle { margin-left: 0; }
+  .post-body {
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
   .post-title-main {
     font-size: 22px;
     line-height: 1.24;
@@ -564,12 +569,15 @@ hr.rule {
   .post-body table {
     display: block;
     width: 100%;
+    min-width: 620px;
+    table-layout: auto;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
   }
   .post-body th,
   .post-body td {
     min-width: 120px;
+    white-space: normal;
     overflow-wrap: normal;
     word-break: normal;
   }
